@@ -35,6 +35,25 @@ public class Woodcutting extends LoopedPlugin {
             return -1;
         }
 
+        // Define the coordinates of the rectangular area
+        int minX = 3176;
+        int minY = 3207;
+        int maxX = 3199;
+        int maxY = 3240;
+
+// Get the player's current position
+        WorldPoint playerPosition = Players.getLocal().getWorldLocation();
+
+// Check if the player is within the rectangular area
+        boolean isPlayerWithinArea = playerPosition.getX() >= minX && playerPosition.getX() <= maxX &&
+                playerPosition.getY() >= minY && playerPosition.getY() <= maxY;
+
+// Set moveto to false if the player is not within the area
+        if (!isPlayerWithinArea) {
+            moveto = false;
+        }
+
+
         if (!started) {
             startLocation = local.getWorldLocation();
             debug("Starting location = "+startLocation);
@@ -102,7 +121,7 @@ public class Woodcutting extends LoopedPlugin {
 
         var logs = Inventory.getFirst(x -> x.getName().toLowerCase(Locale.ROOT).contains("logs"));
 
-        if (moveto && logs != null && !local.isAnimating() && isFull()) {
+        if (!dropalllogs && moveto && logs != null && !local.isAnimating() && isFull()) {
             dropalllogs = true;
             debug("Need to drop all logs!");
             return 500;
@@ -111,7 +130,7 @@ public class Woodcutting extends LoopedPlugin {
         if (dropalllogs) {
             debug("reading here");
             while (Inventory.contains("Logs")) {
-                logs.drop();
+                Inventory.getFirst("Logs").interact("Drop");
                 debug("Dropping log");
                 sleep(300);
             }
