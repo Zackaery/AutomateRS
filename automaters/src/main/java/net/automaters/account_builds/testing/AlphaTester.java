@@ -8,7 +8,7 @@ import static net.automaters.tasks.TaskManager.taskSelected;
 
 public class AlphaTester {
 
-    public AlphaTester() throws InterruptedException {
+    public AlphaTester() {
         if (!taskSelected) {
             generateTask();
         } else {
@@ -25,7 +25,7 @@ public class AlphaTester {
         currentTask = selectedTask;
 //        TaskManager.executeTask(selectedTask, bot, api);
     }
-    private void runTask() throws InterruptedException {
+    private void runTask() {
         new TaskManager(currentTask);
     }
 

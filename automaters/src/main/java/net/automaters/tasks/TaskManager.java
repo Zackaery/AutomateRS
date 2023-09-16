@@ -18,11 +18,11 @@ public class TaskManager {
     public static long startTime;
     public static final long taskDuration = 10000; // Specify the task duration in milliseconds (e.g., 10 seconds)
 
-    public TaskManager(String task) throws InterruptedException {
+    public TaskManager(String task) {
         executeTask(task);
     }
 
-    public void executeTask(String task) throws InterruptedException {
+    public void executeTask(String task) {
         currentTask = task;
         switch (task) {
             case "Woodcutting":

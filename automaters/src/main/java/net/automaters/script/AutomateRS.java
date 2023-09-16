@@ -98,7 +98,7 @@ public class AutomateRS extends TaskPlugin {
 	}
 
 	@Override
-	protected int loop() throws InterruptedException {
+	protected int loop()  {
 		if (scriptStarted) {
 			if (started) {
 				new BuildExecutor();

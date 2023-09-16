@@ -16,7 +16,7 @@ public class Woodcutting extends LoopedPlugin {
     private WorldPoint startLocation = null;
     private boolean started;
     @Override
-    public int loop() throws InterruptedException {
+    public int loop() {
 
         var local = Players.getLocal();
         if ((local == null)|| !scriptStarted) {

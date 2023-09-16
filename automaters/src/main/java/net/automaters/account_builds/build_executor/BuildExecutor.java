@@ -6,11 +6,11 @@ import net.automaters.account_builds.testing.BetaTester;
 import static net.automaters.gui.GUI.selectedBuild;
 
 public class BuildExecutor {
-    public BuildExecutor() throws InterruptedException {
+    public BuildExecutor() {
         executeBuild();
     }
 
-    public void executeBuild() throws InterruptedException {
+    public void executeBuild() {
         switch (selectedBuild) {
             case "ALPHA_TESTER":
                 new AlphaTester();
