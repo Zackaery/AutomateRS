@@ -326,10 +326,11 @@ public class GUI implements ActionListener {
         return "";
     }
 
-    public static void setImage(String pathToImage, JLabel label) throws IOException {
+    public static void setImage(String pathToImage, JLabel label) {
         Image image = ImageManager.getInstance().loadImage(pathToImage);
         ImageIcon icon = new ImageIcon(image);
         label.setIcon(icon);
+        debug(pathToImage + " : " + image);
     }
 
 //    public static void setImage(Image image, JLabel label) throws IOException {

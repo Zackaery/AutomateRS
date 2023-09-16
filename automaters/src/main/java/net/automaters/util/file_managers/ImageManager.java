@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import static net.automaters.script.AutomateRS.debug;
+
 public class ImageManager extends ResourceManager {
 
     private static ImageManager instance;
@@ -25,18 +27,23 @@ public class ImageManager extends ResourceManager {
 
     public BufferedImage loadImage(final String relativeImagePath) {
         if (imageCache.containsKey(relativeImagePath)) {
+            debug("relativeimagepath = " + relativeImagePath);
             return imageCache.get(relativeImagePath);
         }
 
         try (InputStream imageInputStream = loadFile(relativeImagePath)) {
             if (imageInputStream == null) {
+                debug("imageInputStream = " + imageInputStream);
                 return null;
             }
 
             BufferedImage image =  ImageIO.read(imageInputStream);
 
+            debug("image = " + image);
             imageCache.put(relativeImagePath, image);
+            debug("imageCache = " + imageCache);
 
+            debug("image = " + image);
             return image;
         } catch (IOException e) {
             e.printStackTrace();

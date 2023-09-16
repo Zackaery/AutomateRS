@@ -19,14 +19,14 @@ class AutomateRSOverlay extends Overlay
 {
 	private final Client client;
 	private final AutomateRS plugin;
-	private final AutomateRSConfig config;
+	private final AutomateRSPanel panel;
 
 	@Inject
-	private AutomateRSOverlay(Client client, AutomateRS plugin, AutomateRSConfig config)
+	private AutomateRSOverlay(Client client, AutomateRS plugin, AutomateRSPanel panel)
 	{
 		this.client = client;
 		this.plugin = plugin;
-		this.config = config;
+		this.panel = panel;
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_SCENE);
 	}

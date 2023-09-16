@@ -1,27 +1,28 @@
 package net.automaters.script;
 
-import com.google.inject.Provides;
+import com.google.inject.Inject;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.automaters.account_builds.build_executor.BuildExecutor;
 import net.automaters.gui.GUI;
 import net.automaters.gui.utils.EventDispatchThreadRunner;
+import net.automaters.util.file_managers.ImageManager;
 import net.runelite.api.Client;
-import net.runelite.api.events.ConfigButtonClicked;
-import net.runelite.client.config.ConfigManager;
-import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.xptracker.XpTrackerPlugin;
+import net.runelite.client.ui.ClientToolbar;
+import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
-import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.plugins.Task;
 import net.unethicalite.api.plugins.TaskPlugin;
+import net.unethicalite.api.script.blocking_events.BlockingEventManager;
+import net.unethicalite.api.script.blocking_events.LoginEvent;
 import net.unethicalite.api.script.paint.ExperienceTracker;
 import org.pf4j.Extension;
 
-import javax.inject.Inject;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
@@ -36,29 +37,53 @@ import static net.automaters.gui.GUI.*;
 
 @Slf4j
 public class AutomateRS extends TaskPlugin {
-	@Inject
-	private AutomateRSConfig config;
+
 	@Inject
 	private OverlayManager overlayManager;
+
 	@Inject
 	private AutomateRSOverlay automateRSOverlay;
+
 	@Inject
+	@Nullable
 	private Client client;
-	@Provides
-	AutomateRSConfig provideConfig(ConfigManager configManager)
-	{
-		return configManager.getConfig(AutomateRSConfig.class);
-	}
+
+	@Inject
+	private ClientToolbar clientToolbar;
+
+	private NavigationButton navButton;
+
+	@Inject
+	private BlockingEventManager blockingEventManager;
+
+	@Getter
+	private final LoginEvent loginEvent = new LoginEvent(this.blockingEventManager);
+
 	@Getter(AccessLevel.PROTECTED)
 
 	private GUI GUI;
+	private AutomateRSPanel automateRSPanel;
 	public static ExperienceTracker xpTracker;
 	private final Task[] tasks = new Task[] {};
 	public static boolean debugEnabled = true;
 	public static boolean scriptStarted;
 
 	@Override
-	protected void startUp() { overlayManager.add(automateRSOverlay); }
+	protected void startUp() {
+		automateRSPanel = injector.getInstance(AutomateRSPanel.class);
+
+		navButton = NavigationButton.builder()
+				.tooltip("AutomateRS")
+				.icon(ImageManager.getInstance().loadImage("images/panel/navButton.png"))
+				.priority(0)
+				.panel(automateRSPanel)
+				.build();
+
+		clientToolbar.addNavigation(navButton);
+		blockingEventManager.remove(LoginEvent.class);
+
+		overlayManager.add(automateRSOverlay);
+	}
 
 	public Task[] getTasks() { return new Task[0]; }
 
@@ -70,32 +95,32 @@ public class AutomateRS extends TaskPlugin {
 		overlayManager.remove(automateRSOverlay);
 	}
 
-	@Subscribe
-	public void onConfigButtonPressed(ConfigButtonClicked event) throws InterruptedException {
-
-		if (event.getGroup().contains("automaters")) {
-			if (event.getKey().toLowerCase().contains("start")) {
-				var local = Players.getLocal();
-				if (local == null) {
-					debug("Local Player not located");
-					return;
-				}
-				if (!started) {
-					selectedBuild = loadBuildFromGUI();
-				} else {
-					this.scriptStarted = true;
-					debug("Started - AutomateRS");
-				}
-			} else if (event.getKey().toLowerCase().contains("pause")) {
-				scriptStarted = false;
-				debug("Paused - AutomateRS");
-			} else {
-				started = false;
-				scriptStarted = false;
-				debug("Stopped - AutomateRS");
-			}
-		}
-	}
+//	@Subscribe
+//	public void onConfigButtonPressed(ConfigButtonClicked event) throws InterruptedException {
+//
+//		if (event.getGroup().contains("automaters")) {
+//			if (event.getKey().toLowerCase().contains("start")) {
+//				var local = Players.getLocal();
+//				if (local == null) {
+//					debug("Local Player not located");
+//					return;
+//				}
+//				if (!started) {
+//					selectedBuild = loadBuildFromGUI();
+//				} else {
+//					this.scriptStarted = true;
+//					debug("Started - AutomateRS");
+//				}
+//			} else if (event.getKey().toLowerCase().contains("pause")) {
+//				scriptStarted = false;
+//				debug("Paused - AutomateRS");
+//			} else {
+//				started = false;
+//				scriptStarted = false;
+//				debug("Stopped - AutomateRS");
+//			}
+//		}
+//	}
 
 	@Override
 	protected int loop()  {

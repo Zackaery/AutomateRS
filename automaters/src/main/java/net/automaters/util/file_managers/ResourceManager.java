@@ -26,10 +26,6 @@ public class ResourceManager {
     private static final String GITHUB_URL = "https://github.com/Zackaery/Account-Builder";
 
     public static InputStream loadFile(final String relativeFilePath) {
-        File directory = Paths.get(DIRECTORY, relativeFilePath).toFile();
-//        if (!directory.exists()) {
-//
-//        }
 
         if (fileExistsInDataDir(relativeFilePath)) {
             return loadFileFromDataDir(relativeFilePath);
@@ -135,15 +131,24 @@ public class ResourceManager {
     private static synchronized void unzipArchive(final File archive, final File destinationDir) {
         try(ZipFile zipFile = new ZipFile(archive))
         {
+
+            AutomateRS.debug("zipFile = " + archive.toString());
             FileSystem fileSystem = FileSystems.getDefault();
+
+            AutomateRS.debug("fileSystem = " + fileSystem.toString());
 
             destinationDir.mkdirs();
 
+            AutomateRS.debug("destinationDir = " + destinationDir.toString());
+
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+            AutomateRS.debug("entries = " + entries.toString());
 
             while (entries.hasMoreElements())
             {
                 ZipEntry entry = entries.nextElement();
+                AutomateRS.debug("ZipEntry = " + entry.toString());
 
                 Path filePath = fileSystem.getPath(destinationDir.getAbsolutePath(), entry.getName());
 
