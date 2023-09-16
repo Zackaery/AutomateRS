@@ -1,4 +1,8 @@
-# Plugins
-The Unethical plugins are actively maintained and should be working.
+# AutomateRS
+RuneScape - Automated
 
-The Hoot plugins are not maintained, they were created purely to experiment with and should be deemed unstable.
+Plugin maintained by Zackaery & Boredaholic
+
+Discord:
+@zackaery
+@.boredaholic
