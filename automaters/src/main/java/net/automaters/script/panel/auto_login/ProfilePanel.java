@@ -8,6 +8,7 @@ import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.util.ImageUtil;
+import net.unethicalite.api.input.Mouse;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -46,8 +47,8 @@ public class ProfilePanel extends JPanel {
     }
 
     AutomateRSConfig config;
-    private final String loginText;
-    private String password = null;
+    public static String loginText = null;
+    public static String password = null;
 
     public ProfilePanel(final Client client, final String data, final AutomateRSConfig automateRSConfig, final AutomateRSPanel parent)
     {
@@ -116,7 +117,26 @@ public class ProfilePanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e)
             {
-                debug("starting account");
+                client.setUsername(loginText);
+                client.setPassword(password);
+                debug("Mouse position: "+
+                        Mouse.getPosition());
+                Mouse.moved(299, 322, new Canvas(), 1000);
+                debug("Mouse position: "+
+                        Mouse.getPosition());
+                Mouse.click(299, 322, true);
+                debug("Mouse position: "+
+                        Mouse.getPosition());
+                debug("Logging account in");
+                try {
+                    Thread.sleep(2000);
+                    debug("Mouse position: "+
+                            Mouse.getPosition());
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+                debug("Mouse position: "+
+                        Mouse.getPosition());
             }
 
             @Override

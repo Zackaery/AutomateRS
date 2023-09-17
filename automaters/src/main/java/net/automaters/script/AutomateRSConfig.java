@@ -88,4 +88,29 @@ public interface AutomateRSConfig extends Config
     {
         return false;
     }
+
+    @ConfigItem(
+            keyName = "auth",
+            name = "Authenticator",
+            description = "Authenticator",
+            secret = true,
+            position = 2
+    )
+    default String auth()
+    {
+        return "Authenticator";
+    }
+
+
+    @ConfigItem(
+            keyName = "welcomeScreen",
+            name = "Complete Welcome screen",
+            description = "Automatically presses the 'Click here to Play' button after login",
+            position = 6,
+            hidden = true
+    )
+    default boolean welcomeScreen()
+    {
+        return true;
+    }
 }
