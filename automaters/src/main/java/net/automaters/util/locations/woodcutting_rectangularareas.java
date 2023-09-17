@@ -8,7 +8,7 @@ import net.unethicalite.api.movement.Movement;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public enum rectangularareas {
+public enum woodcutting_rectangularareas {
 
     SHOP_GRAND_EXCHANGE_FS(new RectangularArea(3141, 3513, 3186, 3464,0)),
     SHOP_GRAND_EXCHANGE_WALK(new RectangularArea(3167, 3489, 3167, 3488,0)),
@@ -49,7 +49,7 @@ public enum rectangularareas {
 
     private final RectangularArea area;
 
-    rectangularareas(RectangularArea area) {
+    woodcutting_rectangularareas(RectangularArea area) {
         this.area = area;
     }
 
@@ -57,14 +57,14 @@ public enum rectangularareas {
         return area;
     }
 
-    public static rectangularareas getNearest() {
+    public static woodcutting_rectangularareas getNearest() {
         WorldPoint playerLocation = Players.getLocal().getWorldLocation();
         return Arrays.stream(values())
                 .min(Comparator.comparingInt(x -> x.getArea().getNearest().distanceTo2D(playerLocation)))
                 .orElse(null);
     }
 
-    public static rectangularareas getNearestPath() {
+    public static woodcutting_rectangularareas getNearestPath() {
         WorldPoint playerLocation = Players.getLocal().getWorldLocation();
         return Arrays.stream(values())
                 .min(Comparator.comparingInt(x -> Movement.calculateDistance(x.getArea().getNearest())))
