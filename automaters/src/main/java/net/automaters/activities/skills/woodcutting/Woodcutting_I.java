@@ -1,9 +1,12 @@
 package net.automaters.activities.skills.woodcutting;
 import net.automaters.util.locations.woodcutting_rectangularareas;
 import net.automaters.util.timers.globaltimers;
+import net.runelite.api.EquipmentInventorySlot;
+import net.runelite.api.NPC;
 import net.runelite.api.coords.WorldPoint;
 import net.unethicalite.api.commons.Predicates;
 import net.unethicalite.api.coords.Area;
+import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
@@ -14,6 +17,8 @@ import net.unethicalite.api.plugins.LoopedPlugin;
 
 import javax.swing.*;
 import java.util.Random;
+
+import static net.unethicalite.api.commons.Time.sleep;
 
 
 public class Woodcutting_I extends LoopedPlugin {
@@ -68,6 +73,10 @@ public class Woodcutting_I extends LoopedPlugin {
         var local = Players.getLocal();
         WorldPoint playerLocation = local != null ? local.getWorldLocation() : null;
 
+        boolean notatclosestbank = BankLocation.getNearest() != null && playerLocation.distanceTo(BankLocation.getNearest().getArea()) > 4;
+        boolean atclosestbank = BankLocation.getNearest() != null && playerLocation.distanceTo(BankLocation.getNearest().getArea()) <= 4;
+        boolean gecontainsplayer = woodcutting_rectangularareas.SHOP_GRAND_EXCHANGE_FS.getArea().contains(Players.getLocal().getWorldLocation());
+
 
         // method 1
 
@@ -115,8 +124,59 @@ public class Woodcutting_I extends LoopedPlugin {
 
         // method 3
 
+        if (!Bank.isOpen() && notatclosestbank && !BuyItems && Obtain_BronzeAxe != null && Inventory.contains(Predicates.nameContains("axe"))
+                && Equipment.contains(Predicates.nameContains("axe")) || RandomTask >= 41 && RandomTask < 71 && notatclosestbank && !Bank.isOpen()
+                && !BuyItems && !Inventory.contains("Knife") || RandomTask >= 71 && notatclosestbank && !Bank.isOpen() && !BuyItems && !Inventory.contains("Tinderbox")
+                || !Bank.isOpen() && notatclosestbank && BuyItems && !SELECTED_SHOP || !Bank.isOpen() && notatclosestbank && !Inventory.contains("Coins") && BuyItems && SHOP_BOBS_AXES
+                || !Bank.isOpen() && notatclosestbank && !Inventory.contains("Coins") && BuyItems && SHOP_GRAND_EXCHANGE && gecontainsplayer || !Bank.isOpen() && notatclosestbank
+                && Inventory.contains("Coins") && BuyItems && SHOP_GRAND_EXCHANGE && !gecontainsplayer || !Bank.isOpen() && notatclosestbank && Equipment.contains(Predicates.nameContains("pickaxe"))
+                || !Bank.isOpen() && notatclosestbank && Inventory.contains(Predicates.nameContains("pickaxe")))
+        {
+            // walk to closest bank
+            WorldPoint nearestBankLocation = BankLocation.getNearest().getArea().getCenter();
+            Movement.walkTo(nearestBankLocation.getX(), nearestBankLocation.getY(), nearestBankLocation.getPlane());
 
+        } else {
 
+        }
+
+        // method 4
+
+        if (!BuyItems && atclosestbank && !Bank.isOpen() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
+                || !BuyItems && atclosestbank && !Bank.isOpen() && RandomTask >= 41 && RandomTask < 71 && !Inventory.contains("Knife") || !BuyItems && atclosestbank && !Bank.isOpen()
+                && RandomTask >= 71 && !Inventory.contains("Tinderbox") || !Bank.isOpen() && atclosestbank && BuyItems && !SELECTED_SHOP || !Bank.isOpen() && atclosestbank && !Inventory.contains("Coins")
+                && BuyItems && SHOP_BOBS_AXES || !Bank.isOpen() && atclosestbank && !Inventory.contains("Coins") && BuyItems && SHOP_GRAND_EXCHANGE && gecontainsplayer || !Bank.isOpen()
+                && atclosestbank && Inventory.contains("Coins") && BuyItems && SHOP_GRAND_EXCHANGE && !gecontainsplayer || !Bank.isOpen() && atclosestbank && Equipment.contains(Predicates.nameContains("pickaxe"))
+                || !Bank.isOpen() && atclosestbank && Inventory.contains(Predicates.nameContains("pickaxe"))) {
+
+            NPC banker = NPCs.getNearest(npc -> npc.hasAction("Collect"));
+            if (banker != null)
+            {
+                banker.interact("Bank");
+                return -3;
+            }
+            sleep(10000);
+
+        } else {
+
+        }
+
+        // method 5
+
+        if (Bank.isOpen() && Inventory.getCount("Coins") >= 1 && !gecontainsplayer) {
+            SHOP_GRAND_EXCHANGE = true;
+            Bank.depositAll("Coins");
+        } else {
+
+        }
+
+        // method 6
+
+        if (Bank.isOpen()){
+
+        } else {
+
+        }
 
 
         // end of script
