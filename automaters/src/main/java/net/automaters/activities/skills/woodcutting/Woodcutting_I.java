@@ -51,7 +51,7 @@ public class Woodcutting_I extends LoopedPlugin {
 
     // strings
 
-    public static String Accoount_Type = "Unknown";
+    public static String Account_Type = "Unknown";
     public static String Task_Goal = null;
     public static String Current_Task = null;
     public static String Obtain_BronzeAxe = null;
@@ -65,10 +65,6 @@ public class Woodcutting_I extends LoopedPlugin {
     // start of script
     @Inject
     private Client client;
-    boolean isItemEquipped(ItemID itemName) {
-        final ItemContainer equipment = client.getItemContainer(InventoryID.EQUIPMENT);
-        return equipment != null && equipment.count() == 1;
-    }
 
     boolean isWearingPickaxe = Equipment.contains(Predicates.nameContains("pickaxe"));
 
@@ -80,8 +76,9 @@ public class Woodcutting_I extends LoopedPlugin {
         var local = Players.getLocal();
         WorldPoint playerLocation = local != null ? local.getWorldLocation() : null;
 
-        boolean notatclosestbank = BankLocation.getNearest() != null && playerLocation.distanceTo(BankLocation.getNearest().getArea()) > 4;
-        boolean atclosestbank = BankLocation.getNearest() != null && playerLocation.distanceTo(BankLocation.getNearest().getArea()) <= 4;
+        boolean notatclosestbank = BankLocation.getNearest() != null && playerLocation != null && playerLocation.distanceTo(BankLocation.getNearest().getArea()) > 4;
+
+        boolean atclosestbank = BankLocation.getNearest() != null && playerLocation != null && playerLocation.distanceTo(BankLocation.getNearest().getArea()) <= 4;
         boolean gecontainsplayer = woodcutting_rectangularareas.SHOP_GRAND_EXCHANGE_FS.getArea().contains(Players.getLocal().getWorldLocation());
         int getwoodcuttingskill = client.getBoostedSkillLevel(Skill.WOODCUTTING);
 
@@ -97,42 +94,29 @@ public class Woodcutting_I extends LoopedPlugin {
             // Generate a new random number between 1 and 100 (inclusive) and assign it to RandomTask
             Random random = new Random();
             RandomTask = random.nextInt(100) + 1;
-        } else {
-            // Handle the case where none of the conditions are met
         }
 
         // method 2
 
-        if (BankLocation.getNearest() != null && playerLocation.distanceTo(BankLocation.getNearest().getArea()) > 4
-                && !Bank.isOpen() && BuyItems && Obtain_BronzeAxe == null && !Inventory.contains(Predicates.nameContains("axe"))
-                && !Equipment.contains(Predicates.nameContains("axe")) || RandomTask >= 41 && RandomTask < 71 && BankLocation.getNearest() != null
-                && playerLocation.distanceTo(BankLocation.getNearest().getArea()) > 4 && !Bank.isOpen()
-                && !BuyItems && !Inventory.contains("Knife") || RandomTask >= 71 && BankLocation.getNearest() != null
-                && playerLocation.distanceTo(BankLocation.getNearest().getArea()) > 4 && !Bank.isOpen()
-                && !BuyItems && !Inventory.contains("Tinderbox") || !Bank.isOpen() && BankLocation.getNearest() != null
-                && playerLocation.distanceTo(BankLocation.getNearest().getArea()) > 4 && BuyItems && !SELECTED_SHOP
-                || !Bank.isOpen() && BankLocation.getNearest() != null && playerLocation.distanceTo(BankLocation.getNearest().getArea()) > 4
-                && !Inventory.contains("Coins") && BuyItems && SHOP_BOBS_AXES || !Bank.isOpen() && BankLocation.getNearest() != null
-                && playerLocation.distanceTo(BankLocation.getNearest().getArea()) > 4 && !Inventory.contains("Coins") && BuyItems
+        if (notatclosestbank && !Bank.isOpen() && BuyItems && Obtain_BronzeAxe.equals("null") && !Inventory.contains(Predicates.nameContains("axe"))
+                && !Equipment.contains(Predicates.nameContains("axe")) || RandomTask >= 41 && RandomTask < 71 && notatclosestbank && !Bank.isOpen()
+                && !BuyItems && !Inventory.contains("Knife") || RandomTask >= 71 && notatclosestbank && !Bank.isOpen()
+                && !BuyItems && !Inventory.contains("Tinderbox") || !Bank.isOpen() && notatclosestbank && BuyItems && !SELECTED_SHOP
+                || !Bank.isOpen() && notatclosestbank && !Inventory.contains("Coins") && BuyItems && SHOP_BOBS_AXES || !Bank.isOpen() && notatclosestbank && !Inventory.contains("Coins") && BuyItems
                 && SHOP_GRAND_EXCHANGE && woodcutting_rectangularareas.SHOP_GRAND_EXCHANGE_FS.getArea().contains(Players.getLocal().getWorldLocation())
-                || !Bank.isOpen() && BankLocation.getNearest() != null && playerLocation.distanceTo(BankLocation.getNearest().getArea()) > 4
-                && Inventory.contains("Coins") && BuyItems && SHOP_GRAND_EXCHANGE
+                || !Bank.isOpen() && notatclosestbank && Inventory.contains("Coins") && BuyItems && SHOP_GRAND_EXCHANGE
                 && !woodcutting_rectangularareas.SHOP_GRAND_EXCHANGE_FS.getArea().contains(Players.getLocal().getWorldLocation())
-                || !Bank.isOpen() && BankLocation.getNearest() != null && playerLocation.distanceTo(BankLocation.getNearest().getArea()) > 4
-                && Equipment.contains(Predicates.nameContains("pickaxe")) || !Bank.isOpen() && BankLocation.getNearest() != null && playerLocation.distanceTo(BankLocation.getNearest().getArea()) > 4
+                || !Bank.isOpen() && notatclosestbank && Equipment.contains(Predicates.nameContains("pickaxe")) || !Bank.isOpen() && notatclosestbank
                 && Inventory.contains(Predicates.nameContains("pickaxe"))) {
             // walk to closest bank
             WorldPoint nearestBankLocation = BankLocation.getNearest().getArea().getCenter();
             Movement.walkTo(nearestBankLocation.getX(), nearestBankLocation.getY(), nearestBankLocation.getPlane());
 
-        } else
-        {
-
         }
 
         // method 3
 
-        if (!Bank.isOpen() && notatclosestbank && !BuyItems && Obtain_BronzeAxe == null && Inventory.contains(Predicates.nameContains("axe"))
+        if (!Bank.isOpen() && notatclosestbank && !BuyItems && Obtain_BronzeAxe.equals("null") && Inventory.contains(Predicates.nameContains("axe"))
                 && Equipment.contains(Predicates.nameContains("axe")) || RandomTask >= 41 && RandomTask < 71 && notatclosestbank && !Bank.isOpen()
                 && !BuyItems && !Inventory.contains("Knife") || RandomTask >= 71 && notatclosestbank && !Bank.isOpen() && !BuyItems && !Inventory.contains("Tinderbox")
                 || !Bank.isOpen() && notatclosestbank && BuyItems && !SELECTED_SHOP || !Bank.isOpen() && notatclosestbank && !Inventory.contains("Coins") && BuyItems && SHOP_BOBS_AXES
@@ -143,8 +127,6 @@ public class Woodcutting_I extends LoopedPlugin {
             // walk to closest bank
             WorldPoint nearestBankLocation = BankLocation.getNearest().getArea().getCenter();
             Movement.walkTo(nearestBankLocation.getX(), nearestBankLocation.getY(), nearestBankLocation.getPlane());
-
-        } else {
 
         }
 
@@ -165,8 +147,6 @@ public class Woodcutting_I extends LoopedPlugin {
             }
             sleep(10000);
 
-        } else {
-
         }
 
         // method 5
@@ -174,8 +154,6 @@ public class Woodcutting_I extends LoopedPlugin {
         if (Bank.isOpen() && Inventory.getCount("Coins") >= 1 && !gecontainsplayer) {
             SHOP_GRAND_EXCHANGE = true;
             Bank.depositAll("Coins");
-        } else {
-
         }
 
         // method 6
@@ -184,95 +162,214 @@ public class Woodcutting_I extends LoopedPlugin {
 
             Bank.depositEquipment();
 
-        } else {
-
         }
 
         // method 7
 
         if (Bank.isOpen() && Inventory.contains(Predicates.nameContains("pickaxe"))) {
             Bank.depositAllExcept("Lamp", "Knife", "Tinderbox");
-        } else {
-
         }
 
         // method 10
 
-        if (Bank.isOpen() && !Bank.contains("Bronze axe") && !Inventory.contains("Bronze axe") && getwoodcuttingskill < 6 && Obtain_AXE == null) {
+        if (Bank.isOpen() && !Bank.contains("Bronze axe") && !Inventory.contains("Bronze axe") && getwoodcuttingskill < 6 && Obtain_AXE.equals("null")) {
             BuyItems = true;
             Obtain_AXE = "Bronze axe";
         }
 
         // method 11
 
-        if (Bank.isOpen() && !Bank.contains("Steel axe") && !Inventory.contains("Steel axe") && getwoodcuttingskill >= 6 && getwoodcuttingskill < 21 && Obtain_AXE == null) {
+        if (Bank.isOpen() && !Bank.contains("Steel axe") && !Inventory.contains("Steel axe") && getwoodcuttingskill >= 6 && getwoodcuttingskill < 21 && Obtain_AXE.equals("null")) {
             BuyItems = true;
             Obtain_AXE = "Steel axe";
-        } else {
-
         }
 
         // method 12
 
-        if (Bank.isOpen() && !Bank.contains("Mithril axe") && !Inventory.contains("Mithril axe") && getwoodcuttingskill >= 21 && getwoodcuttingskill < 31 && Obtain_AXE == null) {
+        if (Bank.isOpen() && !Bank.contains("Mithril axe") && !Inventory.contains("Mithril axe") && getwoodcuttingskill >= 21 && getwoodcuttingskill < 31 && Obtain_AXE.equals("null")) {
             BuyItems = true;
             Obtain_AXE = "Mithril axe";
-        } else {
-
         }
 
         // method 13
 
-        if (Bank.isOpen() && !Bank.contains("Adamant axe") && !Inventory.contains("Adamant axe") && getwoodcuttingskill >= 31 && getwoodcuttingskill < 41 && Obtain_AXE == null) {
+        if (Bank.isOpen() && !Bank.contains("Adamant axe") && !Inventory.contains("Adamant axe") && getwoodcuttingskill >= 31 && getwoodcuttingskill < 41 && Obtain_AXE.equals("null")) {
             BuyItems = true;
             Obtain_AXE = "Adamant axe";
-        } else {
-
         }
 
         // method 14
 
-        if (Bank.isOpen() && !Bank.contains("Rune axe") && !Inventory.contains("Rune axe") && getwoodcuttingskill >= 41 && getwoodcuttingskill < 51 && Obtain_AXE == null) {
+        if (Bank.isOpen() && !Bank.contains("Rune axe") && !Inventory.contains("Rune axe") && getwoodcuttingskill >= 41 && getwoodcuttingskill < 51 && Obtain_AXE.equals("null")) {
             BuyItems = true;
             Obtain_AXE = "Rune axe";
-        } else {
-
         }
 
         // method 15
 
-        if (Bank.isOpen() && !Bank.contains("Dragon axe") && !Inventory.contains("Dragon axe") && getwoodcuttingskill >= 61 && Obtain_AXE == null) {
+        if (Bank.isOpen() && !Bank.contains("Dragon axe") && !Inventory.contains("Dragon axe") && getwoodcuttingskill >= 61 && Obtain_AXE.equals("null")) {
             BuyItems = true;
             Obtain_AXE = "Dragon axe";
-        } else {
-
         }
 
         // method 16
 
-        if (Bank.isOpen() && client.isMembersWorld() && !Bank.contains("Knife") && !Inventory.contains("Knife") && RandomTask >= 41 && RandomTask < 71 && Accoount_Type == "Normal") {
+        if (Bank.isOpen() && client.isMembersWorld() && !Bank.contains("Knife") && !Inventory.contains("Knife") && RandomTask >= 41 && RandomTask < 71 && Account_Type.equals("Normal")) {
             BuyItems = true;
             Obtain_Knife = true;
-        } else {
-
         }
 
         // method 17
 
-        if (Bank.isOpen() && !Bank.contains("Tinderbox") && !Inventory.contains("Tinderbox") && RandomTask >= 71 && Accoount_Type == "Normal") {
+        if (Bank.isOpen() && !Bank.contains("Tinderbox") && !Inventory.contains("Tinderbox") && RandomTask >= 71 && Account_Type.equals("Normal")) {
             BuyItems = true;
             Obtain_Tinderbox = true;
-        } else {
-
         }
 
         // method 18
 
-        if (Bank.isOpen() && !Bank.contains("Knife") && !Bank.contains("Tinderbox") && !Inventory.contains("Knife") && !Inventory.contains("Tinderbox") && RandomTask >= 41 && RandomTask < 71 && Accoount_Type != "Normal"
+        if (Bank.isOpen() && !Bank.contains("Knife") && !Bank.contains("Tinderbox") && !Inventory.contains("Knife") && !Inventory.contains("Tinderbox") && RandomTask >= 41 && RandomTask < 71 && !Account_Type.equals("Normal")
         || Bank.isOpen() && !Bank.contains("Knife") && !Bank.contains("Tinderbox") && !Inventory.contains("Knife") && !Inventory.contains("Tinderbox") && RandomTask >= 41 && RandomTask < 71 && !client.isMembersWorld()) {
             Obtain_Knife = false;
             RandomTask = 10;
         }
+
+        // method 19
+
+        if (Bank.isOpen() && !Bank.contains("Tinderbox") && !Inventory.contains("Tinderbox") && RandomTask >= 71 && Account_Type.equals("Normal")) {
+            Obtain_Tinderbox = true;
+            RandomTask = 10;
+        }
+
+        // method 20
+
+        if (Bank.isOpen() && !Bank.contains("Knife") && Bank.contains("Tinderbox") && !Inventory.contains("Knife") && RandomTask >= 41 && RandomTask < 71 && !Account_Type.equals("Normal")
+        || Bank.isOpen() && !Bank.contains("Knife") && Inventory.contains("Tinderbox") && !Inventory.contains("Knife") && RandomTask >= 41 && RandomTask < 71 && !Account_Type.equals("Normal")
+        || Bank.isOpen() && !Bank.contains("Tinderbox") && Bank.contains("Knife") && !Inventory.contains("Tinderbox") && RandomTask >= 71 && !Account_Type.equals("Normal")
+        || Bank.isOpen() && !Bank.contains("Tinderbox") && Inventory.contains("Knife") && !Inventory.contains("Tinderbox") && RandomTask >= 71 && !Account_Type.equals("Normal")) {
+
+            Random random = new Random();
+            RandomTask = random.nextInt(100) + 1;
+            sleep(50, 100);
+        }
+
+        // method 21
+
+        if (Obtain_AXE.equals("Mithril axe") && !Account_Type.equals("Normal") && !Inventory.contains("Mithril axe") && !Bank.contains("Mithril axe") && !Equipment.contains("Mithril axe")
+                || Obtain_AXE.equals("Adamant axe") && !Account_Type.equals("Normal") && !Inventory.contains("Adamant axe") && !Bank.contains("Adamant axe") && !Equipment.contains("Adamant axe")
+                || Obtain_AXE.equals("Rune axe") && !Account_Type.equals("Normal") && !Inventory.contains("Rune axe") && !Bank.contains("Rune axe") && !Equipment.contains("Rune axe")
+                || Obtain_AXE.equals("Dragon axe") && !Account_Type.equals("Normal") && !Inventory.contains("Dragon axe") && !Bank.contains("Dragon axe") && !Equipment.contains("Dragon axe")) {
+
+            Obtain_AXE = "Steel axe";
+            sleep(100, 150);
+
+        }
+
+        // method 22
+
+        if (Obtain_AXE.equals("Dragon axe") && Account_Type.equals("Normal") && !client.isMembersWorld()
+                || Obtain_AXE.equals("Dragon axe") && Account_Type.equals("Normal") && Bank.isOpen() && Bank.getCount("Coins") < 70000 && Inventory.getCount("Coins") < 70000
+                && !Inventory.contains("Dragon axe") && !Bank.contains("Dragon axe") && !Equipment.contains("Dragon axe")){
+
+            Obtain_AXE = "Rune axe";
+            sleep(100,150);
+
+        }
+
+        // method 23
+
+        if (Obtain_AXE.equals("Rune axe") && Account_Type.equals("Normal") && Bank.isOpen() && Bank.getCount("Coins") < 8000 && Inventory.getCount("Coins") < 8000
+                && !Inventory.contains("Rune axe") && !Bank.contains("Rune axe") && !Equipment.contains("Rune axe")) {
+
+            Obtain_AXE = "Adamant axe";
+            sleep(100,150);
+        }
+
+        // method 24
+
+        if (Obtain_AXE.equals("Adamant axe") && Account_Type.equals("Normal") && Bank.isOpen() && Bank.getCount("Coins") < 500 && Inventory.getCount("Coins") < 500
+        && !Inventory.contains("Adamant axe") && !Bank.contains("Adamant axe") && !Equipment.contains("Adamant axe")) {
+
+            Obtain_AXE = "Mithril axe";
+            sleep(100,150);
+        }
+
+        // method 25
+
+        if (Obtain_AXE.equals("Mithril axe") && Account_Type.equals("Normal") && Bank.isOpen() && Bank.getCount("Coins") < 250 && Inventory.getCount("Coins") < 250
+        && !Inventory.contains("Mithril axe") && !Bank.contains("Mithril axe") && !Equipment.contains("Mithril axe")) {
+
+            Obtain_AXE = "Steel axe";
+            sleep(100,150);
+        }
+
+        // method 26
+
+        if (Obtain_AXE.equals("Steel axe") && Account_Type.equals("Normal") && Bank.isOpen() && Bank.getCount("Coins") < 100 && Inventory.getCount("Coins") < 100
+                && !Inventory.contains("Steel axe") && !Bank.contains("Steel axe") && !Equipment.contains("Steel axe")
+                || Obtain_AXE.equals("Steel axe") && !Account_Type.equals("Normal") && Bank.isOpen() && Bank.getCount("Coins") < 200 && Inventory.getCount("Coins") < 200
+                && !Inventory.contains("Steel axe") && !Bank.contains("Steel axe") && !Equipment.contains("Steel axe")) {
+
+            Obtain_AXE = "Bronze axe";
+            sleep(100,150);
+        }
+
+        // method 27
+
+        if (Obtain_AXE.equals("Dragon axe") && Inventory.contains("Dragon axe")
+                || Obtain_AXE.equals("Dragon axe") && Bank.isOpen() && Bank.contains("Dragon axe")
+                || Obtain_AXE.equals("Dragon axe") && Equipment.contains("Dragon axe")
+                || Obtain_AXE.equals("Rune axe") && Inventory.contains("Rune axe")
+                || Obtain_AXE.equals("Rune axe") && Bank.isOpen() && Bank.contains("Rune axe")
+                || Obtain_AXE.equals("Rune axe") && Equipment.contains("Rune axe")
+                || Obtain_AXE.equals("Adamant axe") && Inventory.contains("Adamant axe")
+                || Obtain_AXE.equals("Adamant axe") && Bank.isOpen() && Bank.contains("Adamant axe")
+                || Obtain_AXE.equals("Adamant axe") && Equipment.contains("Adamant axe")
+                || Obtain_AXE.equals("Mithril axe") && Inventory.contains("Mithril axe")
+                || Obtain_AXE.equals("Mithril axe") && Bank.isOpen() && Bank.contains("Mithril axe")
+                || Obtain_AXE.equals("Mithril axe") && Equipment.contains("Mithril axe")
+                || Obtain_AXE.equals("Steel axe") && Inventory.contains("Steel axe")
+                || Obtain_AXE.equals("Steel axe") && Bank.isOpen() && Bank.contains("Steel axe")
+                || Obtain_AXE.equals("Steel axe") && Equipment.contains("Steel axe")
+                || Obtain_AXE.equals("Bronze axe") && Inventory.contains("Bronze axe")
+                || Obtain_AXE.equals("Bronze axe") && Bank.isOpen() && Bank.contains("Bronze axe")
+                || Obtain_AXE.equals("Bronze axe") && Equipment.contains("Bronze axe")) {
+
+            Obtain_AXE = "false";
+        }
+
+        // method 36
+
+        if (Bank.isOpen() && client.isMembersWorld() && !Equipment.contains("Lumberjack hat") && Bank.contains("Lumberjack hat") && !Inventory.contains("Lumberjack hat")
+                && getwoodcuttingskill >= 44) {
+            Bank.withdraw("Lumberjack hat",1,Bank.WithdrawMode.ITEM);
+        }
+
+        // method 37
+
+        if (Bank.isOpen() && client.isMembersWorld() && !Equipment.contains("Lumberjack top") && Bank.contains("Lumberjack top") && !Inventory.contains("Lumberjack top")
+                && getwoodcuttingskill >= 44) {
+            Bank.withdraw("Lumberjack top",1,Bank.WithdrawMode.ITEM);
+        }
+
+        // method 38
+
+        if (Bank.isOpen() && client.isMembersWorld() && !Equipment.contains("Lumberjack legs") && Bank.contains("Lumberjack legs") && !Inventory.contains("Lumberjack legs")
+                && getwoodcuttingskill >= 44) {
+            Bank.withdraw("Lumberjack legs",1,Bank.WithdrawMode.ITEM);
+        }
+
+        // method 39
+
+        if (Bank.isOpen() && client.isMembersWorld() && !Equipment.contains("Lumberjack boots") && Bank.contains("Lumberjack boots") && !Inventory.contains("Lumberjack boots")
+                && getwoodcuttingskill >= 44) {
+            Bank.withdraw("Lumberjack boots",1,Bank.WithdrawMode.ITEM);
+        }
+
+        // method 40
+
+
+
 
         // end of script
 
