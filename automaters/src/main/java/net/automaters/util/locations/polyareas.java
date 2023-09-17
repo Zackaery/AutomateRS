@@ -1,4 +1,4 @@
-package net.automaters.activities.skills.woodcutting.locations;
+package net.automaters.util.locations;
 
 import net.unethicalite.api.commons.Rand;
 import net.runelite.api.coords.WorldPoint;

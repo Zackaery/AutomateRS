@@ -1,12 +1,12 @@
-package net.automaters.activities.skills.woodcutting.timers;
+package net.automaters.util.timers;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class globaltimers {
-    private static Timer timer1;
-    private static Timer timer2;
+    public static Timer timer1;
+    public static Timer timer2;
 
     public static void startTimers() {
         // Timer 1: Executes every 1000 milliseconds (1 second)

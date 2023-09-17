@@ -1,7 +1,5 @@
 package net.automaters.activities.skills.woodcutting;
-import net.automaters.activities.skills.woodcutting.locations.rectangularareas;
-import net.automaters.activities.skills.woodcutting.locations.polyareas;
-import net.automaters.activities.skills.woodcutting.timers.globaltimers;
+import net.automaters.util.timers.globaltimers;
 
 import javax.swing.*;
 
