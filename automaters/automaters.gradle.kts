@@ -1,5 +1,3 @@
-@file:Suppress("GradlePackageVersionRange")
-
 version = "0.0.1"
 
 project.extra["PluginName"] = "AutomateRS"

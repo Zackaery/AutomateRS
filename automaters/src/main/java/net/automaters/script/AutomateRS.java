@@ -1,14 +1,17 @@
 package net.automaters.script;
 
-import com.google.inject.Inject;
+import com.google.inject.Provides;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.automaters.account_builds.build_executor.BuildExecutor;
 import net.automaters.gui.GUI;
 import net.automaters.gui.utils.EventDispatchThreadRunner;
+import net.automaters.script.panel.AutomateRSPanel;
 import net.automaters.util.file_managers.ImageManager;
 import net.runelite.api.Client;
+import net.runelite.client.callback.ClientThread;
+import net.runelite.client.config.ConfigManager;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.xptracker.XpTrackerPlugin;
@@ -23,8 +26,16 @@ import net.unethicalite.api.script.paint.ExperienceTracker;
 import org.pf4j.Extension;
 
 import javax.annotation.Nullable;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.concurrent.ScheduledExecutorService;
 
 import static net.automaters.gui.GUI.*;
 
@@ -37,6 +48,9 @@ import static net.automaters.gui.GUI.*;
 
 @Slf4j
 public class AutomateRS extends TaskPlugin {
+	@Inject
+	@Nullable
+	private Client client;
 
 	@Inject
 	private OverlayManager overlayManager;
@@ -45,13 +59,13 @@ public class AutomateRS extends TaskPlugin {
 	private AutomateRSOverlay automateRSOverlay;
 
 	@Inject
-	@Nullable
-	private Client client;
-
-	@Inject
 	private ClientToolbar clientToolbar;
 
-	private NavigationButton navButton;
+	@Inject
+	private AutomateRSConfig config;
+
+	@Inject
+	private ClientThread clientThread;
 
 	@Inject
 	private BlockingEventManager blockingEventManager;
@@ -61,22 +75,34 @@ public class AutomateRS extends TaskPlugin {
 
 	@Getter(AccessLevel.PROTECTED)
 
+	@Inject
+	private ScheduledExecutorService executorService;
+
+	private AutomateRSPanel panel;
+	private NavigationButton navButton;
+
+	@Provides
+	AutomateRSConfig getConfig(ConfigManager configManager)
+	{
+		return configManager.getConfig(AutomateRSConfig.class);
+	}
+
 	private GUI GUI;
-	private AutomateRSPanel automateRSPanel;
 	public static ExperienceTracker xpTracker;
 	private final Task[] tasks = new Task[] {};
 	public static boolean debugEnabled = true;
 	public static boolean scriptStarted;
 
 	@Override
-	protected void startUp() {
-		automateRSPanel = injector.getInstance(AutomateRSPanel.class);
+	protected void startUp() throws IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {
+		panel = injector.getInstance(AutomateRSPanel.class);
+		panel.init();
 
 		navButton = NavigationButton.builder()
 				.tooltip("AutomateRS")
-				.icon(ImageManager.getInstance().loadImage("images/panel/navButton.png"))
+				.icon(ImageManager.getInstance().loadImage("resources/net.automaters.script/panel/navButton.png"))
 				.priority(0)
-				.panel(automateRSPanel)
+				.panel(panel)
 				.build();
 
 		clientToolbar.addNavigation(navButton);

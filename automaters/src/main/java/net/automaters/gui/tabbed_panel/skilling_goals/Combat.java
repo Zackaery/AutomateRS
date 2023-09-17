@@ -69,12 +69,12 @@ public class Combat {
             spinnerGoalPrayer = new JSpinner();
             spinnerGoalPrayer.setBounds(145, 128, 50, 20);
 
-            setImage("images/skillIcons/Attack.png", labelGoalAttack);
-            setImage("images/skillIcons/Strength.png", labelGoalStrength);
-            setImage("images/skillIcons/Defence.png", labelGoalDefence);
-            setImage("images/skillIcons/Ranged.png", labelGoalRanged);
-            setImage("images/skillIcons/Magic.png", labelGoalMagic);
-            setImage("images/skillIcons/Prayer.png", labelGoalPrayer);
+            setImage("net.automaters.script/skillIcons/Attack.png", labelGoalAttack);
+            setImage("net.automaters.script/skillIcons/Strength.png", labelGoalStrength);
+            setImage("net.automaters.script/skillIcons/Defence.png", labelGoalDefence);
+            setImage("net.automaters.script/skillIcons/Ranged.png", labelGoalRanged);
+            setImage("net.automaters.script/skillIcons/Magic.png", labelGoalMagic);
+            setImage("net.automaters.script/skillIcons/Prayer.png", labelGoalPrayer);
         }
 
         // ======== panelSkillingGoalsCombat ========

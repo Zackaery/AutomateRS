@@ -19,8 +19,7 @@ public class ResourceManager {
             System.getProperty("user.home"),
             ".openosrs",
             "data",
-            "AutomateRS",
-            "resources"
+            "AutomateRS"
     ).toString();
 
     private static final String GITHUB_URL = "https://github.com/Zackaery/Account-Builder";
@@ -77,12 +76,12 @@ public class ResourceManager {
 
     private static void downloadResourcesFromGitHubToDataDirectory() {
         try {
-            URL url = new URL(GITHUB_URL + "/raw/main/images.zip");
+            URL url = new URL(GITHUB_URL + "/raw/main/resources.zip");
             AutomateRS.debug("Downloading file from url: " + url.toString() + ", to: " + DIRECTORY);
 
             ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
 
-            File outputFile = Paths.get(DIRECTORY, "images.zip").toFile();
+            File outputFile = Paths.get(DIRECTORY, "resources.zip").toFile();
 
             outputFile.getParentFile().mkdirs();
             outputFile.createNewFile();
