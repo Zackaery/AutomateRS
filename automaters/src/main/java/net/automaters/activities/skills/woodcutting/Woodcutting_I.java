@@ -1,11 +1,10 @@
 package net.automaters.activities.skills.woodcutting;
 import net.automaters.util.locations.woodcutting_rectangularareas;
 import net.automaters.util.timers.globaltimers;
-import net.runelite.api.EquipmentInventorySlot;
-import net.runelite.api.NPC;
+import net.runelite.api.*;
 import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.mixins.Inject;
 import net.unethicalite.api.commons.Predicates;
-import net.unethicalite.api.coords.Area;
 import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.items.Bank;
@@ -53,10 +52,10 @@ public class Woodcutting_I extends LoopedPlugin {
     // strings
 
     public static String Accoount_Type = "Unknown";
-    public static String Task_Goal = "None";
-    public static String Current_Task = "None";
-    public static String Obtain_BronzeAxe = "None";
-    public static String Obtain_AXE = "false";
+    public static String Task_Goal = null;
+    public static String Current_Task = null;
+    public static String Obtain_BronzeAxe = null;
+    public static String Obtain_AXE = null;
 
     // timers
 
@@ -64,6 +63,14 @@ public class Woodcutting_I extends LoopedPlugin {
     Timer timer2 = globaltimers.getTimer2();
 
     // start of script
+    @Inject
+    private Client client;
+    boolean isItemEquipped(ItemID itemName) {
+        final ItemContainer equipment = client.getItemContainer(InventoryID.EQUIPMENT);
+        return equipment != null && equipment.count() == 1;
+    }
+
+    boolean isWearingPickaxe = Equipment.contains(Predicates.nameContains("pickaxe"));
 
     @Override
     public int loop() {
@@ -76,6 +83,7 @@ public class Woodcutting_I extends LoopedPlugin {
         boolean notatclosestbank = BankLocation.getNearest() != null && playerLocation.distanceTo(BankLocation.getNearest().getArea()) > 4;
         boolean atclosestbank = BankLocation.getNearest() != null && playerLocation.distanceTo(BankLocation.getNearest().getArea()) <= 4;
         boolean gecontainsplayer = woodcutting_rectangularareas.SHOP_GRAND_EXCHANGE_FS.getArea().contains(Players.getLocal().getWorldLocation());
+        int getwoodcuttingskill = client.getBoostedSkillLevel(Skill.WOODCUTTING);
 
 
         // method 1
@@ -96,7 +104,7 @@ public class Woodcutting_I extends LoopedPlugin {
         // method 2
 
         if (BankLocation.getNearest() != null && playerLocation.distanceTo(BankLocation.getNearest().getArea()) > 4
-                && !Bank.isOpen() && BuyItems && Obtain_BronzeAxe != null && !Inventory.contains(Predicates.nameContains("axe"))
+                && !Bank.isOpen() && BuyItems && Obtain_BronzeAxe == null && !Inventory.contains(Predicates.nameContains("axe"))
                 && !Equipment.contains(Predicates.nameContains("axe")) || RandomTask >= 41 && RandomTask < 71 && BankLocation.getNearest() != null
                 && playerLocation.distanceTo(BankLocation.getNearest().getArea()) > 4 && !Bank.isOpen()
                 && !BuyItems && !Inventory.contains("Knife") || RandomTask >= 71 && BankLocation.getNearest() != null
@@ -124,7 +132,7 @@ public class Woodcutting_I extends LoopedPlugin {
 
         // method 3
 
-        if (!Bank.isOpen() && notatclosestbank && !BuyItems && Obtain_BronzeAxe != null && Inventory.contains(Predicates.nameContains("axe"))
+        if (!Bank.isOpen() && notatclosestbank && !BuyItems && Obtain_BronzeAxe == null && Inventory.contains(Predicates.nameContains("axe"))
                 && Equipment.contains(Predicates.nameContains("axe")) || RandomTask >= 41 && RandomTask < 71 && notatclosestbank && !Bank.isOpen()
                 && !BuyItems && !Inventory.contains("Knife") || RandomTask >= 71 && notatclosestbank && !Bank.isOpen() && !BuyItems && !Inventory.contains("Tinderbox")
                 || !Bank.isOpen() && notatclosestbank && BuyItems && !SELECTED_SHOP || !Bank.isOpen() && notatclosestbank && !Inventory.contains("Coins") && BuyItems && SHOP_BOBS_AXES
@@ -172,12 +180,99 @@ public class Woodcutting_I extends LoopedPlugin {
 
         // method 6
 
-        if (Bank.isOpen()){
+        if (Bank.isOpen() && isWearingPickaxe){
+
+            Bank.depositEquipment();
 
         } else {
 
         }
 
+        // method 7
+
+        if (Bank.isOpen() && Inventory.contains(Predicates.nameContains("pickaxe"))) {
+            Bank.depositAllExcept("Lamp", "Knife", "Tinderbox");
+        } else {
+
+        }
+
+        // method 10
+
+        if (Bank.isOpen() && !Bank.contains("Bronze axe") && !Inventory.contains("Bronze axe") && getwoodcuttingskill < 6 && Obtain_AXE == null) {
+            BuyItems = true;
+            Obtain_AXE = "Bronze axe";
+        }
+
+        // method 11
+
+        if (Bank.isOpen() && !Bank.contains("Steel axe") && !Inventory.contains("Steel axe") && getwoodcuttingskill >= 6 && getwoodcuttingskill < 21 && Obtain_AXE == null) {
+            BuyItems = true;
+            Obtain_AXE = "Steel axe";
+        } else {
+
+        }
+
+        // method 12
+
+        if (Bank.isOpen() && !Bank.contains("Mithril axe") && !Inventory.contains("Mithril axe") && getwoodcuttingskill >= 21 && getwoodcuttingskill < 31 && Obtain_AXE == null) {
+            BuyItems = true;
+            Obtain_AXE = "Mithril axe";
+        } else {
+
+        }
+
+        // method 13
+
+        if (Bank.isOpen() && !Bank.contains("Adamant axe") && !Inventory.contains("Adamant axe") && getwoodcuttingskill >= 31 && getwoodcuttingskill < 41 && Obtain_AXE == null) {
+            BuyItems = true;
+            Obtain_AXE = "Adamant axe";
+        } else {
+
+        }
+
+        // method 14
+
+        if (Bank.isOpen() && !Bank.contains("Rune axe") && !Inventory.contains("Rune axe") && getwoodcuttingskill >= 41 && getwoodcuttingskill < 51 && Obtain_AXE == null) {
+            BuyItems = true;
+            Obtain_AXE = "Rune axe";
+        } else {
+
+        }
+
+        // method 15
+
+        if (Bank.isOpen() && !Bank.contains("Dragon axe") && !Inventory.contains("Dragon axe") && getwoodcuttingskill >= 61 && Obtain_AXE == null) {
+            BuyItems = true;
+            Obtain_AXE = "Dragon axe";
+        } else {
+
+        }
+
+        // method 16
+
+        if (Bank.isOpen() && client.isMembersWorld() && !Bank.contains("Knife") && !Inventory.contains("Knife") && RandomTask >= 41 && RandomTask < 71 && Accoount_Type == "Normal") {
+            BuyItems = true;
+            Obtain_Knife = true;
+        } else {
+
+        }
+
+        // method 17
+
+        if (Bank.isOpen() && !Bank.contains("Tinderbox") && !Inventory.contains("Tinderbox") && RandomTask >= 71 && Accoount_Type == "Normal") {
+            BuyItems = true;
+            Obtain_Tinderbox = true;
+        } else {
+
+        }
+
+        // method 18
+
+        if (Bank.isOpen() && !Bank.contains("Knife") && !Bank.contains("Tinderbox") && !Inventory.contains("Knife") && !Inventory.contains("Tinderbox") && RandomTask >= 41 && RandomTask < 71 && Accoount_Type != "Normal"
+        || Bank.isOpen() && !Bank.contains("Knife") && !Bank.contains("Tinderbox") && !Inventory.contains("Knife") && !Inventory.contains("Tinderbox") && RandomTask >= 41 && RandomTask < 71 && !client.isMembersWorld()) {
+            Obtain_Knife = false;
+            RandomTask = 10;
+        }
 
         // end of script
 
