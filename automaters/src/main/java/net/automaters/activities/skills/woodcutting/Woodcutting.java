@@ -8,6 +8,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.plugins.LoopedPlugin;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Comparator;
@@ -61,7 +62,7 @@ public class Woodcutting extends LoopedPlugin {
         }
 
         if (!moveto) {
-            String filePath = "C:\\Users\\corey\\.openosrs\\data\\AutomateRS\\testlocation.txt";
+            String filePath = System.getProperty("user.home") + File.separator + ".openosrs" + File.separator + "data" + File.separator + "AutomateRS" + File.separator + "testlocation.txt";
 
             try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
                 String line = reader.readLine(); // Read the first line

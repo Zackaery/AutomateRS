@@ -9,36 +9,26 @@ import net.automaters.gui.GUI;
 import net.automaters.script.panel.AutomateRSPanel;
 import net.automaters.util.file_managers.ImageManager;
 import net.runelite.api.Client;
-import net.runelite.api.GameState;
 import net.runelite.api.World;
-import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.WidgetLoaded;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
-import net.runelite.client.events.PluginChanged;
-import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.plugins.xptracker.XpTrackerPlugin;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.unethicalite.api.events.LobbyWorldSelectToggled;
-import net.unethicalite.api.events.LoginStateChanged;
-import net.unethicalite.api.events.WorldHopped;
-import net.unethicalite.api.game.Game;
 import net.unethicalite.api.game.Worlds;
 import net.unethicalite.api.plugins.Task;
 import net.unethicalite.api.plugins.TaskPlugin;
 import net.unethicalite.api.script.blocking_events.BlockingEventManager;
 import net.unethicalite.api.script.blocking_events.LoginEvent;
 import net.unethicalite.api.script.blocking_events.WelcomeScreenEvent;
-import net.unethicalite.api.script.paint.ExperienceTracker;
 import net.unethicalite.api.widgets.Widgets;
 import org.pf4j.Extension;
 
-import javax.annotation.Nullable;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -48,12 +38,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.concurrent.ScheduledExecutorService;
 
-import net.automaters.script.panel.auto_login.ProfilePanel;
 
 import static net.automaters.gui.GUI.*;
 import static net.automaters.script.panel.AutomateRSPanel.*;
 import static net.automaters.script.panel.auto_login.ProfilePanel.init;
-import static net.unethicalite.api.input.Keyboard.sendEnter;
 
 @PluginDescriptor(name = "AutomateRS", description = "RuneScape - Automated")
 @Extension
@@ -99,12 +87,9 @@ public class AutomateRS extends TaskPlugin {
 	}
 
 	private GUI GUI;
-	public static ExperienceTracker xpTracker;
 	private final Task[] tasks = new Task[] {};
 	public static boolean debugEnabled = true;
 	public static boolean scriptStarted;
-	public static boolean sent;
-	public static int currentWorld;
 
 	@Subscribe
 	private void onWidgetHiddenChanged(WidgetLoaded e)
