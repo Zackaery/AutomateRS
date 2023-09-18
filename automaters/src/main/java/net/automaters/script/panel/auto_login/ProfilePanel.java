@@ -3,6 +3,7 @@ package net.automaters.script.panel.auto_login;
 import net.automaters.script.AutomateRS;
 import net.automaters.script.AutomateRSConfig;
 import net.automaters.script.panel.AutomateRSPanel;
+import net.automaters.util.api.client.ui.components.PluginInfoPanel;
 import net.automaters.util.file_managers.ImageManager;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
@@ -55,8 +56,11 @@ public class ProfilePanel extends JPanel {
     private static Integer world = null;
     Client thisClient;
 
+    private final PluginInfoPanel profileTitle = new PluginInfoPanel();
+
     public ProfilePanel(final Client client, final String data, final AutomateRSConfig automateRSConfig, final AutomateRSPanel parent)
     {
+
         thisClient = client;
         String[] parts = data.split(":", 5);
         this.loginText = parts[1];
@@ -189,7 +193,10 @@ public class ProfilePanel extends JPanel {
             }
         });
 
-        add(labelWrapper, BorderLayout.NORTH);
+        profileTitle.setContent("Profiles",
+                "Please only use one for now, multiple profiles will break it.");
+        add(profileTitle, BorderLayout.NORTH);
+        add(labelWrapper, BorderLayout.CENTER);
 
     }
 
