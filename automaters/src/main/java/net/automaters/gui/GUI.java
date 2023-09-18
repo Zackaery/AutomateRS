@@ -148,7 +148,7 @@ public class GUI implements ActionListener {
         labelTitle.setBounds(449, 10, 957, 160);
         labelTitle.setHorizontalAlignment(SwingConstants.CENTER);
         labelTitle.setFont(labelTitle.getFont().deriveFont(labelTitle.getFont().getSize() + 4f));
-        setImage("net.automaters.script/labelTitle.png", labelTitle);
+        setImage("resources/net.automaters.script/labelTitle.png", labelTitle);
 
         // --- tabbedPanel ---
         tabbedPanel = new JTabbedPane();

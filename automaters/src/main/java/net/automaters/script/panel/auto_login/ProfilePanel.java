@@ -8,7 +8,6 @@ import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.util.ImageUtil;
-import net.unethicalite.api.input.Mouse;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -26,9 +25,12 @@ import java.security.spec.InvalidKeySpecException;
 
 import static net.automaters.script.AutomateRS.debug;
 import static net.automaters.script.panel.AutomateRSPanel.*;
+import static net.unethicalite.api.input.Keyboard.sendEnter;
 
 
 public class ProfilePanel extends JPanel {
+
+    private AutomateRS plugin;
 
     private static final ImageIcon DELETE_ICON;
     private static final ImageIcon DELETE_HOVER_ICON;
@@ -47,17 +49,27 @@ public class ProfilePanel extends JPanel {
     }
 
     AutomateRSConfig config;
-    public static String loginText = null;
-    public static String password = null;
+    private static String loginText = null;
+    private static String password = null;
+    private static Boolean useWorld = null;
+    private static Integer world = null;
+    Client thisClient;
 
     public ProfilePanel(final Client client, final String data, final AutomateRSConfig automateRSConfig, final AutomateRSPanel parent)
     {
-        String[] parts = data.split(":", 3);
+        thisClient = client;
+        String[] parts = data.split(":", 5);
         this.loginText = parts[1];
-        if (parts.length == 3)
+        if (parts.length == 5)
         {
             this.password = parts[2];
+            this.useWorld = Boolean.valueOf(parts[3]);
+            this.world = Integer.valueOf(parts[4]);
         }
+        selectWorldBool = useWorld;
+        AutomateRSPanel.useWorld = world;
+
+
 
         final ProfilePanel panel = this;
 
@@ -117,26 +129,9 @@ public class ProfilePanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e)
             {
-                client.setUsername(loginText);
-                client.setPassword(password);
-                debug("Mouse position: "+
-                        Mouse.getPosition());
-                Mouse.moved(299, 322, new Canvas(), 1000);
-                debug("Mouse position: "+
-                        Mouse.getPosition());
-                Mouse.click(299, 322, true);
-                debug("Mouse position: "+
-                        Mouse.getPosition());
-                debug("Logging account in");
-                try {
-                    Thread.sleep(2000);
-                    debug("Mouse position: "+
-                            Mouse.getPosition());
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
+                if (useWorld && client.getWorld() != world) {
+                    prepareLogin();
                 }
-                debug("Mouse position: "+
-                        Mouse.getPosition());
             }
 
             @Override
@@ -196,5 +191,22 @@ public class ProfilePanel extends JPanel {
 
         add(labelWrapper, BorderLayout.NORTH);
 
+    }
+
+    private void prepareLogin() {
+        if (useWorld && thisClient.getWorld() != world) {
+            thisClient.loadWorlds();
+        } else {
+            thisClient.promptCredentials(false);
+        }
+    }
+
+    public static void init(Client client) {
+        login(client);
+    }
+    private static void login(Client client) {
+        client.setUsername(loginText);
+        client.setPassword(password);
+        sendEnter();
     }
 }

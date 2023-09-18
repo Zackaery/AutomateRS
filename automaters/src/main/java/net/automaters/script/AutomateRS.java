@@ -6,23 +6,36 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.automaters.account_builds.build_executor.BuildExecutor;
 import net.automaters.gui.GUI;
-import net.automaters.gui.utils.EventDispatchThreadRunner;
 import net.automaters.script.panel.AutomateRSPanel;
 import net.automaters.util.file_managers.ImageManager;
 import net.runelite.api.Client;
+import net.runelite.api.GameState;
+import net.runelite.api.World;
+import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.events.WidgetLoaded;
+import net.runelite.api.widgets.Widget;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
+import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.PluginChanged;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.xptracker.XpTrackerPlugin;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.unethicalite.api.events.LobbyWorldSelectToggled;
+import net.unethicalite.api.events.LoginStateChanged;
+import net.unethicalite.api.events.WorldHopped;
+import net.unethicalite.api.game.Game;
+import net.unethicalite.api.game.Worlds;
 import net.unethicalite.api.plugins.Task;
 import net.unethicalite.api.plugins.TaskPlugin;
 import net.unethicalite.api.script.blocking_events.BlockingEventManager;
 import net.unethicalite.api.script.blocking_events.LoginEvent;
+import net.unethicalite.api.script.blocking_events.WelcomeScreenEvent;
 import net.unethicalite.api.script.paint.ExperienceTracker;
+import net.unethicalite.api.widgets.Widgets;
 import org.pf4j.Extension;
 
 import javax.annotation.Nullable;
@@ -30,26 +43,24 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.inject.Inject;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.concurrent.ScheduledExecutorService;
 
+import net.automaters.script.panel.auto_login.ProfilePanel;
+
 import static net.automaters.gui.GUI.*;
+import static net.automaters.script.panel.AutomateRSPanel.*;
+import static net.automaters.script.panel.auto_login.ProfilePanel.init;
+import static net.unethicalite.api.input.Keyboard.sendEnter;
 
-@PluginDependency(XpTrackerPlugin.class)
-
+@PluginDescriptor(name = "AutomateRS", description = "RuneScape - Automated")
 @Extension
-@PluginDescriptor(
-		name = "AutomateRS",
-		description = "RuneScape - Automated")
-
 @Slf4j
 public class AutomateRS extends TaskPlugin {
+
 	@Inject
-	@Nullable
 	private Client client;
 
 	@Inject
@@ -92,6 +103,39 @@ public class AutomateRS extends TaskPlugin {
 	private final Task[] tasks = new Task[] {};
 	public static boolean debugEnabled = true;
 	public static boolean scriptStarted;
+	public static boolean sent;
+	public static int currentWorld;
+
+	@Subscribe
+	private void onWidgetHiddenChanged(WidgetLoaded e)
+	{
+		int group = e.getGroupId();
+		if (group == 378 || group == 413)
+		{
+			Widget playButton = WelcomeScreenEvent.getPlayButton();
+			if (Widgets.isVisible(playButton))
+			{
+				client.invokeWidgetAction(1, playButton.getId(), -1, -1, "");
+			}
+		}
+	}
+	@Subscribe
+	private void onLobbyWorldSelectToggled(LobbyWorldSelectToggled e) {
+		if (e.isOpened()) {
+			client.setWorldSelectOpen(false);
+		}
+		if (selectWorldBool) {
+			World selectedWorld = Worlds.getFirst(useWorld);
+			if (selectedWorld != null) {
+				client.changeWorld(selectedWorld);
+			}
+		}
+
+		client.promptCredentials(false);
+		init(client);
+	}
+
+
 
 	@Override
 	protected void startUp() throws IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {
@@ -121,33 +165,6 @@ public class AutomateRS extends TaskPlugin {
 		overlayManager.remove(automateRSOverlay);
 	}
 
-//	@Subscribe
-//	public void onConfigButtonPressed(ConfigButtonClicked event) throws InterruptedException {
-//
-//		if (event.getGroup().contains("automaters")) {
-//			if (event.getKey().toLowerCase().contains("start")) {
-//				var local = Players.getLocal();
-//				if (local == null) {
-//					debug("Local Player not located");
-//					return;
-//				}
-//				if (!started) {
-//					selectedBuild = loadBuildFromGUI();
-//				} else {
-//					this.scriptStarted = true;
-//					debug("Started - AutomateRS");
-//				}
-//			} else if (event.getKey().toLowerCase().contains("pause")) {
-//				scriptStarted = false;
-//				debug("Paused - AutomateRS");
-//			} else {
-//				started = false;
-//				scriptStarted = false;
-//				debug("Stopped - AutomateRS");
-//			}
-//		}
-//	}
-
 	@Override
 	protected int loop()  {
 		if (scriptStarted) {
@@ -156,32 +173,9 @@ public class AutomateRS extends TaskPlugin {
 				debug("--- Initiating loop sequence ---\n\n");
 				return 600;
 			}
+			return 600;
 		}
 		return 600;
-	}
-
-	private String loadBuildFromGUI() throws InterruptedException {
-		try {
-			EventDispatchThreadRunner.runOnDispatchThread(() -> {
-				try {
-					GUI = new GUI();
-					GUI.open();
-					debug("Launching AutomateRS - GUI");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}, true);
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-			return null;
-		}
-
-		if (started) {
-			debug("SELECTED BUILD = " + selectedBuild);
-			return selectedBuild;
-		} else {
-			return null;
-		}
 	}
 
 	public static void debug(String message) {

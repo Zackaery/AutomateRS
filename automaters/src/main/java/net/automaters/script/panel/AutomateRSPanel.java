@@ -6,27 +6,12 @@ import net.automaters.script.AutomateRSConfig;
 import net.automaters.script.panel.auto_login.ProfilePanel;
 import net.automaters.util.api.client.ui.components.PluginInfoPanel;
 import net.runelite.api.Client;
-import net.runelite.api.GameState;
-import net.runelite.api.World;
-import net.runelite.api.events.GameStateChanged;
-import net.runelite.api.events.WidgetLoaded;
-import net.runelite.api.widgets.Widget;
-import net.runelite.client.eventbus.Subscribe;
-import net.runelite.client.events.PluginChanged;
 import net.runelite.client.ui.ClientUI;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.DynamicGridLayout;
 import net.runelite.client.ui.PluginPanel;
 import net.runelite.client.ui.components.ToggleButton;
 import net.unethicalite.api.entities.Players;
-import net.unethicalite.api.events.LobbyWorldSelectToggled;
-import net.unethicalite.api.events.LoginStateChanged;
-import net.unethicalite.api.events.WorldHopped;
-import net.unethicalite.api.game.Game;
-import net.unethicalite.api.game.Worlds;
-import net.unethicalite.api.input.Mouse;
-import net.unethicalite.api.script.blocking_events.WelcomeScreenEvent;
-import net.unethicalite.api.widgets.Widgets;
 
 import javax.annotation.Nullable;
 import javax.crypto.*;
@@ -51,13 +36,10 @@ import java.security.spec.KeySpec;
 import java.util.Arrays;
 import java.util.Base64;
 
-import static java.lang.Integer.parseInt;
 import static net.automaters.gui.GUI.*;
 import static net.automaters.gui.GUI.started;
 import static net.automaters.script.AutomateRS.debug;
 import static net.automaters.script.AutomateRS.scriptStarted;
-import static net.automaters.script.panel.auto_login.ProfilePanel.loginText;
-import static net.automaters.script.panel.auto_login.ProfilePanel.password;
 
 public class AutomateRSPanel extends PluginPanel {
     @Inject
@@ -68,7 +50,6 @@ public class AutomateRSPanel extends PluginPanel {
     private AutomateRSConfig automateRSConfig;
 
     public static boolean accountsAdded;
-    public static int currentWorld;
 
     private final JPanel container = new JPanel();
     private final JPanel scriptPanel = new JPanel();
@@ -88,7 +69,6 @@ public class AutomateRSPanel extends PluginPanel {
     private final SpinnerModel model = new SpinnerNumberModel(301, 301, 578, 1);
     private final JPanel loginPanel = new JPanel();
     private final JPanel accountPanel = new JPanel();
-    private final JPanel worldPanel = new JPanel();
     private final JTextField profileLabel = new JTextField(PROFILE_NAME);
     private final JLabel usernameLabel = new JLabel("Username:");
     private final JLabel passwordLabel = new JLabel("Password:");
@@ -101,8 +81,9 @@ public class AutomateRSPanel extends PluginPanel {
     private final JLabel worldLabel = new JLabel("World:");
     private final ToggleButton saveLastWorld = new ToggleButton("Save last world");
 
-    private static boolean selectWorldBool;
+    public static boolean selectWorldBool;
 
+    public static int useWorld = 301;
     private static final int iterations = 100000;
     private GUI GUI;
 
@@ -123,15 +104,11 @@ public class AutomateRSPanel extends PluginPanel {
 
         loginPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         loginPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        loginPanel.setLayout(new DynamicGridLayout(7, 1, 0, 5));
+        loginPanel.setLayout(new DynamicGridLayout(11, 1, 0, 5));
 
         accountPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         accountPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         accountPanel.setLayout(new DynamicGridLayout(0, 1, 0, 5));
-
-        worldPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-        worldPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        worldPanel.setLayout(new DynamicGridLayout(4, 1, 0, 5));
 
         profileLabel.setForeground(ColorScheme.LIGHT_GRAY_COLOR);
         profileLabel.addFocusListener(new FocusListener() {
@@ -161,19 +138,17 @@ public class AutomateRSPanel extends PluginPanel {
         loginPanel.add(usernameField);
         loginPanel.add(passwordLabel);
         loginPanel.add(passwordField);
+        loginPanel.add(selectWorld);
         loginPanel.add(saveProfile);
 
         noAccountsTitle.setContent("No profiles saved",
                 "You do not have any profiles saved, please add a new profile from the panel above.");
         accountPanel.add(noAccountsTitle);
 
-        worldPanel.add(selectWorld);
-
         add(container, BorderLayout.NORTH);
         add(loginPanel, BorderLayout.CENTER);
         decryptAccounts();
         add(accountPanel, BorderLayout.CENTER);
-        add(worldPanel, BorderLayout.CENTER);
         add(scriptPanel, BorderLayout.SOUTH);
 
         saveProfile.addActionListener(e -> {
@@ -190,7 +165,7 @@ public class AutomateRSPanel extends PluginPanel {
                 return;
             }
             String data;
-            data = profileText + ":" + usernameText + ":" + passwordText;
+            data = profileText + ":" + usernameText + ":" + passwordText + ":" + selectWorldBool + ":" + useWorld;
             try
             {
                 if (!addProfile(data))
@@ -209,21 +184,25 @@ public class AutomateRSPanel extends PluginPanel {
         });
 
         selectWorld.addActionListener(e -> {
-            if (!selectWorldBool) {
-                worldPanel.add(worldLabel);
-                worldPanel.add(selectedWorld);
-                worldPanel.add(saveLastWorld);
-                selectWorldBool = true;
-                worldPanel.repaint();
-                worldPanel.revalidate();
-            } else {
-                worldPanel.remove(worldLabel);
-                worldPanel.remove(selectedWorld);
-                worldPanel.remove(saveLastWorld);
+            if (selectWorldBool) {
+                loginPanel.remove(saveProfile);
+                loginPanel.add(worldLabel);
+                loginPanel.add(selectedWorld);
+                loginPanel.add(saveProfile);
                 selectWorldBool = false;
-                worldPanel.repaint();
-                worldPanel.revalidate();
+                loginPanel.repaint();
+                loginPanel.revalidate();
+            } else {
+                loginPanel.remove(worldLabel);
+                loginPanel.remove(selectedWorld);
+                selectWorldBool = true;
+                loginPanel.repaint();
+                loginPanel.revalidate();
             }
+        });
+
+        selectedWorld.addChangeListener(e -> {
+            useWorld = Integer.parseInt(selectedWorld.toString());
         });
 
         startButton.addMouseListener(new MouseAdapter()
@@ -333,102 +312,6 @@ public class AutomateRSPanel extends PluginPanel {
         revalidate();
     }
 
-    @Subscribe
-    private void onGameStateChanged(GameStateChanged e)
-    {
-        if (e.getGameState() == GameState.LOGIN_SCREEN && client.getLoginIndex() == 0)
-        {
-            prepareLogin();
-        }
-    }
-    @Subscribe
-    private void onLoginStateChanged(LoginStateChanged e)
-    {
-        switch (e.getIndex())
-        {
-            case 2:
-                login();
-                break;
-            case 4:
-                debug("Please enter in your Authenticator.");
-                break;
-            case 24:
-                prepareLogin();
-                client.getCallbacks().post(new LoginStateChanged(2));
-                break;
-        }
-    }
-
-    @Subscribe
-    private void onWorldHopped(WorldHopped e)
-    {
-        currentWorld = e.getWorldId();
-    }
-
-    @Subscribe
-    private void onWidgetHiddenChanged(WidgetLoaded e)
-    {
-        int group = e.getGroupId();
-        if (group == 378 || group == 413)
-        {
-            Widget playButton = WelcomeScreenEvent.getPlayButton();
-            if (Widgets.isVisible(playButton))
-            {
-                client.invokeWidgetAction(1, playButton.getId(), -1, -1, "");
-            }
-        }
-    }
-
-    @Subscribe
-    private void onLobbyWorldSelectToggled(LobbyWorldSelectToggled e)
-    {
-        if (e.isOpened())
-        {
-            client.setWorldSelectOpen(false);
-
-            if (selectWorldBool)
-            {
-                World prefWorld = Worlds.getFirst(parseInt(String.valueOf(selectedWorld)));
-                if (prefWorld != null)
-                {
-                    client.changeWorld(prefWorld);
-                }
-            }
-        }
-
-        client.promptCredentials(false);
-    }
-
-    @Subscribe
-    private void onPluginChanged(PluginChanged e)
-    {
-        if (e.isLoaded() && Game.getState() == GameState.LOGIN_SCREEN)
-        {
-            debug("log screen");
-            prepareLogin();
-            client.getCallbacks().post(new LoginStateChanged(2));
-        }
-    }
-    private void prepareLogin()
-    {
-        debug("prepareLogin");
-        if (selectWorldBool && (client != null ? client.getWorld() : 0) != parseInt(String.valueOf(selectedWorld)))
-        {
-            client.loadWorlds();
-        }
-        else
-        {
-            client.promptCredentials(false);
-        }
-    }
-
-    private void login()
-    {
-        client.setUsername(loginText);
-        client.setPassword(password);
-        Mouse.click(299, 322, true);
-    }
-
     private void decryptAccounts() throws IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {
         redrawProfiles();
         accountPanel.setLayout(new DynamicGridLayout(0, 1, 0, 3));
@@ -455,7 +338,6 @@ public class AutomateRSPanel extends PluginPanel {
 
     private void addAccounts(String data)
     {
-//        debug("data = "+ data);
         data = data.trim();
         if (!data.contains(":"))
         {
