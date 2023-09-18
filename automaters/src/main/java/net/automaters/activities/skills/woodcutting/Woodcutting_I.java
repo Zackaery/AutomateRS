@@ -10,6 +10,7 @@ import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
+import net.unethicalite.api.items.Items;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.plugins.LoopedPlugin;
@@ -25,7 +26,7 @@ public class Woodcutting_I extends LoopedPlugin {
     // Booleans
 
     public static boolean HopWorlds = false;
-    public static boolean Random_Skilling_Task = true;
+    public static boolean Random_Skilling_Task = false;
     public static boolean REGION_ASGARNIA_MISTHALIN = false;
     public static boolean REGION_KANDARIN = false;
     public static boolean REGION_ZEAH = false;
@@ -80,7 +81,15 @@ public class Woodcutting_I extends LoopedPlugin {
 
         boolean atclosestbank = BankLocation.getNearest() != null && playerLocation != null && playerLocation.distanceTo(BankLocation.getNearest().getArea()) <= 4;
         boolean gecontainsplayer = woodcutting_rectangularareas.SHOP_GRAND_EXCHANGE_FS.getArea().contains(Players.getLocal().getWorldLocation());
+        boolean ramcontainsplayer = woodcutting_rectangularareas.Region_AsgarniaMisthalin.getArea().contains(Players.getLocal().getWorldLocation());
+        boolean ramicontainsplayer = woodcutting_rectangularareas.Region_AsgarniaMisthalin_I.getArea().contains(Players.getLocal().getWorldLocation());
+        boolean ramiicontainsplayer = woodcutting_rectangularareas.Region_AsgarniaMisthalin_II.getArea().contains(Players.getLocal().getWorldLocation());
+        boolean noramcontainsplayer = !woodcutting_rectangularareas.Region_AsgarniaMisthalin.getArea().contains(Players.getLocal().getWorldLocation());
+        boolean noramicontainsplayer = !woodcutting_rectangularareas.Region_AsgarniaMisthalin_I.getArea().contains(Players.getLocal().getWorldLocation());
+        boolean noramiicontainsplayer = !woodcutting_rectangularareas.Region_AsgarniaMisthalin_II.getArea().contains(Players.getLocal().getWorldLocation());
+
         int getwoodcuttingskill = client.getBoostedSkillLevel(Skill.WOODCUTTING);
+        int getfishingskill = client.getBoostedSkillLevel(Skill.FISHING);
 
 
         // method 1
@@ -88,8 +97,8 @@ public class Woodcutting_I extends LoopedPlugin {
         if ((RandomTask >= 41 && RandomTask < 71) ||
                 (Bank.isOpen() && !Inventory.contains("Knife") && !Bank.contains("Knife") && RandomTask >= 41 && RandomTask < 71) ||
                 (Bank.isOpen() && !Inventory.contains("Tinderbox") && !Bank.contains("Tinderbox") && RandomTask >= 71) ||
-                (COMPLETED_GOAL_FIREMAKING && RandomTask >= 71) ||
-                (COMPLETED_GOAL_FLETCHING && RandomTask >= 41 && RandomTask < 71)) {
+                (!COMPLETED_GOAL_FIREMAKING && RandomTask >= 71) ||
+                (!COMPLETED_GOAL_FLETCHING && RandomTask >= 41 && RandomTask < 71)) {
 
             // Generate a new random number between 1 and 100 (inclusive) and assign it to RandomTask
             Random random = new Random();
@@ -100,11 +109,11 @@ public class Woodcutting_I extends LoopedPlugin {
 
         if (notatclosestbank && !Bank.isOpen() && BuyItems && Obtain_BronzeAxe.equals("null") && !Inventory.contains(Predicates.nameContains("axe"))
                 && !Equipment.contains(Predicates.nameContains("axe")) || RandomTask >= 41 && RandomTask < 71 && notatclosestbank && !Bank.isOpen()
-                && !BuyItems && !Inventory.contains("Knife") || RandomTask >= 71 && notatclosestbank && !Bank.isOpen()
-                && !BuyItems && !Inventory.contains("Tinderbox") || !Bank.isOpen() && notatclosestbank && BuyItems && !SELECTED_SHOP
-                || !Bank.isOpen() && notatclosestbank && !Inventory.contains("Coins") && BuyItems && SHOP_BOBS_AXES || !Bank.isOpen() && notatclosestbank && !Inventory.contains("Coins") && BuyItems
-                && SHOP_GRAND_EXCHANGE && woodcutting_rectangularareas.SHOP_GRAND_EXCHANGE_FS.getArea().contains(Players.getLocal().getWorldLocation())
-                || !Bank.isOpen() && notatclosestbank && Inventory.contains("Coins") && BuyItems && SHOP_GRAND_EXCHANGE
+                && BuyItems && !Inventory.contains("Knife") || RandomTask >= 71 && notatclosestbank && !Bank.isOpen()
+                && BuyItems && !Inventory.contains("Tinderbox") || !Bank.isOpen() && notatclosestbank && !BuyItems && SELECTED_SHOP
+                || !Bank.isOpen() && notatclosestbank && !Inventory.contains("Coins") && !BuyItems && !SHOP_BOBS_AXES || !Bank.isOpen() && notatclosestbank && !Inventory.contains("Coins") && !BuyItems
+                && !SHOP_GRAND_EXCHANGE && woodcutting_rectangularareas.SHOP_GRAND_EXCHANGE_FS.getArea().contains(Players.getLocal().getWorldLocation())
+                || !Bank.isOpen() && notatclosestbank && Inventory.contains("Coins") && !BuyItems && !SHOP_GRAND_EXCHANGE
                 && !woodcutting_rectangularareas.SHOP_GRAND_EXCHANGE_FS.getArea().contains(Players.getLocal().getWorldLocation())
                 || !Bank.isOpen() && notatclosestbank && Equipment.contains(Predicates.nameContains("pickaxe")) || !Bank.isOpen() && notatclosestbank
                 && Inventory.contains(Predicates.nameContains("pickaxe"))) {
@@ -116,12 +125,12 @@ public class Woodcutting_I extends LoopedPlugin {
 
         // method 3
 
-        if (!Bank.isOpen() && notatclosestbank && !BuyItems && Obtain_BronzeAxe.equals("null") && Inventory.contains(Predicates.nameContains("axe"))
+        if (!Bank.isOpen() && notatclosestbank && BuyItems && Obtain_BronzeAxe.equals("null") && Inventory.contains(Predicates.nameContains("axe"))
                 && Equipment.contains(Predicates.nameContains("axe")) || RandomTask >= 41 && RandomTask < 71 && notatclosestbank && !Bank.isOpen()
-                && !BuyItems && !Inventory.contains("Knife") || RandomTask >= 71 && notatclosestbank && !Bank.isOpen() && !BuyItems && !Inventory.contains("Tinderbox")
-                || !Bank.isOpen() && notatclosestbank && BuyItems && !SELECTED_SHOP || !Bank.isOpen() && notatclosestbank && !Inventory.contains("Coins") && BuyItems && SHOP_BOBS_AXES
-                || !Bank.isOpen() && notatclosestbank && !Inventory.contains("Coins") && BuyItems && SHOP_GRAND_EXCHANGE && gecontainsplayer || !Bank.isOpen() && notatclosestbank
-                && Inventory.contains("Coins") && BuyItems && SHOP_GRAND_EXCHANGE && !gecontainsplayer || !Bank.isOpen() && notatclosestbank && Equipment.contains(Predicates.nameContains("pickaxe"))
+                && BuyItems && !Inventory.contains("Knife") || RandomTask >= 71 && notatclosestbank && !Bank.isOpen() && BuyItems && !Inventory.contains("Tinderbox")
+                || !Bank.isOpen() && notatclosestbank && !BuyItems && SELECTED_SHOP || !Bank.isOpen() && notatclosestbank && !Inventory.contains("Coins") && !BuyItems && !SHOP_BOBS_AXES
+                || !Bank.isOpen() && notatclosestbank && !Inventory.contains("Coins") && !BuyItems && !SHOP_GRAND_EXCHANGE && gecontainsplayer || !Bank.isOpen() && notatclosestbank
+                && Inventory.contains("Coins") && !BuyItems && !SHOP_GRAND_EXCHANGE && !gecontainsplayer || !Bank.isOpen() && notatclosestbank && Equipment.contains(Predicates.nameContains("pickaxe"))
                 || !Bank.isOpen() && notatclosestbank && Inventory.contains(Predicates.nameContains("pickaxe")))
         {
             // walk to closest bank
@@ -132,11 +141,11 @@ public class Woodcutting_I extends LoopedPlugin {
 
         // method 4
 
-        if (!BuyItems && atclosestbank && !Bank.isOpen() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
-                || !BuyItems && atclosestbank && !Bank.isOpen() && RandomTask >= 41 && RandomTask < 71 && !Inventory.contains("Knife") || !BuyItems && atclosestbank && !Bank.isOpen()
-                && RandomTask >= 71 && !Inventory.contains("Tinderbox") || !Bank.isOpen() && atclosestbank && BuyItems && !SELECTED_SHOP || !Bank.isOpen() && atclosestbank && !Inventory.contains("Coins")
-                && BuyItems && SHOP_BOBS_AXES || !Bank.isOpen() && atclosestbank && !Inventory.contains("Coins") && BuyItems && SHOP_GRAND_EXCHANGE && gecontainsplayer || !Bank.isOpen()
-                && atclosestbank && Inventory.contains("Coins") && BuyItems && SHOP_GRAND_EXCHANGE && !gecontainsplayer || !Bank.isOpen() && atclosestbank && Equipment.contains(Predicates.nameContains("pickaxe"))
+        if (BuyItems && atclosestbank && !Bank.isOpen() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
+                || BuyItems && atclosestbank && !Bank.isOpen() && RandomTask >= 41 && RandomTask < 71 && !Inventory.contains("Knife") || BuyItems && atclosestbank && !Bank.isOpen()
+                && RandomTask >= 71 && !Inventory.contains("Tinderbox") || !Bank.isOpen() && atclosestbank && !BuyItems && SELECTED_SHOP || !Bank.isOpen() && atclosestbank && !Inventory.contains("Coins")
+                && !BuyItems && !SHOP_BOBS_AXES || !Bank.isOpen() && atclosestbank && !Inventory.contains("Coins") && !BuyItems && !SHOP_GRAND_EXCHANGE && gecontainsplayer || !Bank.isOpen()
+                && atclosestbank && Inventory.contains("Coins") && !BuyItems && !SHOP_GRAND_EXCHANGE && !gecontainsplayer || !Bank.isOpen() && atclosestbank && Equipment.contains(Predicates.nameContains("pickaxe"))
                 || !Bank.isOpen() && atclosestbank && Inventory.contains(Predicates.nameContains("pickaxe"))) {
 
             NPC banker = NPCs.getNearest(npc -> npc.hasAction("Collect"));
@@ -368,8 +377,200 @@ public class Woodcutting_I extends LoopedPlugin {
 
         // method 40
 
+        if (Bank.isOpen() && client.isMembersWorld() && !Equipment.contains("Lumberjack hat") && !Equipment.contains("Graceful hood") && !Bank.contains("Lumberjack hat") && !Inventory.contains("Lumberjack hat")
+                && Bank.contains("Graceful hood") && !Inventory.contains("Graceful hood")) {
 
+            Bank.withdraw("Graceful hood",1,Bank.WithdrawMode.ITEM);
+        }
 
+        // method 41
+
+        if (Bank.isOpen() && client.isMembersWorld() && !Equipment.contains("Lumberjack top") && !Equipment.contains("Graceful top") && !Bank.contains("Lumberjack top") && !Inventory.contains("Lumberjack top")
+                && Bank.contains("Graceful top") && !Inventory.contains("Graceful top")) {
+
+            Bank.withdraw("Graceful top",1,Bank.WithdrawMode.ITEM);
+        }
+
+        // method 42
+
+        if (Bank.isOpen() && client.isMembersWorld() && !Equipment.contains("Lumberjack legs") && !Equipment.contains("Graceful legs") && !Bank.contains("Lumberjack legs") && !Inventory.contains("Lumberjack legs")
+                && Bank.contains("Graceful legs") && !Inventory.contains("Graceful legs")) {
+
+            Bank.withdraw("Graceful legs",1,Bank.WithdrawMode.ITEM);
+        }
+
+        // method 43
+
+        if (Bank.isOpen() && client.isMembersWorld() && !Equipment.contains("Lumberjack boots") && !Equipment.contains("Graceful boots") && !Bank.contains("Lumberjack boots") && !Inventory.contains("Lumberjack boots")
+                && Bank.contains("Graceful boots") && !Inventory.contains("Graceful boots")) {
+
+            Bank.withdraw("Graceful boots",1,Bank.WithdrawMode.ITEM);
+        }
+
+        // method 44
+
+        if (Bank.isOpen() && client.isMembersWorld() && Bank.contains("Graceful gloves") && !Inventory.contains("Graceful gloves")) {
+            Bank.withdraw("Graceful gloves",1,Bank.WithdrawMode.ITEM);
+        }
+
+        // method 45
+
+        if (Bank.isOpen() && client.isMembersWorld() && Bank.contains("Graceful cape") && !Inventory.contains("Graceful cape")) {
+            Bank.withdraw("Graceful cape",1,Bank.WithdrawMode.ITEM);
+        }
+
+        // method 46
+
+        if (Bank.isOpen() && !Equipment.contains("Lumberjack hat") && !Equipment.contains("Graceful hood") && !Bank.contains("Lumberjack hat") && !Inventory.contains("Lumberjack hat") && !Inventory.contains("Graceful hood")
+                && !Bank.contains("Graceful hood") && Bank.contains(Predicates.nameContains("ronman helm")) && getfishingskill < 34) {
+            Bank.withdraw(Predicates.nameContains("ronman helm"),1,Bank.WithdrawMode.ITEM);
+        }
+
+        // method 47
+
+        if (Bank.isOpen() && !Equipment.contains("Lumberjack hat") && !Equipment.contains("Graceful hood") && !Bank.contains("Lumberjack hat") && !Inventory.contains("Lumberjack hat") && !Inventory.contains("Graceful hood")
+                && !Bank.contains("Graceful hood") && Bank.contains(Predicates.nameContains("ron helm")) && !Inventory.contains(Predicates.nameContains("ron helm")) && getfishingskill < 34
+                || Bank.contains(Predicates.nameContains("ron helm")) && !Inventory.contains(Predicates.nameContains("ron helm")) && getfishingskill <34) {
+            Bank.withdraw(Predicates.nameContains("ron helm"),1,Bank.WithdrawMode.ITEM);
+        }
+
+        // method 48
+
+        if (!Bank.isOpen() && Inventory.contains("Lumberjack hat") && getwoodcuttingskill >= 44) {
+           Inventory.getFirst("Lumberjack hat").interact("Wear");
+        } else {
+            if (Bank.isOpen() && Inventory.contains("Lumberjack hat") && getwoodcuttingskill >= 44) {
+                Bank.Inventory.getFirst("Lumberjack hat").interact("Wear");
+            }
+        }
+
+        // method 49
+
+        if (!Bank.isOpen() && Inventory.contains("Lumberjack top") && getwoodcuttingskill >= 44) {
+            Inventory.getFirst("Lumberjack top").interact("Wear");
+        } else {
+            if (Bank.isOpen() && Inventory.contains("Lumberjack top") && getwoodcuttingskill >= 44) {
+                Bank.Inventory.getFirst("Lumberjack top").interact("Wear");
+            }
+        }
+
+        // method 50
+
+        if (!Bank.isOpen() && Inventory.contains("Lumberjack legs") && getwoodcuttingskill >= 44) {
+            Inventory.getFirst("Lumberjack legs").interact("Wear");
+        } else {
+            if (Bank.isOpen() && Inventory.contains("Lumberjack legs") && getwoodcuttingskill >= 44) {
+                Bank.Inventory.getFirst("Lumberjack legs").interact("Wear");
+            }
+        }
+
+        // method 51
+
+        if (!Bank.isOpen() && Inventory.contains("Lumberjack boots") && getwoodcuttingskill >= 44) {
+            Inventory.getFirst("Lumberjack boots").interact("Wear");
+        } else {
+            if (Bank.isOpen() && Inventory.contains("Lumberjack boots") && getwoodcuttingskill >= 44) {
+                Bank.Inventory.getFirst("Lumberjack boots").interact("Wear");
+            }
+        }
+
+        // method 52
+
+        if (!Bank.isOpen() && Inventory.contains("Graceful hood") && !Equipment.contains("Lumberjack hat")) {
+            Inventory.getFirst("Graceful hood").interact("Wear");
+        } else {
+            if (Bank.isOpen() && Inventory.contains("Graceful hood") && !Equipment.contains("Lumberjack hat")) {
+                Bank.Inventory.getFirst("Graceful hood").interact("Wear");
+            }
+        }
+
+        // method 53
+
+        if (!Bank.isOpen() && Inventory.contains("Graceful top") && !Equipment.contains("Lumberjack top")) {
+            Inventory.getFirst("Graceful top").interact("Wear");
+        } else {
+            if (Bank.isOpen() && Inventory.contains("Graceful top") && !Equipment.contains("Lumberjack top")) {
+                Bank.Inventory.getFirst("Graceful top").interact("Wear");
+            }
+        }
+
+        // method 54
+
+        if (!Bank.isOpen() && Inventory.contains("Graceful legs") && !Equipment.contains("Lumberjack legs")) {
+            Inventory.getFirst("Graceful legs").interact("Wear");
+        } else {
+            if (Bank.isOpen() && Inventory.contains("Graceful legs") && !Equipment.contains("Lumberjack legs")) {
+                Bank.Inventory.getFirst("Graceful legs").interact("Wear");
+            }
+        }
+
+        // method 55
+
+        if (!Bank.isOpen() && Inventory.contains("Graceful boots") && !Equipment.contains("Lumberjack boots")) {
+            Inventory.getFirst("Graceful boots").interact("Wear");
+        } else {
+            if (Bank.isOpen() && Inventory.contains("Graceful boots") && !Equipment.contains("Lumberjack boots")) {
+                Bank.Inventory.getFirst("Graceful boots").interact("Wear");
+            }
+        }
+
+        // method 56
+
+        if (!Bank.isOpen() && Inventory.contains("Graceful gloves")) {
+            Inventory.getFirst("Graceful gloves").interact("Wear");
+        } else {
+            if (Bank.isOpen() && Inventory.contains("Graceful gloves")) {
+                Bank.Inventory.getFirst("Graceful gloves").interact("Wear");
+            }
+        }
+
+        // method 57
+
+        if (!Bank.isOpen() && Inventory.contains("Graceful cape")) {
+            Inventory.getFirst("Graceful cape").interact("Wear");
+        } else {
+            if (Bank.isOpen() && Inventory.contains("Graceful cape")) {
+                Bank.Inventory.getFirst("Graceful cape").interact("Wear");
+            }
+        }
+
+        // method 58
+
+        if (Bank.isOpen() && !Equipment.contains("Lumberjack hat") && !Equipment.contains("Graceful hood") && Inventory.contains(Predicates.nameContains("ronman helm"))) {
+            Bank.Inventory.getFirst(Predicates.nameContains("ronman helm")).interact("Wear");
+        } else {
+            if (!Bank.isOpen() && !Equipment.contains("Lumberjack hat") && !Equipment.contains("Graceful hood") && Inventory.contains(Predicates.nameContains("ronman helm"))) {
+                Inventory.getFirst(Predicates.nameContains("ronman helm")).interact("Wear");
+            }
+        }
+
+        // method 59
+
+        if (Bank.isOpen() && !Equipment.contains("Lumberjack hat") && !Equipment.contains("Graceful hood") && Inventory.contains(Predicates.nameContains("ron helm"))) {
+            Bank.Inventory.getFirst(Predicates.nameContains("ron helm")).interact("Wear");
+        } else {
+            if (!Bank.isOpen() && !Equipment.contains("Lumberjack hat") && !Equipment.contains("Graceful hood") && Inventory.contains(Predicates.nameContains("ron helm"))) {
+                Inventory.getFirst(Predicates.nameContains("ron helm")).interact("Wear");
+            }
+        }
+
+        // method 60
+
+        if (!REGION_ASGARNIA_MISTHALIN && ramcontainsplayer
+                || !REGION_ASGARNIA_MISTHALIN && ramicontainsplayer
+                || !REGION_ASGARNIA_MISTHALIN && ramiicontainsplayer) {
+            REGION_ASGARNIA_MISTHALIN = true;
+        }
+
+        // method 61
+
+        if (!REGION_ASGARNIA_MISTHALIN && noramcontainsplayer && noramicontainsplayer && noramiicontainsplayer) {
+
+            // may not need this method.
+
+        }
+
+        // method 62
 
         // end of script
 
