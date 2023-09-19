@@ -181,6 +181,7 @@ public class Woodcutting_II extends LoopedPlugin {
             }
         }
 
+
         if (client.isMembersWorld()) {
             if (!Bank.contains("Knife") && !Inventory.contains("Knife") && RandomTask >= 41 && RandomTask < 71 && Account_Type.equals("Normal")) {
                 BuyItems = true;

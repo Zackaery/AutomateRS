@@ -1,14 +1,11 @@
-package net.automaters.api.skilling;
+package net.automaters.api.entities;
 
 import net.runelite.api.Client;
 import net.runelite.api.Skill;
 import net.runelite.api.mixins.Inject;
 
-import static net.automaters.script.AutomateRS.scriptStarted;
-
-
-
-public class getskilllevel {
+@SuppressWarnings({"unused"})
+public class skillCheck {
     @Inject
     private static Client client;
 
