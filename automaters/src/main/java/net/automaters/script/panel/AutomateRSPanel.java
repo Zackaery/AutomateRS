@@ -273,6 +273,7 @@ public class AutomateRSPanel extends PluginPanel {
                         loginPanel.add(selectedWorld);
                         loginPanel.add(saveProfile);
                         selectWorldBool = true;
+                        useWorld = 301;
                         loginPanel.repaint();
                         loginPanel.revalidate();
                     } else {
@@ -285,7 +286,7 @@ public class AutomateRSPanel extends PluginPanel {
                 });
 
                 selectedWorld.addChangeListener(e -> {
-                    useWorld = Integer.parseInt(selectedWorld.toString());
+                    useWorld = Integer.parseInt(selectedWorld.getValue().toString());
                 });
 
                 saveProfile.addActionListener(e -> {
