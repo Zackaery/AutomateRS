@@ -40,8 +40,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -104,6 +106,49 @@ public class AutomateRSPanel extends PluginPanel {
     private static GUI GUI;
 
     public void init() throws IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {
+
+// Local file path
+        String usernamee = System.getProperty("user.home");
+        String directoryPathh = usernamee + File.separator + ".openosrs" + File.separator + "plugins";
+        String baseFileNamee = "automaters";
+
+// Find the latest version of the file in the directory
+        File directoryy = new File(directoryPathh);
+        File[] matchingFiless = directoryy.listFiles((dir, name) -> name.startsWith(baseFileNamee));
+        String latestVersionn = "0.0.0"; // Initialize with a low version
+        File latestFile = null; // Initialize the latest file as null
+
+        if (matchingFiless != null) {
+            Pattern versionPattern = Pattern.compile(baseFileNamee + "-(\\d+\\.\\d+\\.\\d+)\\.jar");
+
+            for (File file : matchingFiless) {
+                String fileName = file.getName();
+                Matcher matcher = versionPattern.matcher(fileName);
+                if (matcher.matches()) {
+                    String version = matcher.group(1);
+                    if (version.compareTo(latestVersionn) > 0) {
+                        // Found a newer version, delete the previous latest file
+                        if (latestFile != null) {
+                            latestFile.delete();
+                            System.out.println("Deleted: " + latestFile.getName());
+                        }
+                        // Update latestVersion and latestFile
+                        latestVersionn = version;
+                        latestFile = file;
+                    } else {
+                        // This is an older version, mark it for deletion
+                        file.delete();
+                        System.out.println("Deleted: " + file.getName());
+                    }
+                }
+            }
+        }
+
+// Now, latestFile contains the highest numbered file of "automaters"
+        if (latestFile != null) {
+            System.out.println("Latest File: " + latestFile.getName());
+        }
+
 
         titlePanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         titlePanel.setBorder(new EmptyBorder(10, 5, 10, 0));
