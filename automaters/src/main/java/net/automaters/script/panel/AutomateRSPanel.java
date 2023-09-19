@@ -42,6 +42,8 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static net.automaters.gui.GUI.*;
 import static net.automaters.gui.GUI.started;
@@ -152,12 +154,45 @@ public class AutomateRSPanel extends PluginPanel {
                 updateButton.addActionListener(e -> {
 
                     // Local file path
-                    String username = System.getProperty("user.name");
-                    String localFilePath = "C:\\Users\\" + username + "\\.openosrs\\plugins\\automaters-0.0.1.jar";  // Replace with your local file path
+                    String username = System.getProperty("user.home");
+                    String directoryPath = username + File.separator + ".openosrs" + File.separator + "plugins";
+                    String baseFileName = "automaters";
 
-// GitHub raw URL
+                    // Find the latest version of the file in the directory
+                    File directory = new File(directoryPath);
+                    File[] matchingFiles = directory.listFiles((dir, name) -> name.startsWith(baseFileName));
+                    String latestVersion = "0.0.0"; // Initialize with a low version
+
+                    if (matchingFiles != null) {
+                        Pattern versionPattern = Pattern.compile(baseFileName + "-(\\d+\\.\\d+\\.\\d+)\\.jar");
+                        for (File file : matchingFiles) {
+                            String fileName = file.getName();
+                            Matcher matcher = versionPattern.matcher(fileName);
+                            if (matcher.matches()) {
+                                String version = matcher.group(1);
+                                if (version.compareTo(latestVersion) > 0) {
+                                    latestVersion = version;
+                                }
+                            }
+                        }
+                    }
+
+                    // Increment the latest version by 1
+                    String[] versionParts = latestVersion.split("\\.");
+                    int major = Integer.parseInt(versionParts[0]);
+                    int minor = Integer.parseInt(versionParts[1]);
+                    int patch = Integer.parseInt(versionParts[2]);
+                    patch++;
+
+                    // Construct the new version string
+                    latestVersion = String.format("%d.%d.%d", major, minor, patch);
+
+                    // Construct the final localFilePath
+                    String localFilePath = directoryPath + File.separator + baseFileName + "-" + latestVersion + ".jar";
+
+                    System.out.println("Latest Version: " + latestVersion);
+                    System.out.println("Local File Path: " + localFilePath);
                     String githubRawURL = "https://raw.githubusercontent.com/Zackaery/Account-Builder/main/automaters-0.0.1.jar";
-// Replace with the raw URL of your GitHub file
 
                     try {
                         File localFile = new File(localFilePath);
@@ -178,7 +213,7 @@ public class AutomateRSPanel extends PluginPanel {
                                 // Replace the old file with the updated file
                                 Files.move(tempFile, localFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-                                System.out.println("File updated: " + localFile.getName());
+                                System.out.println("File updated to: " + localFile.getName() + " Please restart the client!");
                                 JOptionPane.showMessageDialog(null, "File updated: " + localFile.getName(), "Update Successful", JOptionPane.INFORMATION_MESSAGE);
                             } catch (IOException ex) {
                                 ex.printStackTrace();
@@ -194,7 +229,7 @@ public class AutomateRSPanel extends PluginPanel {
                     }
 
 
-                    // insert download code here
+
                 });
 
             }
