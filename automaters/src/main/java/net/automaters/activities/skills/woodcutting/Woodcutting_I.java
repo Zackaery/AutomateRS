@@ -10,7 +10,6 @@ import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
-import net.unethicalite.api.items.Items;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.plugins.LoopedPlugin;
@@ -20,7 +19,7 @@ import java.util.Random;
 
 import static net.unethicalite.api.commons.Time.sleep;
 
-
+@SuppressWarnings({"ConstantConditions","unused"})
 public class Woodcutting_I extends LoopedPlugin {
 
     // Booleans
