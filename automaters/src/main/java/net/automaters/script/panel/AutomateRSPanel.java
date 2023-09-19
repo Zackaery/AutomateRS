@@ -215,7 +215,7 @@ public class AutomateRSPanel extends PluginPanel {
                                 Files.move(tempFile, localFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
                                 System.out.println("File updated to: " + localFile.getName() + " Please restart the client!");
-                                JOptionPane.showMessageDialog(null, "File updated: " + localFile.getName(), "Update Successful", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "File updated: " + localFile.getName() + " Please restart the client!", "Update Successful", JOptionPane.INFORMATION_MESSAGE);
                             } catch (IOException ex) {
                                 ex.printStackTrace();
                                 JOptionPane.showMessageDialog(null, "Failed to update file.", "Update Failed", JOptionPane.ERROR_MESSAGE);
