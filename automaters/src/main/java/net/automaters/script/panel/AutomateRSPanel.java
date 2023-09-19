@@ -178,7 +178,7 @@ public class AutomateRSPanel extends PluginPanel {
                         }
                     }
 
-                    // Increment the latest version by 1
+                    // Increment the latest version by 1 here
                     String[] versionParts = latestVersion.split("\\.");
                     int major = Integer.parseInt(versionParts[0]);
                     int minor = Integer.parseInt(versionParts[1]);
