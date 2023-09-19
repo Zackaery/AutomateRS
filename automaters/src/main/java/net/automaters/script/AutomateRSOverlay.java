@@ -1,7 +1,6 @@
 package net.automaters.script;
 
 import com.google.inject.Singleton;
-import net.automaters.script.panel.AutomateRSPanel;
 import net.runelite.api.Client;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
@@ -16,14 +15,12 @@ class AutomateRSOverlay extends Overlay
 {
 	private final Client client;
 	private final AutomateRS plugin;
-	private final AutomateRSPanel panel;
 
 	@Inject
-	private AutomateRSOverlay(Client client, AutomateRS plugin, AutomateRSPanel panel)
+	private AutomateRSOverlay(Client client, AutomateRS plugin)
 	{
 		this.client = client;
 		this.plugin = plugin;
-		this.panel = panel;
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_SCENE);
 	}

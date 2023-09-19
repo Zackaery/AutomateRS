@@ -2,9 +2,10 @@ package net.automaters.script.panel;
 
 import net.automaters.gui.GUI;
 import net.automaters.gui.utils.EventDispatchThreadRunner;
+import net.automaters.script.AutomateRS;
 import net.automaters.script.AutomateRSConfig;
 import net.automaters.script.panel.auto_login.ProfilePanel;
-import net.automaters.util.api.client.ui.components.PluginInfoPanel;
+import net.automaters.api.client.ui.components.PluginInfoPanel;
 import net.runelite.api.Client;
 import net.runelite.client.ui.ClientUI;
 import net.runelite.client.ui.ColorScheme;
@@ -30,7 +31,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -101,7 +101,7 @@ public class AutomateRSPanel extends PluginPanel {
     public static int useWorld;
     public static boolean boolWorld;
     private static final int iterations = 100000;
-    private GUI GUI;
+    private static GUI GUI;
 
     public void init() throws IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {
 
@@ -131,7 +131,7 @@ public class AutomateRSPanel extends PluginPanel {
         {
             // --- SET COMPONENTS ---
             {
-                setImage("resources/net.automaters.script/panel/AutomateRS.png", titleLabel);
+                GUI.setImage("resources/net.automaters.script/panel/AutomateRS.png", titleLabel);
             }
             // --- ADD COMPONENTS ---
             {
@@ -318,7 +318,7 @@ public class AutomateRSPanel extends PluginPanel {
                     }
 
                     {
-                        debug(e.toString());
+                        AutomateRS.debug(e.toString());
                     }
                 });
             }
@@ -360,24 +360,24 @@ public class AutomateRSPanel extends PluginPanel {
                     {
                         var local = Players.getLocal();
                         if (local == null) {
-                            debug("Local Player not located");
+                            AutomateRS.debug("Local Player not located");
                             return;
                         }
-                        if (!started) {
-                            selectedBuild = loadBuildFromGUI();
+                        if (!GUI.started) {
+                            GUI.selectedBuild = loadBuildFromGUI();
                             scriptPanel.remove(startButton);
                             scriptPanel.add(pauseButton);
                             scriptPanel.add(stopButton);
                             scriptPanel.repaint();
                             scriptPanel.revalidate();
                         } else {
-                            scriptStarted = true;
+                            AutomateRS.scriptStarted = true;
                             scriptPanel.remove(startButton);
                             scriptPanel.add(pauseButton);
                             scriptPanel.add(stopButton);
                             scriptPanel.repaint();
                             scriptPanel.revalidate();
-                            debug("Started - AutomateRS");
+                            AutomateRS.debug("Started - AutomateRS");
                         }
                     }
 
@@ -401,13 +401,13 @@ public class AutomateRSPanel extends PluginPanel {
                     @Override
                     public void mouseClicked(MouseEvent e)
                     {
-                        scriptStarted = false;
+                        AutomateRS.scriptStarted = false;
                         scriptPanel.remove(pauseButton);
                         scriptPanel.add(startButton);
                         scriptPanel.add(stopButton);
                         scriptPanel.repaint();
                         scriptPanel.revalidate();
-                        debug("Paused - AutomateRS");
+                        AutomateRS.debug("Paused - AutomateRS");
                     }
 
                     @Override
@@ -430,14 +430,14 @@ public class AutomateRSPanel extends PluginPanel {
                     @Override
                     public void mouseClicked(MouseEvent e)
                     {
-                        started = false;
-                        scriptStarted = false;
+                        GUI.started = false;
+                        AutomateRS.scriptStarted = false;
                         scriptPanel.remove(pauseButton);
                         scriptPanel.remove(stopButton);
                         scriptPanel.add(startButton);
                         scriptPanel.repaint();
                         scriptPanel.revalidate();
-                        debug("Stopped - AutomateRS");
+                        AutomateRS.debug("Stopped - AutomateRS");
                     }
 
                     @Override
@@ -495,7 +495,7 @@ public class AutomateRSPanel extends PluginPanel {
 
     private void addAccount(String data)
     {
-        debug("profile = "+data);
+        AutomateRS.debug("profile = "+data);
         ProfilePanel profile = new ProfilePanel(client, data, automateRSConfig, this);
         accountPanel.add(profile);
         revalidate();
@@ -625,13 +625,13 @@ public class AutomateRSPanel extends PluginPanel {
         titleLabel.requestFocusInWindow();
     }
 
-    private String loadBuildFromGUI() {
+    public static String loadBuildFromGUI() {
         try {
             EventDispatchThreadRunner.runOnDispatchThread(() -> {
                 try {
                     GUI = new GUI();
                     GUI.open();
-                    debug("Launching AutomateRS - GUI");
+                    AutomateRS.debug("Launching AutomateRS - GUI");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -643,9 +643,9 @@ public class AutomateRSPanel extends PluginPanel {
             throw new RuntimeException(e);
         }
 
-        if (started) {
-            debug("SELECTED BUILD = " + selectedBuild);
-            return selectedBuild;
+        if (GUI.started) {
+            AutomateRS.debug("SELECTED BUILD = " + GUI.selectedBuild);
+            return GUI.selectedBuild;
         } else {
             return null;
         }

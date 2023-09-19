@@ -18,6 +18,7 @@ import static net.automaters.script.AutomateRS.*;
 import static net.unethicalite.api.commons.Time.sleep;
 import static net.unethicalite.api.items.Inventory.isFull;
 
+@SuppressWarnings({"ConstantConditions","unused"})
 public class Woodcutting extends LoopedPlugin {
 
     public WorldPoint startLocation = null;

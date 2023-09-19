@@ -1,15 +1,18 @@
 package net.automaters.script;
 
 import com.google.inject.Provides;
+import com.openosrs.client.events.OPRSPluginChanged;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.automaters.account_builds.build_executor.BuildExecutor;
 import net.automaters.gui.GUI;
+import net.automaters.gui.utils.EventDispatchThreadRunner;
 import net.automaters.script.panel.AutomateRSPanel;
 import net.automaters.util.file_managers.ImageManager;
 import net.runelite.api.Client;
 import net.runelite.api.World;
+import net.runelite.api.events.ConfigButtonClicked;
 import net.runelite.api.events.WidgetLoaded;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.callback.ClientThread;
@@ -19,6 +22,7 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.events.LobbyWorldSelectToggled;
 import net.unethicalite.api.game.Worlds;
 import net.unethicalite.api.plugins.Task;
@@ -33,6 +37,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.inject.Inject;
+import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -90,6 +95,23 @@ public class AutomateRS extends TaskPlugin {
 	private final Task[] tasks = new Task[] {};
 	public static boolean debugEnabled = true;
 	public static boolean scriptStarted;
+	private boolean hotswapEnabled = true;
+
+	@Subscribe
+	private void onExternalPluginChanged(OPRSPluginChanged e)
+	{
+		if (e.getPlugin() != this)
+		{
+			debug("return");
+			return;
+		}
+
+		if (e.isAdded())
+		{
+			debug("client.getcallbacks");
+			client.getCallbacks();
+		}
+	}
 
 	@Subscribe
 	private void onWidgetHiddenChanged(WidgetLoaded e)
@@ -126,17 +148,44 @@ public class AutomateRS extends TaskPlugin {
 
 	@Override
 	protected void startUp() throws IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {
-		panel = injector.getInstance(AutomateRSPanel.class);
-		panel.init();
 
-		navButton = NavigationButton.builder()
-				.tooltip("AutomateRS")
-				.icon(ImageManager.getInstance().loadImage("resources/net.automaters.script/panel/navButton.png"))
-				.priority(0)
-				.panel(panel)
-				.build();
+		if (hotswapEnabled) {
+			panel = injector.getInstance(AutomateRSPanel.class);
+			try {
+				EventDispatchThreadRunner.runOnDispatchThread(() -> {
+					try {
+						debug("panel.init");
+						panel.init();
+					} catch (IllegalBlockSizeException e) {
+						throw new RuntimeException(e);
+					} catch (NoSuchPaddingException e) {
+						throw new RuntimeException(e);
+					} catch (NoSuchAlgorithmException e) {
+						throw new RuntimeException(e);
+					} catch (InvalidKeySpecException e) {
+						throw new RuntimeException(e);
+					} catch (BadPaddingException e) {
+						throw new RuntimeException(e);
+					} catch (InvalidKeyException e) {
+						throw new RuntimeException(e);
+					}
+				}, true);
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
 
-		clientToolbar.addNavigation(navButton);
+			navButton = NavigationButton.builder()
+					.tooltip("AutomateRS")
+					.icon(ImageManager.getInstance().loadImage("resources/net.automaters.script/panel/navButton.png"))
+					.priority(0)
+					.panel(panel)
+					.build();
+
+			clientToolbar.addNavigation(navButton);
+			hotswapEnabled = false;
+		}
 		blockingEventManager.remove(LoginEvent.class);
 
 		overlayManager.add(automateRSOverlay);
@@ -151,6 +200,34 @@ public class AutomateRS extends TaskPlugin {
 		if (GUI != null && GUI.isOpen()) { GUI.close();	}
 		overlayManager.remove(automateRSOverlay);
 	}
+
+	@Subscribe
+	public void onConfigButtonPressed(ConfigButtonClicked event) throws InterruptedException {
+
+		if (event.getGroup().contains("automaters")) {
+			if (event.getKey().toLowerCase().contains("start")) {
+				var local = Players.getLocal();
+				if (local == null) {
+					debug("Local Player not located");
+					return;
+				}
+				if (!started) {
+					selectedBuild = loadBuildFromGUI();
+				} else {
+					this.scriptStarted = true;
+					debug("Started - AutomateRS");
+				}
+			} else if (event.getKey().toLowerCase().contains("pause")) {
+				scriptStarted = false;
+				debug("Paused - AutomateRS");
+			} else {
+				started = false;
+				scriptStarted = false;
+				debug("Stopped - AutomateRS");
+			}
+		}
+	}
+
 
 	@Override
 	protected int loop()  {

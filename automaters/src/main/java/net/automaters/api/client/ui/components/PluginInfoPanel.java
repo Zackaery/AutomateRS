@@ -1,4 +1,4 @@
-package net.automaters.util.api.client.ui.components;
+package net.automaters.api.client.ui.components;
 
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.components.shadowlabel.JShadowedLabel;
@@ -16,8 +16,7 @@ public class PluginInfoPanel extends JPanel
     private final JLabel textTitle = new JShadowedLabel();
     private final JLabel textDescription = new JShadowedLabel();
 
-    public PluginInfoPanel()
-    {
+    public PluginInfoPanel() {
         setOpaque(false);
         setBorder(new EmptyBorder(0, 10, 0, 10));
         setLayout(new BorderLayout());
@@ -39,8 +38,7 @@ public class PluginInfoPanel extends JPanel
      * Changes the content of the panel to the given parameters.
      * The description has to be wrapped in html so that its text can be wrapped.
      */
-    public void setContent(String title, String description)
-    {
+    public void setContent(String title, String description) {
         textTitle.setText(title);
         textDescription.setText("<html><body style = 'text-align:center'>" + description + "</body></html>");
         setVisible(true);

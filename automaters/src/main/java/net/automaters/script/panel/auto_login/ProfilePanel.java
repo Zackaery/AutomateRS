@@ -3,16 +3,12 @@ package net.automaters.script.panel.auto_login;
 import net.automaters.script.AutomateRS;
 import net.automaters.script.AutomateRSConfig;
 import net.automaters.script.panel.AutomateRSPanel;
-import net.automaters.util.api.client.ui.components.PluginInfoPanel;
 import net.automaters.util.file_managers.ImageManager;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
-import net.runelite.api.World;
-import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.util.ImageUtil;
-import net.unethicalite.api.events.LobbyWorldSelectToggled;
-import net.unethicalite.api.game.Worlds;
+import net.unethicalite.api.input.Keyboard;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -72,11 +68,11 @@ public class ProfilePanel extends JPanel {
             this.useWorld = Boolean.valueOf(parts[3]);
             this.world = Integer.valueOf(parts[4]);
         }
-        debug("profile = "+parts[0]);
-        debug("loginText = "+loginText);
-        debug("password = "+password);
-        debug("useWorld = "+useWorld);
-        debug("world = "+world);
+        AutomateRS.debug("profile = "+parts[0]);
+        AutomateRS.debug("loginText = "+loginText);
+        AutomateRS.debug("password = "+password);
+        AutomateRS.debug("useWorld = "+useWorld);
+        AutomateRS.debug("world = "+world);
         AutomateRSPanel.useWorld = world;
         AutomateRSPanel.boolWorld = useWorld;
 
@@ -107,17 +103,17 @@ public class ProfilePanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e)
             {
-                debug("delete - mousePressed");
+                AutomateRS.debug("delete - mousePressed");
                 panel.getParent().remove(panel);
                 try
                 {
-                    debug("removeProfile: "+data);
+                    AutomateRS.debug("removeProfile: "+data);
                     parent.removeProfile(data);
                 }
                 catch (InvalidKeySpecException | NoSuchAlgorithmException | IllegalBlockSizeException |
                        InvalidKeyException | BadPaddingException | NoSuchPaddingException ex)
                 {
-                    debug(e.toString());
+                    AutomateRS.debug(e.toString());
                 }
             }
 
@@ -142,9 +138,9 @@ public class ProfilePanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e)
             {
-                debug("start - mousePressed");
+                AutomateRS.debug("start - mousePressed");
                 if (useWorld && client.getWorld() != world) {
-                    debug("prepareLogin");
+                    AutomateRS.debug("prepareLogin");
                     prepareLogin();
                 } else {
                     login(client);
@@ -182,12 +178,12 @@ public class ProfilePanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e)
             {
-                debug("label - mousePressed");
+                AutomateRS.debug("label - mousePressed");
                 if (SwingUtilities.isLeftMouseButton(e) && (client.getGameState() == GameState.LOGIN_SCREEN || client.getGameState() == GameState.LOGIN_SCREEN_AUTHENTICATOR))
                 {
-                    debug("setUsername");
+                    AutomateRS.debug("setUsername");
                     client.setUsername(loginText);
-                    debug("setPassword");
+                    AutomateRS.debug("setPassword");
                     client.setPassword(password);
                 }
             }
@@ -201,12 +197,12 @@ public class ProfilePanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e)
             {
-                debug("bottomContainer - mousePressed");
+                AutomateRS.debug("bottomContainer - mousePressed");
                 if (SwingUtilities.isLeftMouseButton(e) && (client.getGameState() == GameState.LOGIN_SCREEN || client.getGameState() == GameState.LOGIN_SCREEN_AUTHENTICATOR))
                 {
-                    debug("setUsername");
+                    AutomateRS.debug("setUsername");
                     client.setUsername(loginText);
-                    debug("setPassword");
+                    AutomateRS.debug("setPassword");
                     client.setPassword(password);
                 }
             }
@@ -219,28 +215,28 @@ public class ProfilePanel extends JPanel {
 
 
     private void prepareLogin() {
-        debug("prepareLogin");
+        AutomateRS.debug("prepareLogin");
         if (useWorld && thisClient.getWorld() != world) {
-            debug("loadWorlds");
+            AutomateRS.debug("loadWorlds");
             thisClient.loadWorlds();
         } else {
-            debug("promptCredentials");
+            AutomateRS.debug("promptCredentials");
             thisClient.promptCredentials(false);
         }
     }
 
     public static void init(Client client) {
-        debug("init");
-        debug("login");
+        AutomateRS.debug("init");
+        AutomateRS.debug("login");
         login(client);
     }
     private static void login(Client client) {
-        debug("login");
-        debug("setUsername");
+        AutomateRS.debug("login");
+        AutomateRS.debug("setUsername");
         client.setUsername(loginText);
-        debug("setPassword");
+        AutomateRS.debug("setPassword");
         client.setPassword(password);
-        debug("sendEnter");
-        sendEnter();
+        AutomateRS.debug("sendEnter");
+        Keyboard.sendEnter();
     }
 }
