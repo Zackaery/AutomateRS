@@ -7,8 +7,12 @@ import net.automaters.util.api.client.ui.components.PluginInfoPanel;
 import net.automaters.util.file_managers.ImageManager;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
+import net.runelite.api.World;
+import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.util.ImageUtil;
+import net.unethicalite.api.events.LobbyWorldSelectToggled;
+import net.unethicalite.api.game.Worlds;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -56,7 +60,6 @@ public class ProfilePanel extends JPanel {
     private static Integer world = null;
     Client thisClient;
 
-
     public ProfilePanel(final Client client, final String data, final AutomateRSConfig automateRSConfig, final AutomateRSPanel parent)
     {
 
@@ -75,6 +78,7 @@ public class ProfilePanel extends JPanel {
         debug("useWorld = "+useWorld);
         debug("world = "+world);
         AutomateRSPanel.useWorld = world;
+        AutomateRSPanel.boolWorld = useWorld;
 
 
 
@@ -211,6 +215,8 @@ public class ProfilePanel extends JPanel {
         add(labelWrapper, BorderLayout.CENTER);
 
     }
+
+
 
     private void prepareLogin() {
         debug("prepareLogin");

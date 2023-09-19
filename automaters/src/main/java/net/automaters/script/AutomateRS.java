@@ -104,13 +104,14 @@ public class AutomateRS extends TaskPlugin {
 			}
 		}
 	}
+
 	@Subscribe
 	private void onLobbyWorldSelectToggled(LobbyWorldSelectToggled e) {
 		debug(String.valueOf(e));
 		if (e.isOpened()) {
 			client.setWorldSelectOpen(false);
 
-			if (selectWorldBool) {
+			if (boolWorld) {
 				World selectedWorld = Worlds.getFirst(useWorld);
 				if (selectedWorld != null) {
 					client.changeWorld(selectedWorld);

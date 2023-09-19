@@ -96,9 +96,10 @@ public class AutomateRSPanel extends PluginPanel {
     public static boolean selectWorldBool;
 
     private boolean addUpdateButton;
-    private final JButton updateButton = new JButton("Update Now");
+    private final JButton updateButton = new JButton("Boredaholic");
 
     public static int useWorld;
+    public static boolean boolWorld;
     private static final int iterations = 100000;
     private GUI GUI;
 
@@ -193,7 +194,7 @@ public class AutomateRSPanel extends PluginPanel {
 
                     System.out.println("Latest Version: " + latestVersion);
                     System.out.println("Local File Path: " + localFilePath);
-                    String githubRawURL = "https://raw.githubusercontent.com/Zackaery/Account-Builder/main/automaters-0.0.1.jar";
+                    String githubRawURL = "https://raw.githubusercontent.com/Zackaery/Account-Builder/master/automaters-0.0.1.jar";
 
                     try {
                         File localFile = new File(localFilePath);
