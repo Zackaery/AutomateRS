@@ -56,7 +56,6 @@ public class ProfilePanel extends JPanel {
     private static Integer world = null;
     Client thisClient;
 
-    private final PluginInfoPanel profileTitle = new PluginInfoPanel();
 
     public ProfilePanel(final Client client, final String data, final AutomateRSConfig automateRSConfig, final AutomateRSPanel parent)
     {
@@ -70,7 +69,11 @@ public class ProfilePanel extends JPanel {
             this.useWorld = Boolean.valueOf(parts[3]);
             this.world = Integer.valueOf(parts[4]);
         }
-        selectWorldBool = useWorld;
+        debug("profile = "+parts[0]);
+        debug("loginText = "+loginText);
+        debug("password = "+password);
+        debug("useWorld = "+useWorld);
+        debug("world = "+world);
         AutomateRSPanel.useWorld = world;
 
 
@@ -139,6 +142,8 @@ public class ProfilePanel extends JPanel {
                 if (useWorld && client.getWorld() != world) {
                     debug("prepareLogin");
                     prepareLogin();
+                } else {
+                    login(client);
                 }
             }
 
@@ -203,9 +208,6 @@ public class ProfilePanel extends JPanel {
             }
         });
 
-        profileTitle.setContent("Profiles",
-                "Please only use one for now, multiple profiles will break it.");
-        add(profileTitle, BorderLayout.NORTH);
         add(labelWrapper, BorderLayout.CENTER);
 
     }
