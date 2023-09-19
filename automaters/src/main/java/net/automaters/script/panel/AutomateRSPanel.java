@@ -71,6 +71,7 @@ public class AutomateRSPanel extends PluginPanel {
     private final PluginInfoPanel loginProfileTitle = new PluginInfoPanel();
     private final PluginInfoPanel noAccountsTitle = new PluginInfoPanel();
     private final PluginInfoPanel updateTitle = new PluginInfoPanel();
+    private final PluginInfoPanel profileTitle = new PluginInfoPanel();
 
     private final String PROFILE_NAME = "Profile Name";
 
@@ -95,7 +96,7 @@ public class AutomateRSPanel extends PluginPanel {
     private boolean addUpdateButton;
     private final JButton updateButton = new JButton("Update Now");
 
-    public static int useWorld = 301;
+    public static int useWorld;
     private static final int iterations = 100000;
     private GUI GUI;
 
@@ -231,18 +232,18 @@ public class AutomateRSPanel extends PluginPanel {
                 });
 
                 selectWorld.addActionListener(e -> {
-                    if (selectWorldBool) {
+                    if (!selectWorldBool) {
                         loginPanel.remove(saveProfile);
                         loginPanel.add(worldLabel);
                         loginPanel.add(selectedWorld);
                         loginPanel.add(saveProfile);
-                        selectWorldBool = false;
+                        selectWorldBool = true;
                         loginPanel.repaint();
                         loginPanel.revalidate();
                     } else {
                         loginPanel.remove(worldLabel);
                         loginPanel.remove(selectedWorld);
-                        selectWorldBool = true;
+                        selectWorldBool = false;
                         loginPanel.repaint();
                         loginPanel.revalidate();
                     }
@@ -457,6 +458,7 @@ public class AutomateRSPanel extends PluginPanel {
 
     private void addAccount(String data)
     {
+        debug("profile = "+data);
         ProfilePanel profile = new ProfilePanel(client, data, automateRSConfig, this);
         accountPanel.add(profile);
         revalidate();
@@ -468,7 +470,6 @@ public class AutomateRSPanel extends PluginPanel {
         data = data.trim();
         if (!data.contains(":"))
         {
-            accountsAdded = true;
             return;
         }
         Arrays.stream(data.split("\\n")).forEach(this::addAccount);
