@@ -100,9 +100,11 @@ public class ProfilePanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e)
             {
+                debug("delete - mousePressed");
                 panel.getParent().remove(panel);
                 try
                 {
+                    debug("removeProfile: "+data);
                     parent.removeProfile(data);
                 }
                 catch (InvalidKeySpecException | NoSuchAlgorithmException | IllegalBlockSizeException |
@@ -133,7 +135,9 @@ public class ProfilePanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e)
             {
+                debug("start - mousePressed");
                 if (useWorld && client.getWorld() != world) {
+                    debug("prepareLogin");
                     prepareLogin();
                 }
             }
@@ -169,9 +173,12 @@ public class ProfilePanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e)
             {
+                debug("label - mousePressed");
                 if (SwingUtilities.isLeftMouseButton(e) && (client.getGameState() == GameState.LOGIN_SCREEN || client.getGameState() == GameState.LOGIN_SCREEN_AUTHENTICATOR))
                 {
+                    debug("setUsername");
                     client.setUsername(loginText);
+                    debug("setPassword");
                     client.setPassword(password);
                 }
             }
@@ -185,9 +192,12 @@ public class ProfilePanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e)
             {
+                debug("bottomContainer - mousePressed");
                 if (SwingUtilities.isLeftMouseButton(e) && (client.getGameState() == GameState.LOGIN_SCREEN || client.getGameState() == GameState.LOGIN_SCREEN_AUTHENTICATOR))
                 {
+                    debug("setUsername");
                     client.setUsername(loginText);
+                    debug("setPassword");
                     client.setPassword(password);
                 }
             }
@@ -201,19 +211,28 @@ public class ProfilePanel extends JPanel {
     }
 
     private void prepareLogin() {
+        debug("prepareLogin");
         if (useWorld && thisClient.getWorld() != world) {
+            debug("loadWorlds");
             thisClient.loadWorlds();
         } else {
+            debug("promptCredentials");
             thisClient.promptCredentials(false);
         }
     }
 
     public static void init(Client client) {
+        debug("init");
+        debug("login");
         login(client);
     }
     private static void login(Client client) {
+        debug("login");
+        debug("setUsername");
         client.setUsername(loginText);
+        debug("setPassword");
         client.setPassword(password);
+        debug("sendEnter");
         sendEnter();
     }
 }

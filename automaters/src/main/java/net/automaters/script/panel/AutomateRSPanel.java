@@ -51,7 +51,7 @@ public class AutomateRSPanel extends PluginPanel {
 
     public static boolean accountsAdded;
 
-    private final JPanel container = new JPanel();
+    private final JPanel titlePanel = new JPanel();
     private final JPanel scriptPanel = new JPanel();
 
     private final JLabel titleLabel = new JLabel();
@@ -63,10 +63,12 @@ public class AutomateRSPanel extends PluginPanel {
 
     private final PluginInfoPanel loginProfileTitle = new PluginInfoPanel();
     private final PluginInfoPanel noAccountsTitle = new PluginInfoPanel();
+    private final PluginInfoPanel updateTitle = new PluginInfoPanel();
 
     private final String PROFILE_NAME = "Profile Name";
 
     private final SpinnerModel model = new SpinnerNumberModel(301, 301, 578, 1);
+    private final JPanel updatePanel = new JPanel();
     private final JPanel loginPanel = new JPanel();
     private final JPanel accountPanel = new JPanel();
     private final JTextField profileLabel = new JTextField(PROFILE_NAME);
@@ -83,24 +85,22 @@ public class AutomateRSPanel extends PluginPanel {
 
     public static boolean selectWorldBool;
 
+    private boolean addUpdateButton;
+    private final JButton updateButton = new JButton("Update Now");
+
     public static int useWorld = 301;
     private static final int iterations = 100000;
     private GUI GUI;
 
     public void init() throws IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {
 
-        container.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-        container.setBorder(new EmptyBorder(10, 5, 10, 0));
-        container.setLayout(new DynamicGridLayout(0, 1, 0, 0));
+        titlePanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+        titlePanel.setBorder(new EmptyBorder(10, 5, 10, 0));
+        titlePanel.setLayout(new DynamicGridLayout(0, 1, 0, 0));
 
-        scriptPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
-        scriptPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        scriptPanel.setLayout(new DynamicGridLayout(3, 1, 0, 5));
-
-        setImage("resources/net.automaters.script/panel/AutomateRS.png", titleLabel);
-
-        container.add(titleLabel, BorderLayout.CENTER);
-        scriptPanel.add(startButton, BorderLayout.CENTER);
+        updatePanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+        updatePanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        updatePanel.setLayout(new DynamicGridLayout(0, 1, 0, 5));
 
         loginPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         loginPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -110,203 +110,279 @@ public class AutomateRSPanel extends PluginPanel {
         accountPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         accountPanel.setLayout(new DynamicGridLayout(0, 1, 0, 5));
 
-        profileLabel.setForeground(ColorScheme.LIGHT_GRAY_COLOR);
-        profileLabel.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e)
+        scriptPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+        scriptPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        scriptPanel.setLayout(new DynamicGridLayout(3, 1, 0, 5));
+
+
+
+        // --- TITLE IMAGE PANEL ---
+        {
+            // --- SET COMPONENTS ---
             {
-                if (profileLabel.getText().equals(PROFILE_NAME))
-                {
-                    profileLabel.setText("");
+                setImage("resources/net.automaters.script/panel/AutomateRS.png", titleLabel);
+            }
+            // --- ADD COMPONENTS ---
+            {
+                titlePanel.add(titleLabel, BorderLayout.CENTER);
+            }
+        }
+
+        // --- UPDATE PANEL ---
+        {
+            // --- SET COMPONENTS ---
+            {
+                updateTitle.setContent("Update Available",
+                        "Please click the button below to download the newest update.");
+                /**
+                 *  --- add in logic here to check github for updates
+                 */
+
+                // if need to update {
+                addUpdateButton = true;
+                //}
+
+                updateButton.addActionListener(e -> {
+                    // insert download code here
+                });
+
+            }
+            // --- ADD COMPONENTS ---
+            {
+                if (addUpdateButton) {
+                    updatePanel.add(updateTitle, BorderLayout.NORTH);
+                    updatePanel.add(updateButton, BorderLayout.CENTER);
                 }
             }
-            @Override
-            public void focusLost(FocusEvent e)
+        }
+
+        // --- LOGIN PANEL ---
+        {
+            // --- SET COMPONENTS ---
             {
-                if (profileLabel.getText().isEmpty())
-                {
-                    profileLabel.setText(PROFILE_NAME);
-                }
+                loginProfileTitle.setContent("Add an account",
+                        "Input your account details below, then click save to have your account added in your saved profiles.");
+                profileLabel.setForeground(ColorScheme.LIGHT_GRAY_COLOR);
+                profileLabel.addFocusListener(new FocusListener() {
+                    @Override
+                    public void focusGained(FocusEvent e) {
+                        if (profileLabel.getText().equals(PROFILE_NAME)) {
+                            profileLabel.setText("");
+                        }
+                    }
+
+                    @Override
+                    public void focusLost(FocusEvent e) {
+                        if (profileLabel.getText().isEmpty()) {
+                            profileLabel.setText(PROFILE_NAME);
+                        }
+                    }
+                });
+
+                selectWorld.addActionListener(e -> {
+                    if (selectWorldBool) {
+                        loginPanel.remove(saveProfile);
+                        loginPanel.add(worldLabel);
+                        loginPanel.add(selectedWorld);
+                        loginPanel.add(saveProfile);
+                        selectWorldBool = false;
+                        loginPanel.repaint();
+                        loginPanel.revalidate();
+                    } else {
+                        loginPanel.remove(worldLabel);
+                        loginPanel.remove(selectedWorld);
+                        selectWorldBool = true;
+                        loginPanel.repaint();
+                        loginPanel.revalidate();
+                    }
+                });
+
+                selectedWorld.addChangeListener(e -> {
+                    useWorld = Integer.parseInt(selectedWorld.toString());
+                });
+
+                saveProfile.addActionListener(e -> {
+                    accountPanel.remove(noAccountsTitle);
+                    String profileText = String.valueOf(profileLabel.getText());
+                    String usernameText = String.valueOf(usernameField.getText());
+                    String passwordText = String.valueOf(passwordField.getPassword());
+
+                    if (profileLabel.equals(PROFILE_NAME) || usernameField.equals("")) {
+                        return;
+                    }
+                    if ((profileLabel.getText() == ":") || (usernameField.getText() == ":")) {
+                        JOptionPane.showMessageDialog(null, "You may not use colons in your label or login name", "Account Switcher", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    String data;
+                    data = profileText + ":" + usernameText + ":" + passwordText + ":" + selectWorldBool + ":" + useWorld;
+                    try
+                    {
+                        if (!addProfile(data))
+                        {
+                            return;
+                        }
+
+                        redrawProfiles();
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+                    {
+                        debug(e.toString());
+                    }
+                });
             }
-        });
 
-        loginProfileTitle.setContent("Add an account",
-                "Input your account details below, then click save to have your account added in your saved profiles.");
-        loginPanel.add(loginProfileTitle);
-        loginPanel.add(profileLabel);
-        loginPanel.add(usernameLabel);
-        loginPanel.add(usernameField);
-        loginPanel.add(passwordLabel);
-        loginPanel.add(passwordField);
-        loginPanel.add(selectWorld);
-        loginPanel.add(saveProfile);
-
-        noAccountsTitle.setContent("No profiles saved",
-                "You do not have any profiles saved, please add a new profile from the panel above.");
-        accountPanel.add(noAccountsTitle);
-
-        add(container, BorderLayout.NORTH);
-        add(loginPanel, BorderLayout.CENTER);
-        decryptAccounts();
-        add(accountPanel, BorderLayout.CENTER);
-        add(scriptPanel, BorderLayout.SOUTH);
-
-        saveProfile.addActionListener(e -> {
-            accountPanel.remove(noAccountsTitle);
-            String profileText = String.valueOf(profileLabel.getText());
-            String usernameText = String.valueOf(usernameField.getText());
-            String passwordText = String.valueOf(passwordField.getPassword());
-
-            if (profileLabel.equals(PROFILE_NAME) || usernameField.equals("")) {
-                return;
-            }
-            if ((profileLabel.getText() == ":") || (usernameField.getText() == ":")) {
-                JOptionPane.showMessageDialog(null, "You may not use colons in your label or login name", "Account Switcher", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            String data;
-            data = profileText + ":" + usernameText + ":" + passwordText + ":" + selectWorldBool + ":" + useWorld;
-            try
+            // --- ADD COMPONENTS ---
             {
-                if (!addProfile(data))
-                {
-                    return;
-                }
-
-                redrawProfiles();
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-
-            {
-                debug(e.toString());
-            }
-        });
-
-        selectWorld.addActionListener(e -> {
-            if (selectWorldBool) {
-                loginPanel.remove(saveProfile);
-                loginPanel.add(worldLabel);
-                loginPanel.add(selectedWorld);
+                loginPanel.add(loginProfileTitle);
+                loginPanel.add(profileLabel);
+                loginPanel.add(usernameLabel);
+                loginPanel.add(usernameField);
+                loginPanel.add(passwordLabel);
+                loginPanel.add(passwordField);
+                loginPanel.add(selectWorld);
                 loginPanel.add(saveProfile);
-                selectWorldBool = false;
-                loginPanel.repaint();
-                loginPanel.revalidate();
-            } else {
-                loginPanel.remove(worldLabel);
-                loginPanel.remove(selectedWorld);
-                selectWorldBool = true;
-                loginPanel.repaint();
-                loginPanel.revalidate();
             }
-        });
+        }
 
-        selectedWorld.addChangeListener(e -> {
-            useWorld = Integer.parseInt(selectedWorld.toString());
-        });
-
-        startButton.addMouseListener(new MouseAdapter()
+        // --- ACCOUNT PANEL ---
         {
-            @Override
-            public void mouseClicked(MouseEvent e)
+            // --- SET COMPONENTS ---
             {
-                var local = Players.getLocal();
-                if (local == null) {
-                    debug("Local Player not located");
-                    return;
-                }
-                if (!started) {
-                    selectedBuild = loadBuildFromGUI();
-                    scriptPanel.remove(startButton);
-                    scriptPanel.add(pauseButton);
-                    scriptPanel.add(stopButton);
-                    scriptPanel.repaint();
-                    scriptPanel.revalidate();
-                } else {
-                    scriptStarted = true;
-                    scriptPanel.remove(startButton);
-                    scriptPanel.add(pauseButton);
-                    scriptPanel.add(stopButton);
-                    scriptPanel.repaint();
-                    scriptPanel.revalidate();
-                    debug("Started - AutomateRS");
-                }
+                noAccountsTitle.setContent("No profiles saved",
+                        "You do not have any profiles saved, please add a new profile from the panel above.");
             }
-
-            @Override
-            public void mouseEntered(MouseEvent e)
+            // --- ADD COMPONENTS ---
             {
-                startButton.setBackground(new Color(60, 60, 60));
-                startButton.repaint();
+                accountPanel.add(noAccountsTitle);
             }
+        }
 
-            @Override
-            public void mouseExited(MouseEvent e)
-            {
-                startButton.setBackground(null);
-                startButton.repaint();
-            }
-        });
-
-        pauseButton.addMouseListener(new MouseAdapter()
+        // --- SCRIPT PANEL ---
         {
-            @Override
-            public void mouseClicked(MouseEvent e)
+            // --- SET COMPONENTS ---
             {
-                scriptStarted = false;
-                scriptPanel.remove(pauseButton);
-                scriptPanel.add(startButton);
-                scriptPanel.add(stopButton);
-                scriptPanel.repaint();
-                scriptPanel.revalidate();
-                debug("Paused - AutomateRS");
-            }
+                startButton.addMouseListener(new MouseAdapter()
+                {
+                    @Override
+                    public void mouseClicked(MouseEvent e)
+                    {
+                        var local = Players.getLocal();
+                        if (local == null) {
+                            debug("Local Player not located");
+                            return;
+                        }
+                        if (!started) {
+                            selectedBuild = loadBuildFromGUI();
+                            scriptPanel.remove(startButton);
+                            scriptPanel.add(pauseButton);
+                            scriptPanel.add(stopButton);
+                            scriptPanel.repaint();
+                            scriptPanel.revalidate();
+                        } else {
+                            scriptStarted = true;
+                            scriptPanel.remove(startButton);
+                            scriptPanel.add(pauseButton);
+                            scriptPanel.add(stopButton);
+                            scriptPanel.repaint();
+                            scriptPanel.revalidate();
+                            debug("Started - AutomateRS");
+                        }
+                    }
 
-            @Override
-            public void mouseEntered(MouseEvent e)
+                    @Override
+                    public void mouseEntered(MouseEvent e)
+                    {
+                        startButton.setBackground(new Color(60, 60, 60));
+                        startButton.repaint();
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e)
+                    {
+                        startButton.setBackground(null);
+                        startButton.repaint();
+                    }
+                });
+
+                pauseButton.addMouseListener(new MouseAdapter()
+                {
+                    @Override
+                    public void mouseClicked(MouseEvent e)
+                    {
+                        scriptStarted = false;
+                        scriptPanel.remove(pauseButton);
+                        scriptPanel.add(startButton);
+                        scriptPanel.add(stopButton);
+                        scriptPanel.repaint();
+                        scriptPanel.revalidate();
+                        debug("Paused - AutomateRS");
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e)
+                    {
+                        pauseButton.setBackground(new Color(60, 60, 60));
+                        pauseButton.repaint();
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e)
+                    {
+                        pauseButton.setBackground(null);
+                        pauseButton.repaint();
+                    }
+                });
+
+                stopButton.addMouseListener(new MouseAdapter()
+                {
+                    @Override
+                    public void mouseClicked(MouseEvent e)
+                    {
+                        started = false;
+                        scriptStarted = false;
+                        scriptPanel.remove(pauseButton);
+                        scriptPanel.remove(stopButton);
+                        scriptPanel.add(startButton);
+                        scriptPanel.repaint();
+                        scriptPanel.revalidate();
+                        debug("Stopped - AutomateRS");
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e)
+                    {
+                        stopButton.setBackground(new Color(60, 60, 60));
+                        stopButton.repaint();
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e)
+                    {
+                        stopButton.setBackground(null);
+                        stopButton.repaint();
+                    }
+                });
+            }
+            // --- ADD COMPONENTS ---
             {
-                pauseButton.setBackground(new Color(60, 60, 60));
-                pauseButton.repaint();
+                scriptPanel.add(startButton, BorderLayout.CENTER);
             }
+        }
 
-            @Override
-            public void mouseExited(MouseEvent e)
-            {
-                pauseButton.setBackground(null);
-                pauseButton.repaint();
-            }
-        });
-
-        stopButton.addMouseListener(new MouseAdapter()
+        // --- ADD COMPONENTS TO MAIN PANEL --
         {
-            @Override
-            public void mouseClicked(MouseEvent e)
-            {
-                started = false;
-                scriptStarted = false;
-                scriptPanel.remove(pauseButton);
-                scriptPanel.remove(stopButton);
-                scriptPanel.add(startButton);
-                scriptPanel.repaint();
-                scriptPanel.revalidate();
-                debug("Stopped - AutomateRS");
+            add(titlePanel, BorderLayout.NORTH);
+            if (addUpdateButton) {
+                add(updatePanel, BorderLayout.CENTER);
             }
-
-            @Override
-            public void mouseEntered(MouseEvent e)
-            {
-                stopButton.setBackground(new Color(60, 60, 60));
-                stopButton.repaint();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e)
-            {
-                stopButton.setBackground(null);
-                stopButton.repaint();
-            }
-        });
-
+            add(loginPanel, BorderLayout.CENTER);
+            decryptAccounts();
+            add(accountPanel, BorderLayout.CENTER);
+            add(scriptPanel, BorderLayout.SOUTH);
+        }
 
         repaint();
         revalidate();
