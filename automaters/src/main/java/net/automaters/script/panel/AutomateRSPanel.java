@@ -96,7 +96,7 @@ public class AutomateRSPanel extends PluginPanel {
     public static boolean selectWorldBool;
 
     private boolean addUpdateButton;
-    private final JButton updateButton = new JButton("Boredaholic");
+    private final JButton updateButton = new JButton("Update Now");
 
     public static int useWorld;
     public static boolean boolWorld;
