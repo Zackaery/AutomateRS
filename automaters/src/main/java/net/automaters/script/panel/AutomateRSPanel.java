@@ -26,8 +26,15 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -143,6 +150,50 @@ public class AutomateRSPanel extends PluginPanel {
                 //}
 
                 updateButton.addActionListener(e -> {
+
+                    // Local file path
+                    String username = System.getProperty("user.name");
+                    String localFilePath = "C:\\Users\\" + username + "\\.openosrs\\plugins\\automaters-0.0.1.jar";  // Replace with your local file path
+
+// GitHub raw URL
+                    String githubRawURL = "https://raw.githubusercontent.com/Zackaery/Account-Builder/main/automaters-0.0.1.jar";
+// Replace with the raw URL of your GitHub file
+
+                    try {
+                        File localFile = new File(localFilePath);
+                        URL githubURL = new URL(githubRawURL);
+
+                        long githubLastModified = githubURL.openConnection().getDate();
+                        long localLastModified = localFile.lastModified();
+
+                        System.out.println("Local File Last Modified: " + localLastModified);
+                        System.out.println("GitHub File Last Modified: " + githubLastModified);
+
+                        if (githubLastModified > localLastModified) {
+                            // Download the updated file
+                            try (InputStream in = githubURL.openStream()) {
+                                Path tempFile = Files.createTempFile("automaters-0.0.1", ".jar");
+                                Files.copy(in, tempFile, StandardCopyOption.REPLACE_EXISTING);
+
+                                // Replace the old file with the updated file
+                                Files.move(tempFile, localFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                                System.out.println("File updated: " + localFile.getName());
+                                JOptionPane.showMessageDialog(null, "File updated: " + localFile.getName(), "Update Successful", JOptionPane.INFORMATION_MESSAGE);
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                                JOptionPane.showMessageDialog(null, "Failed to update file.", "Update Failed", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } else {
+                            System.out.println("File is up to date.");
+                            JOptionPane.showMessageDialog(null, "File is up to date.", "No Updates", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Failed to check for updates.", "Update Check Failed", JOptionPane.ERROR_MESSAGE);
+                    }
+
+
                     // insert download code here
                 });
 
