@@ -35,7 +35,7 @@ public class LocalPlayer {
      * @return if local is in area.
      */
     public static boolean localInArea(RectangularArea area) {
-        return area.contains(local);
+        return area.contains(local.getWorldLocation());
     }
 
     /**
@@ -44,7 +44,7 @@ public class LocalPlayer {
      * @return if local is at nearest bank.
      */
     public static boolean isInBank() {
-        return BankLocation.getNearest().getArea().contains(Players.getLocal());
+        return BankLocation.getNearest().getArea().contains(local.getWorldLocation());
     }
 
     /**
@@ -61,7 +61,7 @@ public class LocalPlayer {
      */
     public static void openBank() {
         TileObject bank = TileObjects.getFirstSurrounding(local.getWorldLocation(), 10, obj -> obj.hasAction("Bank"));
-        TileObject bankChest = TileObjects.getFirstSurrounding(local.getWorldLocation(), 10, obj -> obj.getName().startsWith("Bank"));
+        TileObject bankChest = TileObjects.getFirstSurrounding(local.getWorldLocation(), 10, obj -> obj.getName().startsWith("Bank chest"));
         if (!Bank.isOpen() && !LocalPlayer.isInBank()) {
             walkToNearestBank();
         } else if (!Bank.isOpen() && LocalPlayer.isInBank()) {
