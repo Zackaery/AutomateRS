@@ -5,8 +5,6 @@ import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.mixins.Inject;
 import net.unethicalite.api.commons.Predicates;
 import net.unethicalite.api.commons.Time;
-import net.unethicalite.api.coords.RectangularArea;
-import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.game.Skills;
@@ -15,7 +13,6 @@ import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
-import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.plugins.LoopedPlugin;
 
 import java.util.Comparator;
@@ -29,7 +26,7 @@ import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.automaters.util.locations.woodcutting_rectangularareas.*;
 import static net.automaters.util.locations.woodcutting_rectangularareas.Falador_Oak_TreeArea_V;
 
-
+@SuppressWarnings({"ConstantConditions","unused"})
 public class WoodcuttingBored extends LoopedPlugin {
 
     @Inject
@@ -91,7 +88,6 @@ public class WoodcuttingBored extends LoopedPlugin {
         };
 
         boolean lumberjackHatEquipped = Equipment.contains("Lumberjack hat");
-        boolean lumberjackEquipped = Equipment.contains(Predicates.nameContains("Lumberjack"));
         boolean gracefulHoodEquipped = Equipment.contains("Graceful hood");
 
         for (String itemName : itemsToHandle) {
