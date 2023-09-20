@@ -89,6 +89,12 @@ public enum woodcutting_rectangularareas implements Locatable {
         return area;
     }
 
+    // New method to check if player is within 2 tiles of the area
+    public boolean isPlayerWithinTwoTiles() {
+        WorldPoint playerLocation = Players.getLocal().getWorldLocation();
+        return area.contains(playerLocation);
+    }
+
     public static woodcutting_rectangularareas getNearest() {
         WorldPoint playerLocation = Players.getLocal().getWorldLocation();
         return Arrays.stream(values())

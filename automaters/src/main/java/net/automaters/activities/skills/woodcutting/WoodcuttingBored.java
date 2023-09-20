@@ -241,50 +241,50 @@ public class WoodcuttingBored extends LoopedPlugin {
             Random random = new Random();
             int randomIndex = random.nextInt(5);
 
-            if (randomIndex == 0 && playerPosition.distanceTo(Falador_Tree_TreeArea_I) > 2) {
+            if (randomIndex == 0 && Falador_Tree_TreeArea_I.isPlayerWithinTwoTiles()) {
 
                 Movement.walkTo(Falador_Tree_TreeArea_I);
-                while (playerPosition.distanceTo(Falador_Tree_TreeArea_I) > 2) {
+                while (!Falador_Tree_TreeArea_I.isPlayerWithinTwoTiles()) {
                     if (Movement.getRunEnergy() <= 10 && Movement.isRunEnabled()) {
                         Movement.toggleRun();
                     } else if (Movement.getRunEnergy() >= 70 && !Movement.isRunEnabled()) {
                         Movement.toggleRun();
                     }
                 }
-            } else if (randomIndex == 1 && playerPosition.distanceTo(Falador_Tree_TreeArea_II) > 2) {
+            } else if (randomIndex == 1 && Falador_Tree_TreeArea_II.isPlayerWithinTwoTiles()) {
 
                 Movement.walkTo(Falador_Tree_TreeArea_II);
-                while (playerPosition.distanceTo(Falador_Tree_TreeArea_II) > 2) {
+                while (!Falador_Tree_TreeArea_II.isPlayerWithinTwoTiles()) {
                     if (Movement.getRunEnergy() <= 10 && Movement.isRunEnabled()) {
                         Movement.toggleRun();
                     } else if (Movement.getRunEnergy() >= 70 && !Movement.isRunEnabled()) {
                         Movement.toggleRun();
                     }
                 }
-            } else if (randomIndex == 2 && playerPosition.distanceTo(Falador_Tree_TreeArea_III) > 2) {
+            } else if (randomIndex == 2 && Falador_Tree_TreeArea_III.isPlayerWithinTwoTiles()) {
 
                 Movement.walkTo(Falador_Tree_TreeArea_III);
-                while (playerPosition.distanceTo(Falador_Tree_TreeArea_III) > 2) {
+                while (!Falador_Tree_TreeArea_III.isPlayerWithinTwoTiles()) {
                     if (Movement.getRunEnergy() <= 10 && Movement.isRunEnabled()) {
                         Movement.toggleRun();
                     } else if (Movement.getRunEnergy() >= 70 && !Movement.isRunEnabled()) {
                         Movement.toggleRun();
                     }
                 }
-            } else if (randomIndex == 3 && playerPosition.distanceTo(Falador_Tree_TreeArea_IV) > 2) {
+            } else if (randomIndex == 3 && Falador_Tree_TreeArea_IV.isPlayerWithinTwoTiles()) {
 
                 Movement.walkTo(Falador_Tree_TreeArea_IV);
-                while (playerPosition.distanceTo(Falador_Tree_TreeArea_IV) > 2) {
+                while (!Falador_Tree_TreeArea_IV.isPlayerWithinTwoTiles()) {
                     if (Movement.getRunEnergy() <= 10 && Movement.isRunEnabled()) {
                         Movement.toggleRun();
                     } else if (Movement.getRunEnergy() >= 70 && !Movement.isRunEnabled()) {
                         Movement.toggleRun();
                     }
                 }
-            } else if (randomIndex == 4 && playerPosition.distanceTo(Falador_Tree_TreeArea_V) > 2) {
+            } else if (randomIndex == 4 && Falador_Tree_TreeArea_V.isPlayerWithinTwoTiles()) {
 
                 Movement.walkTo(Falador_Tree_TreeArea_V);
-                while (playerPosition.distanceTo(Falador_Tree_TreeArea_V) > 2) {
+                while (!Falador_Tree_TreeArea_V.isPlayerWithinTwoTiles()) {
                     if (Movement.getRunEnergy() <= 10 && Movement.isRunEnabled()) {
                         Movement.toggleRun();
                     } else if (Movement.getRunEnergy() >= 70 && !Movement.isRunEnabled()) {
@@ -410,11 +410,11 @@ public class WoodcuttingBored extends LoopedPlugin {
 
                 // Checking for tree and chopping
 
-                if (playerPosition.distanceTo(Falador_Tree_TreeArea_I) < 2 && !Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))
-                        || playerPosition.distanceTo(Falador_Tree_TreeArea_II) < 2 && !Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))
-                        || playerPosition.distanceTo(Falador_Tree_TreeArea_III) < 2 && !Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))
-                        || playerPosition.distanceTo(Falador_Tree_TreeArea_IV) < 2 && !Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))
-                        || playerPosition.distanceTo(Falador_Tree_TreeArea_V) < 2 && !Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
+                if (Falador_Tree_TreeArea_I.isPlayerWithinTwoTiles()&& !Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))
+                        || Falador_Tree_TreeArea_II.isPlayerWithinTwoTiles() && !Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))
+                        || Falador_Tree_TreeArea_III.isPlayerWithinTwoTiles() && !Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))
+                        || Falador_Tree_TreeArea_IV.isPlayerWithinTwoTiles() && !Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))
+                        || Falador_Tree_TreeArea_V.isPlayerWithinTwoTiles() && !Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
 
                     var tree = TileObjects
                             .getSurrounding(playerPosition, 8, "Tree")
