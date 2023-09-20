@@ -21,6 +21,7 @@ import net.unethicalite.api.plugins.LoopedPlugin;
 import java.util.Comparator;
 import java.util.Random;
 
+import static net.automaters.api.entities.LocalPlayer.openBank;
 import static net.automaters.api.entities.SkillCheck.getAttackLevel;
 import static net.automaters.api.entities.SkillCheck.getWoodcuttingLevel;
 import static net.automaters.script.AutomateRS.debug;
@@ -48,53 +49,17 @@ public class WoodcuttingBored extends LoopedPlugin {
 
         WorldPoint playerPosition = Players.getLocal().getWorldLocation();
 
-        if (Inventory.isFull() || !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
+        if (Inventory.isFull() || !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
+                || !Inventory.isFull() && !Equipment.contains(Predicates.nameContains("axe")) && Inventory.contains(Predicates.nameContains("axe"))
+                || !Bank.isOpen() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
             // do something
-            Movement.walkTo(BankLocation.getNearest());
-            while (local.isMoving()) {
-                if (Movement.getRunEnergy() <= 10 && Movement.isRunEnabled()) {
-                    Movement.toggleRun();
-                    return 100;
-                } else if (Movement.getRunEnergy() >= 70 && !Movement.isRunEnabled()) {
-                    Movement.toggleRun();
-                    return 100;
-                }
-            }
+            openBank();
             return 100;
         }
-        Locatable bankerr = NPCs.getNearest(npc -> npc.hasAction("Collect"));
-        NPC banker = NPCs.getNearest(npc -> npc.hasAction("Collect"));
-        if (!Inventory.isFull() && !Equipment.contains(Predicates.nameContains("axe")) && banker == null && Inventory.contains(Predicates.nameContains("axe"))) {
 
-            Movement.walkTo(BankLocation.getNearest());
-            while (local.isMoving()) {
-                if (Movement.getRunEnergy() <= 10 && Movement.isRunEnabled()) {
-                    Movement.toggleRun();
-                    return 100;
-                } else if (Movement.getRunEnergy() >= 70 && !Movement.isRunEnabled()) {
-                    Movement.toggleRun();
-                    return 100;
-                }
-            }
-
-        }
-
-        if (banker != null && !local.isMoving() && playerPosition.distanceTo(banker) > 2) {
-            Movement.walkTo(banker);
-            while (local.isMoving()) {
-                if (Movement.getRunEnergy() <= 10 && Movement.isRunEnabled()) {
-                    Movement.toggleRun();
-                    return 100;
-                } else if (Movement.getRunEnergy() >= 70 && !Movement.isRunEnabled()) {
-                    Movement.toggleRun();
-                    return 100;
-                }
-            }
-        }
-
-        if (banker != null && !Bank.isOpen() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
-            banker.interact("Bank");
-            return -3;
+        if (Bank.isOpen() && Inventory.contains(Predicates.nameContains("axe")) && Equipment.contains(Predicates.nameContains("axe"))) {
+            Bank.depositInventory();
+            Bank.depositEquipment();
         }
 
         if (Bank.isOpen() && Inventory.contains(Predicates.nameContains("Logs"))
@@ -179,32 +144,38 @@ public class WoodcuttingBored extends LoopedPlugin {
         for (String itemName : axesToHandle) {
             if (itemName.contains("Steel axe")) {
                 // Check Woodcutting level
-                if (getWoodcuttingLevel() < 6 && getAttackLevel() < 5) {
+                if (getWoodcuttingLevel() < 6 && getAttackLevel() < 5
+                        || getWoodcuttingLevel() >= 11 && getAttackLevel() >= 10 && Bank.contains("Black axe")) {
                     continue; // Skip wearing Steel items if Woodcutting level is less than 44
                 }
             } else if (itemName.contains("Black axe")) {
                 // Check Woodcutting level
-                if (getWoodcuttingLevel() < 11 && getAttackLevel() < 10) {
+                if (getWoodcuttingLevel() < 11 && getAttackLevel() < 10
+                        || getWoodcuttingLevel() >= 21 && getAttackLevel() >= 20 && Bank.contains("Mithril axe")) {
                     continue; // Skip wearing Black items if Woodcutting level is less than 44
                 }
             } else if (itemName.contains("Mithril axe")) {
                 // Check Woodcutting level
-                if (getWoodcuttingLevel() < 21 && getAttackLevel() < 20) {
+                if (getWoodcuttingLevel() < 21 && getAttackLevel() < 20
+                        || getWoodcuttingLevel() >= 31 && getAttackLevel() >= 30 && Bank.contains("Adamant axe")) {
                     continue; // Skip wearing Mithril items if Woodcutting level is less than 44
                 }
             } else if (itemName.contains("Adamant axe")) {
                 // Check Woodcutting level
-                if (getWoodcuttingLevel() < 31 && getAttackLevel() < 30) {
+                if (getWoodcuttingLevel() < 31 && getAttackLevel() < 30
+                        || getWoodcuttingLevel() >= 41 && getAttackLevel() >= 40 && Bank.contains("Rune axe")) {
                     continue; // Skip wearing Adamant items if Woodcutting level is less than 44
                 }
             } else if (itemName.contains("Rune axe")) {
                 // Check Woodcutting level
-                if (getWoodcuttingLevel() < 41 && getAttackLevel() < 40) {
+                if (getWoodcuttingLevel() < 41 && getAttackLevel() < 40
+                        || getWoodcuttingLevel() >= 61 && getAttackLevel() >= 60 && Bank.contains("Dragon axe")) {
                     continue; // Skip wearing Black items if Woodcutting level is less than 44
                 }
             } else if (itemName.contains("Dragon axe")) {
                 // Check Woodcutting level
-                if (getWoodcuttingLevel() < 61 && getAttackLevel() < 60) {
+                if (getWoodcuttingLevel() < 61 && getAttackLevel() < 60
+                        || getWoodcuttingLevel() >= 71 && getAttackLevel() >= 70 && Bank.contains("Crystal axe")) {
                     continue; // Skip wearing Black items if Woodcutting level is less than 44
                 }
             } else if (itemName.contains("Crystal axe")) {
@@ -411,6 +382,7 @@ public class WoodcuttingBored extends LoopedPlugin {
 
                 // Checking for tree and chopping
 
+        // normal tree
                 if (Falador_Tree_TreeArea_I.isPlayerWithinTwoTiles()
                         || Falador_Tree_TreeArea_II.isPlayerWithinTwoTiles()
                         || Falador_Tree_TreeArea_III.isPlayerWithinTwoTiles()
@@ -430,6 +402,52 @@ public class WoodcuttingBored extends LoopedPlugin {
                         }
                     }
                 }
+
+                // oak tree
+
+        if (Falador_Oak_TreeArea_I.isPlayerWithinTwoTiles()
+                || Falador_Oak_TreeArea_II.isPlayerWithinTwoTiles()
+                || Falador_Oak_TreeArea_III.isPlayerWithinTwoTiles()
+                || Falador_Oak_TreeArea_IV.isPlayerWithinTwoTiles()
+                || Falador_Oak_TreeArea_V.isPlayerWithinTwoTiles()) {
+            if (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
+
+                var tree = TileObjects
+                        .getSurrounding(playerPosition, 8, "Oak Tree")
+                        .stream()
+                        .filter(tileObject -> Reachable.isWalkable(tileObject.getWorldLocation()))
+                        .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
+                        .orElse(null);
+
+                if (!local.isAnimating() && !local.isMoving() && tree != null) {
+                    tree.interact("Chop down");
+                }
+            }
+        }
+
+        // willow tree
+
+        if (DraynorVillage_Willow_TreeArea_I.isPlayerWithinTwoTiles()
+                || DraynorVillage_Willow_TreeArea_II.isPlayerWithinTwoTiles()
+                || DraynorVillage_Willow_TreeArea_III.isPlayerWithinTwoTiles()
+                || DraynorVillage_Willow_TreeArea_IV.isPlayerWithinTwoTiles()
+                || DraynorVillage_Willow_TreeArea_V.isPlayerWithinTwoTiles()) {
+            if (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
+
+                var tree = TileObjects
+                        .getSurrounding(playerPosition, 8, "Willow Tree")
+                        .stream()
+                        .filter(tileObject -> Reachable.isWalkable(tileObject.getWorldLocation()))
+                        .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
+                        .orElse(null);
+
+                if (!local.isAnimating() && !local.isMoving() && tree != null) {
+                    tree.interact("Chop down");
+                }
+            }
+        }
+
+
 
 
                 // end of loop
