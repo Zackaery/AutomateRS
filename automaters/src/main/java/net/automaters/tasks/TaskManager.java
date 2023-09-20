@@ -2,6 +2,7 @@ package net.automaters.tasks;
 
 //import net.automaters.activities.skills.mining.Mining;
 import net.automaters.activities.skills.woodcutting.Woodcutting;
+import net.automaters.activities.skills.woodcutting.WoodcuttingBored;
 
 import static net.automaters.script.AutomateRS.debug;
 
