@@ -1,13 +1,22 @@
 package net.automaters.api.entities;
 
 import net.runelite.api.Player;
+import net.runelite.api.TileObject;
 import net.unethicalite.api.coords.RectangularArea;
 import net.unethicalite.api.entities.Players;
+import net.unethicalite.api.entities.TileObjects;
+import net.unethicalite.api.items.Bank;
+import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 
+import static net.automaters.script.AutomateRS.debug;
 import static net.automaters.script.AutomateRS.scriptStarted;
 
 public class LocalPlayer {
+
+    private LocalPlayer() {
+
+    }
 
     static Player local = Players.getLocal();
 
@@ -17,10 +26,7 @@ public class LocalPlayer {
      * @return if local can interact.
      */
     public static boolean localCanInteract() {
-        if ((local == null) || !scriptStarted || local.isAnimating() || local.isInteracting() ) {
-            return false;
-        }
-        return true;
+        return ((local == null) || !scriptStarted || local.isAnimating() || local.isInteracting());
     }
 
     /**
@@ -29,10 +35,44 @@ public class LocalPlayer {
      * @return if local is in area.
      */
     public static boolean localInArea(RectangularArea area) {
-        if (area.contains(local)) {
-            return true;
+        return area.contains(local);
+    }
+
+    /**
+     * Checks to see if local character is at nearest bank.
+     *
+     * @return if local is at nearest bank.
+     */
+    public static boolean isInBank() {
+        return BankLocation.getNearest().getArea().contains(Players.getLocal());
+    }
+
+    /**
+     * Walks your player to the closest bank.
+     */
+    public static void walkToNearestBank() {
+        if (!Bank.isOpen() && !LocalPlayer.isInBank()) {
+            Movement.walkTo(BankLocation.getNearest());
         }
-        return false;
+    }
+
+    /**
+     * Opens the closest bank to your player.
+     */
+    public static void openBank() {
+        TileObject bank = TileObjects.getFirstSurrounding(local.getWorldLocation(), 10, obj -> obj.hasAction("Bank"));
+        TileObject bankChest = TileObjects.getFirstSurrounding(local.getWorldLocation(), 10, obj -> obj.getName().startsWith("Bank"));
+        if (!Bank.isOpen() && !LocalPlayer.isInBank()) {
+            walkToNearestBank();
+        } else if (!Bank.isOpen() && LocalPlayer.isInBank()) {
+            if (bank != null) {
+                bank.interact("Bank");
+            } else if (bankChest != null) {
+                bankChest.interact("Use");
+            }
+        } else {
+            debug("The bank is open!");
+        }
     }
 
 }
