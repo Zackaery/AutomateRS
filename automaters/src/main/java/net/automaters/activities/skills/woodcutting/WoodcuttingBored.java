@@ -14,6 +14,7 @@ import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
+import net.unethicalite.api.movement.Reachable;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.plugins.LoopedPlugin;
 
@@ -419,10 +420,11 @@ public class WoodcuttingBored extends LoopedPlugin {
                     var tree = TileObjects
                             .getSurrounding(playerPosition, 8, "Tree")
                             .stream()
+                            .filter(tileObject -> Reachable.isWalkable(tileObject.getWorldLocation()))
                             .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
                             .orElse(null);
-                    if (!local.isAnimating() && !local.isMoving()) {
-                        assert tree != null;
+
+                    if (!local.isAnimating() && !local.isMoving() && tree != null) {
                         tree.interact("Chop down");
                     }
                 }
