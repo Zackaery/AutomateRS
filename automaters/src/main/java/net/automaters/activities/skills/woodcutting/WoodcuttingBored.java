@@ -13,6 +13,7 @@ import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
+import net.unethicalite.api.movement.pathfinder.Walker;
 import net.unethicalite.api.plugins.LoopedPlugin;
 
 import java.util.Comparator;
@@ -24,7 +25,7 @@ import static net.automaters.api.entities.SkillCheck.getWoodcuttingLevel;
 import static net.automaters.script.AutomateRS.debug;
 import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.automaters.util.locations.woodcutting_rectangularareas.*;
-import static net.automaters.util.locations.woodcutting_rectangularareas.Falador_Oak_TreeArea_V;
+import static net.unethicalite.api.commons.Time.sleep;
 
 @SuppressWarnings({"ConstantConditions","unused"})
 public class WoodcuttingBored extends LoopedPlugin {
@@ -206,61 +207,176 @@ public class WoodcuttingBored extends LoopedPlugin {
         // Choosing tree location
 
         if (getWoodcuttingLevel() <= 15 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull()) {
+            debug("Choosing location");
             Random random = new Random();
             int randomIndex = random.nextInt(5);
 
-            if (randomIndex == 0 && Falador_Tree_TreeArea_I.isPlayerWithinTwoTiles()) {
+            debug("Location chosen: " + randomIndex);
 
-                Movement.walkTo(Falador_Tree_TreeArea_I);
+            if (randomIndex == 0) {
+
+                debug("Walking");
+
+                Movement.walk(Falador_Tree_TreeArea_I.getRandomPointInside());
                 while (!Falador_Tree_TreeArea_I.isPlayerWithinTwoTiles()) {
-                    if (Movement.getRunEnergy() <= 10 && Movement.isRunEnabled()) {
-                        Movement.toggleRun();
-                    } else if (Movement.getRunEnergy() >= 70 && !Movement.isRunEnabled()) {
-                        Movement.toggleRun();
-                    }
+                    sleep(1500, 3000);
+                    debug("walking 2");
+                    Movement.walkTo(Falador_Tree_TreeArea_I.getRandomPointInside());
                 }
-            } else if (randomIndex == 1 && Falador_Tree_TreeArea_II.isPlayerWithinTwoTiles()) {
 
-                Movement.walkTo(Falador_Tree_TreeArea_II);
+            if (Falador_Tree_TreeArea_I.isPlayerWithinTwoTiles()) {
+                        if (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
+
+                            var tree = TileObjects
+                                    .getSurrounding(playerPosition, 8, "Tree")
+                                    .stream()
+                                    .filter(tileObject -> Reachable.isWalkable(tileObject.getWorldLocation()))
+                                    .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
+                                    .orElse(null);
+
+                            if (!local.isAnimating() && !local.isMoving() && tree != null) {
+                                tree.interact("Chop down");
+                            }
+                            if (!Inventory.isFull() && !Falador_Tree_TreeArea_I.isPlayerWithinTwoTiles()){
+                                while (!Falador_Tree_TreeArea_I.isPlayerWithinTwoTiles()) {
+                                    sleep(1500, 3000);
+                                    debug("walking 2");
+                                    Movement.walkTo(Falador_Tree_TreeArea_I.getRandomPointInside());
+                                }
+
+                            }
+                        }
+                    }
+            }
+             if (randomIndex == 1) {
+
+                Movement.walk(Falador_Tree_TreeArea_II.getRandomPointInside());
                 while (!Falador_Tree_TreeArea_II.isPlayerWithinTwoTiles()) {
-                    if (Movement.getRunEnergy() <= 10 && Movement.isRunEnabled()) {
-                        Movement.toggleRun();
-                    } else if (Movement.getRunEnergy() >= 70 && !Movement.isRunEnabled()) {
-                        Movement.toggleRun();
+                    sleep(1500, 3000);
+                    debug("walking 2");
+                    Movement.walk(Falador_Tree_TreeArea_II.getRandomPointInside());
+                }
+                    if (Falador_Tree_TreeArea_II.isPlayerWithinTwoTiles()) {
+                        if (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
+
+                            var tree = TileObjects
+                                    .getSurrounding(playerPosition, 8, "Tree")
+                                    .stream()
+                                    .filter(tileObject -> Reachable.isWalkable(tileObject.getWorldLocation()))
+                                    .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
+                                    .orElse(null);
+
+                            if (!local.isAnimating() && !local.isMoving() && tree != null) {
+                                tree.interact("Chop down");
+                            }
+                            if (!Inventory.isFull() && !Falador_Tree_TreeArea_II.isPlayerWithinTwoTiles()){
+                                while (!Falador_Tree_TreeArea_II.isPlayerWithinTwoTiles()) {
+                                    sleep(1500, 3000);
+                                    debug("walking 2");
+                                    Movement.walkTo(Falador_Tree_TreeArea_II.getRandomPointInside());
+                                }
+
+                            }
+                        }
                     }
                 }
-            } else if (randomIndex == 2 && Falador_Tree_TreeArea_III.isPlayerWithinTwoTiles()) {
+            if (randomIndex == 2) {
 
-                Movement.walkTo(Falador_Tree_TreeArea_III);
+                Movement.walk(Falador_Tree_TreeArea_III.getRandomPointInside());
                 while (!Falador_Tree_TreeArea_III.isPlayerWithinTwoTiles()) {
-                    if (Movement.getRunEnergy() <= 10 && Movement.isRunEnabled()) {
-                        Movement.toggleRun();
-                    } else if (Movement.getRunEnergy() >= 70 && !Movement.isRunEnabled()) {
-                        Movement.toggleRun();
+                    sleep(1500, 3000);
+                    debug("walking 2");
+                    Movement.walkTo(Falador_Tree_TreeArea_III.getRandomPointInside());
+                }
+                    if (Falador_Tree_TreeArea_III.isPlayerWithinTwoTiles()) {
+                        if (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
+
+                            var tree = TileObjects
+                                    .getSurrounding(playerPosition, 8, "Tree")
+                                    .stream()
+                                    .filter(tileObject -> Reachable.isWalkable(tileObject.getWorldLocation()))
+                                    .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
+                                    .orElse(null);
+
+                            if (!local.isAnimating() && !local.isMoving() && tree != null) {
+                                tree.interact("Chop down");
+                            }
+                            if (!Inventory.isFull() && !Falador_Tree_TreeArea_III.isPlayerWithinTwoTiles()){
+                                while (!Falador_Tree_TreeArea_III.isPlayerWithinTwoTiles()) {
+                                    sleep(1500, 3000);
+                                    debug("walking 2");
+                                    Movement.walkTo(Falador_Tree_TreeArea_III.getRandomPointInside());
+                                }
+
+                            }
+                        }
                     }
                 }
-            } else if (randomIndex == 3 && Falador_Tree_TreeArea_IV.isPlayerWithinTwoTiles()) {
+            if (randomIndex == 3) {
 
-                Movement.walkTo(Falador_Tree_TreeArea_IV);
+                Movement.walk(Falador_Tree_TreeArea_IV.getRandomPointInside());
                 while (!Falador_Tree_TreeArea_IV.isPlayerWithinTwoTiles()) {
-                    if (Movement.getRunEnergy() <= 10 && Movement.isRunEnabled()) {
-                        Movement.toggleRun();
-                    } else if (Movement.getRunEnergy() >= 70 && !Movement.isRunEnabled()) {
-                        Movement.toggleRun();
+                    sleep(1500, 3000);
+                    debug("walking 2");
+                    Movement.walkTo(Falador_Tree_TreeArea_IV.getRandomPointInside());
+                }
+                    if (Falador_Tree_TreeArea_IV.isPlayerWithinTwoTiles()) {
+                        if (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
+
+                            var tree = TileObjects
+                                    .getSurrounding(playerPosition, 8, "Tree")
+                                    .stream()
+                                    .filter(tileObject -> Reachable.isWalkable(tileObject.getWorldLocation()))
+                                    .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
+                                    .orElse(null);
+
+                            if (!local.isAnimating() && !local.isMoving() && tree != null) {
+                                tree.interact("Chop down");
+                            }
+                            if (!Inventory.isFull() && !Falador_Tree_TreeArea_IV.isPlayerWithinTwoTiles()){
+                                while (!Falador_Tree_TreeArea_IV.isPlayerWithinTwoTiles()) {
+                                    sleep(1500, 3000);
+                                    debug("walking 2");
+                                    Movement.walkTo(Falador_Tree_TreeArea_IV.getRandomPointInside());
+                                }
+
+                            }
+                        }
                     }
                 }
-            } else if (randomIndex == 4 && Falador_Tree_TreeArea_V.isPlayerWithinTwoTiles()) {
+            if (randomIndex == 4) {
 
-                Movement.walkTo(Falador_Tree_TreeArea_V);
+                Movement.walk(Falador_Tree_TreeArea_V.getRandomPointInside());
                 while (!Falador_Tree_TreeArea_V.isPlayerWithinTwoTiles()) {
-                    if (Movement.getRunEnergy() <= 10 && Movement.isRunEnabled()) {
-                        Movement.toggleRun();
-                    } else if (Movement.getRunEnergy() >= 70 && !Movement.isRunEnabled()) {
-                        Movement.toggleRun();
+                    sleep(1500, 3000);
+                    debug("walking 2");
+                    Movement.walkTo(Falador_Tree_TreeArea_V.getRandomPointInside());
+                }
+                    if (Falador_Tree_TreeArea_V.isPlayerWithinTwoTiles()) {
+                        while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
+
+                            var tree = TileObjects
+                                    .getSurrounding(playerPosition, 8, "Tree")
+                                    .stream()
+                                    .filter(tileObject -> Reachable.isWalkable(tileObject.getWorldLocation()))
+                                    .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
+                                    .orElse(null);
+
+                            if (!local.isAnimating() && !local.isMoving() && tree != null) {
+                                tree.interact("Chop down");
+                            }
+                            if (!Inventory.isFull() && !Falador_Tree_TreeArea_V.isPlayerWithinTwoTiles()){
+                                while (!Falador_Tree_TreeArea_V.isPlayerWithinTwoTiles()) {
+                                    sleep(1500, 3000);
+                                    debug("walking 2");
+                                    Movement.walkTo(Falador_Tree_TreeArea_V.getRandomPointInside());
+                                }
+
+                            }
+                        }
                     }
                 }
-
-            } else {
+            {
                 if (getWoodcuttingLevel() > 15 && getWoodcuttingLevel() <= 30 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull()) {
                     if (randomIndex == 0 && !Falador_Oak_TreeArea_I.isPlayerWithinTwoTiles()) {
 
@@ -387,7 +503,7 @@ public class WoodcuttingBored extends LoopedPlugin {
                      if (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
 
                         var tree = TileObjects
-                                .getSurrounding(playerPosition, 8, "Tree")
+                                .getSurrounding(playerPosition, 8, "Evergreen tree")
                                 .stream()
                                 .filter(tileObject -> Reachable.isWalkable(tileObject.getWorldLocation()))
                                 .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
