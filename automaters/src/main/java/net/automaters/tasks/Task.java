@@ -1,27 +1,44 @@
 package net.automaters.tasks;
 
 import net.automaters.script.AutomateRS;
+import net.unethicalite.api.plugins.LoopedPlugin;
 
+import java.util.Timer;
+
+import static net.automaters.script.AutomateRS.debug;
 import static net.automaters.tasks.TaskManager.*;
 
 public abstract class Task {
 
-    private boolean hasContext;
+    private static boolean started;
+
+    public static long startTime;
+    public static long taskDuration;
+
+    public boolean taskStarted() {
+        return started;
+    }
+    public void setStarted(boolean started) {
+        this.started = started;
+    }
 
     public Task() {
-        hasContext = true;
+        if (!taskFinished()) {
+            if (!taskStarted()) {
+                onStart();
+            } else {
+                onLoop();
+            }
+        } else {
+            onEnd();
+        }
     }
 
-    public boolean hasContext() {
-        return hasContext;
-    }
-
-    public abstract void run() throws InterruptedException;
-    public abstract void onStart() throws InterruptedException;
-    public abstract void onLoop() throws InterruptedException;
+    public abstract void onStart();
+    public abstract void onLoop();
     public abstract boolean taskFinished();
     public void onEnd() {
-        AutomateRS.debug("Completed Task: "+currentTask+"\n\n");
+        debug("Completed Task: "+currentTask+"\n\n");
         currentTask = null;
         taskSelected = false;
         taskStarted = false;

@@ -1,6 +1,7 @@
 package net.automaters.tasks;
 
 //import net.automaters.activities.skills.mining.Mining;
+import net.automaters.activities.money_making.low_value.PotOfFlour;
 import net.automaters.activities.skills.woodcutting.Woodcutting;
 
 import static net.automaters.script.AutomateRS.debug;
@@ -16,8 +17,6 @@ public class TaskManager {
     public static boolean taskStarted;
     public static boolean taskSelected;
     public static String currentTask;
-    public static long startTime;
-    public static final long taskDuration = 10000; // Specify the task duration in milliseconds (e.g., 10 seconds)
 
     public TaskManager(String task) {
         executeTask(task);
@@ -28,7 +27,7 @@ public class TaskManager {
         switch (task) {
             case "Woodcutting":
                 debug("EXECUTING WOODCUTTING TASK");
-                new Woodcutting().loop();
+                new PotOfFlour();
                 break;
             case "Mining":
                 debug("EXECUTING MINING TASK");

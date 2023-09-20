@@ -26,6 +26,7 @@ import java.security.spec.InvalidKeySpecException;
 
 import static net.automaters.script.AutomateRS.debug;
 import static net.automaters.script.panel.AutomateRSPanel.*;
+import static net.unethicalite.api.commons.Time.sleep;
 import static net.unethicalite.api.input.Keyboard.sendEnter;
 
 
@@ -181,10 +182,7 @@ public class ProfilePanel extends JPanel {
                 AutomateRS.debug("label - mousePressed");
                 if (SwingUtilities.isLeftMouseButton(e) && (client.getGameState() == GameState.LOGIN_SCREEN || client.getGameState() == GameState.LOGIN_SCREEN_AUTHENTICATOR))
                 {
-                    AutomateRS.debug("setUsername");
-                    client.setUsername(loginText);
-                    AutomateRS.debug("setPassword");
-                    client.setPassword(password);
+                    init(client);
                 }
             }
         });
@@ -200,10 +198,7 @@ public class ProfilePanel extends JPanel {
                 AutomateRS.debug("bottomContainer - mousePressed");
                 if (SwingUtilities.isLeftMouseButton(e) && (client.getGameState() == GameState.LOGIN_SCREEN || client.getGameState() == GameState.LOGIN_SCREEN_AUTHENTICATOR))
                 {
-                    AutomateRS.debug("setUsername");
-                    client.setUsername(loginText);
-                    AutomateRS.debug("setPassword");
-                    client.setPassword(password);
+                    init(client);
                 }
             }
         });
@@ -236,6 +231,7 @@ public class ProfilePanel extends JPanel {
         client.setUsername(loginText);
         AutomateRS.debug("setPassword");
         client.setPassword(password);
+        sleep(1000);
         AutomateRS.debug("sendEnter");
         Keyboard.sendEnter();
     }
