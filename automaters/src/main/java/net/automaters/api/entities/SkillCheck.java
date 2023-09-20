@@ -5,7 +5,7 @@ import net.runelite.api.Skill;
 import net.runelite.api.mixins.Inject;
 
 @SuppressWarnings({"unused"})
-public class skillCheck {
+public class SkillCheck {
     @Inject
     private static Client client;
 
@@ -13,91 +13,91 @@ public class skillCheck {
         return client.getBoostedSkillLevel(skill);
     }
 
-    public static int WoodcuttingLevel() {
+    public static int getWoodcuttingLevel() {
         return getBoostedSkillLevel(Skill.WOODCUTTING);
     }
 
-    public static int FishingLevel() {
+    public static int getFishingLevel() {
         return getBoostedSkillLevel(Skill.FISHING);
     }
 
-    public static int AttackLevel() {
+    public static int getAttackLevel() {
         return getBoostedSkillLevel(Skill.ATTACK);
     }
 
-    public static int StrengthLevel() {
+    public static int getStrengthLevel() {
         return getBoostedSkillLevel(Skill.STRENGTH);
     }
 
-    public static int DefenceLevel() {
+    public static int getDefenceLevel() {
         return getBoostedSkillLevel(Skill.DEFENCE);
     }
 
-    public static int RangedLevel() {
+    public static int getRangedLevel() {
         return getBoostedSkillLevel(Skill.RANGED);
     }
 
-    public static int PrayerLevel() {
+    public static int getPrayerLevel() {
         return getBoostedSkillLevel(Skill.PRAYER);
     }
 
-    public static int MagicLevel() {
+    public static int getMagicLevel() {
         return getBoostedSkillLevel(Skill.MAGIC);
     }
 
-    public static int RunecraftingLevel() {
+    public static int getRunecraftingLevel() {
         return getBoostedSkillLevel(Skill.RUNECRAFT);
     }
 
-    public static int HitpointsLevel() {
+    public static int getHitpointsLevel() {
         return getBoostedSkillLevel(Skill.HITPOINTS);
     }
 
-    public static int CraftingLevel() {
+    public static int getCraftingLevel() {
         return getBoostedSkillLevel(Skill.CRAFTING);
     }
 
-    public static int MiningLevel() {
+    public static int getMiningLevel() {
         return getBoostedSkillLevel(Skill.MINING);
     }
 
-    public static int CookingLevel() {
+    public static int getCookingLevel() {
         return getBoostedSkillLevel(Skill.COOKING);
     }
 
-    public static int FiremakingLevel() {
+    public static int getFiremakingLevel() {
         return getBoostedSkillLevel(Skill.FIREMAKING);
     }
 
-    public static int AgilityLevel() {
+    public static int getAgilityLevel() {
         return getBoostedSkillLevel(Skill.AGILITY);
     }
 
-    public static int HerbloreLevel() {
+    public static int getHerbloreLevel() {
         return getBoostedSkillLevel(Skill.HERBLORE);
     }
 
-    public static int ThievingLevel() {
+    public static int getThievingLevel() {
         return getBoostedSkillLevel(Skill.THIEVING);
     }
 
-    public static int FletchingLevel() {
+    public static int getFletchingLevel() {
         return getBoostedSkillLevel(Skill.FLETCHING);
     }
 
-    public static int SlayerLevel() {
+    public static int getSlayerLevel() {
         return getBoostedSkillLevel(Skill.SLAYER);
     }
 
-    public static int FarmingLevel() {
+    public static int getFarmingLevel() {
         return getBoostedSkillLevel(Skill.FARMING);
     }
 
-    public static int ConstructionLevel() {
+    public static int getConstructionLevel() {
         return getBoostedSkillLevel(Skill.CONSTRUCTION);
     }
 
-    public static int HunterLevel() {
+    public static int getHunterLevel() {
         return getBoostedSkillLevel(Skill.HUNTER);
     }
 

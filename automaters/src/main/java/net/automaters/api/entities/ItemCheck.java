@@ -4,7 +4,7 @@ import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 @SuppressWarnings({"unused"})
-public class itemCheck {
+public class ItemCheck {
 
     public static boolean noItem(String itemName) {
         return !Bank.contains(itemName) && !Inventory.contains(itemName);

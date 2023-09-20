@@ -21,9 +21,9 @@ public class Woodcutting_Zach extends LoopedPlugin {
 
         if (!localCanInteract()) { return -1; }
 
-        if (!localInArea(LUMBRIDGE)) {
+       // if (!localInArea(LUMBRIDGE)) {
 
-        }
+      //  }
 
 
 

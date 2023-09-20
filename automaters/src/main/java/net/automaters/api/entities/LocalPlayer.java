@@ -1,8 +1,9 @@
 package net.automaters.api.entities;
 
 import net.runelite.api.Player;
-import net.unethicalite.api.coords.Area;
+import net.unethicalite.api.coords.RectangularArea;
 import net.unethicalite.api.entities.Players;
+import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 
 import static net.automaters.script.AutomateRS.scriptStarted;
 
@@ -27,7 +28,7 @@ public class LocalPlayer {
      *
      * @return if local is in area.
      */
-    public static boolean localInArea(Area area) {
+    public static boolean localInArea(RectangularArea area) {
         if (area.contains(local)) {
             return true;
         }

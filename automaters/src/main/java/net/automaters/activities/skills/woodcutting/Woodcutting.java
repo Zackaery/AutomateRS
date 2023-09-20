@@ -38,10 +38,10 @@ public class Woodcutting extends LoopedPlugin {
         }
 
         // Define the coordinates of the rectangular area
-        int minX = 3176;
-        int minY = 3207;
-        int maxX = 3199;
-        int maxY = 3240;
+        int minX = 2945;
+        int minY = 3265;
+        int maxX = 3004;
+        int maxY = 3308;
 
 // Get the player's current position
         WorldPoint playerPosition = Players.getLocal().getWorldLocation();
