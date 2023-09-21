@@ -327,8 +327,7 @@ public class GUI implements ActionListener {
     }
 
     public static void setImage(String loadImage, JLabel label) {
-        String pathToImage = "resources/net.automaters.script/" + loadImage;
-        Image image = ImageManager.getInstance().loadImage(pathToImage);
+        Image image = ImageManager.getInstance().loadImage(loadImage);
         ImageIcon icon = new ImageIcon(image);
         label.setIcon(icon);
     }
