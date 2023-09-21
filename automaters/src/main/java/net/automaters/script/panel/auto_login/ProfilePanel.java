@@ -231,8 +231,9 @@ public class ProfilePanel extends JPanel {
         client.setUsername(loginText);
         AutomateRS.debug("setPassword");
         client.setPassword(password);
-        sleep(1000);
-        AutomateRS.debug("sendEnter");
+        AutomateRS.debug("sendEnter from username to password");
+        Keyboard.sendEnter();
+        AutomateRS.debug("sendEnter from password to login");
         Keyboard.sendEnter();
     }
 }

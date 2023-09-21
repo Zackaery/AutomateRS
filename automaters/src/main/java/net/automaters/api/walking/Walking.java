@@ -5,7 +5,9 @@ import net.automaters.api.game.Game;
 import net.runelite.api.Client;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.events.GameTick;
 import net.runelite.client.callback.ClientThread;
+import net.runelite.client.eventbus.Subscribe;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.client.Static;
@@ -17,17 +19,20 @@ import java.util.function.Supplier;
 
 import static net.automaters.api.entities.LocalPlayer.local;
 import static net.automaters.script.AutomateRS.debug;
+import static net.unethicalite.api.commons.Time.sleep;
 import static net.unethicalite.api.movement.Movement.toggleRun;
 
 @Slf4j
 public class Walking {
 
+    @Inject
     static Client client;
+    @Inject
     static ClientThread clientThread;
 
     private static final int MAX_MIN_ENERGY = 50;
     private static final int MIN_ENERGY = 15;
-
+    @Inject
     private static Game game;
 
     private static int minEnergy = new Random().nextInt(MAX_MIN_ENERGY - MIN_ENERGY + 1) + MIN_ENERGY;
@@ -48,7 +53,13 @@ public class Walking {
         debug("Walking to: "+ area.toString());
         var attempts = 0;
         Movement.walkTo(area);
-        game.tick();
+
+        while (!area.contains(Players.getLocal())) {
+            debug("Walking and sleeping is sleep walking!");
+            sleep(1000,5000);
+            Movement.walkTo(area);
+        }
+//        game.tick();
         while (!area.contains(Players.getLocal()) && attempts < 15 && !Thread.currentThread().isInterrupted()) {
             if (Players.getLocal().isMoving()) {
                 attempts = 0;
@@ -62,11 +73,12 @@ public class Walking {
                     setRun(true);
                 }
             } else {
+                debug("The area? --> " + area.toString());
                 Movement.walkTo(area);
                 attempts++;
-                debug("Walking to: "+ area.toString()+", Total attempts: "+attempts);
+                debug("Walking to: " + area + ", Total attempts: " + attempts);
             }
-            game.tick();
+//            game.tick();
         }
 
         if (attempts >= 15) {
