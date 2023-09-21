@@ -1,5 +1,6 @@
 package net.automaters.api.entities;
 
+import net.automaters.api.walking.Position;
 import net.runelite.api.Player;
 import net.runelite.api.TileObject;
 import net.unethicalite.api.coords.RectangularArea;
@@ -18,7 +19,8 @@ public class LocalPlayer {
 
     }
 
-    static Player local = Players.getLocal();
+    public static Player local = Players.getLocal();
+
 
     /**
      * Gets the local characters interaction status.
