@@ -148,7 +148,7 @@ public class GUI implements ActionListener {
         labelTitle.setBounds(449, 10, 957, 160);
         labelTitle.setHorizontalAlignment(SwingConstants.CENTER);
         labelTitle.setFont(labelTitle.getFont().deriveFont(labelTitle.getFont().getSize() + 4f));
-        setImage("resources/net.automaters.script/labelTitle.png", labelTitle);
+        setImage("labelTitle.png", labelTitle);
 
         // --- tabbedPanel ---
         tabbedPanel = new JTabbedPane();
@@ -326,11 +326,11 @@ public class GUI implements ActionListener {
         return "";
     }
 
-    public static void setImage(String pathToImage, JLabel label) {
+    public static void setImage(String loadImage, JLabel label) {
+        String pathToImage = "resources/net.automaters.script/" + loadImage;
         Image image = ImageManager.getInstance().loadImage(pathToImage);
         ImageIcon icon = new ImageIcon(image);
         label.setIcon(icon);
-        debug(pathToImage + " : " + image);
     }
 
 //    public static void setImage(Image image, JLabel label) throws IOException {

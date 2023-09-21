@@ -174,7 +174,7 @@ public class AutomateRSPanel extends PluginPanel {
         {
             // --- SET COMPONENTS ---
             {
-                GUI.setImage("resources/net.automaters.script/panel/AutomateRS.png", titleLabel);
+                GUI.setImage("panel/AutomateRS.png", titleLabel);
             }
             // --- ADD COMPONENTS ---
             {

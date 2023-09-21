@@ -41,11 +41,11 @@ public class ProfilePanel extends JPanel {
 
     static
     {
-        final BufferedImage deleteImg = ImageManager.getInstance().loadImage("resources/net.automaters.script/panel/delete_icon.png");
+        final BufferedImage deleteImg = ImageManager.getInstance().loadImage("panel/delete_icon.png");
         DELETE_ICON = new ImageIcon(deleteImg);
         DELETE_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(deleteImg, -100));
 
-        final BufferedImage startImg = ImageManager.getInstance().loadImage("resources/net.automaters.script/panel/start_icon.png");
+        final BufferedImage startImg = ImageManager.getInstance().loadImage("panel/start_icon.png");
         START_ICON = new ImageIcon(startImg);
         START_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(startImg, -100));
     }

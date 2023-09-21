@@ -60,11 +60,11 @@ public class Gathering {
             spinnerGoalHunter = new JSpinner();
             spinnerGoalHunter.setBounds(164, 108, 50, 20);
 
-            setImage("resources/net.automaters.script/skillIcons/Mining.png", labelGoalMining);
-            setImage("resources/net.automaters.script/skillIcons/Fishing.png", labelGoalFishing);
-            setImage("resources/net.automaters.script/skillIcons/Woodcutting.png", labelGoalWoodcutting);
-            setImage("resources/net.automaters.script/skillIcons/Farming.png", labelGoalFarming);
-            setImage("resources/net.automaters.script/skillIcons/Hunter.png", labelGoalHunter);
+            setImage("skillIcons/Mining.png", labelGoalMining);
+            setImage("skillIcons/Fishing.png", labelGoalFishing);
+            setImage("skillIcons/Woodcutting.png", labelGoalWoodcutting);
+            setImage("skillIcons/Farming.png", labelGoalFarming);
+            setImage("skillIcons/Hunter.png", labelGoalHunter);
 
         }
 

@@ -26,25 +26,18 @@ public class ImageManager extends ResourceManager {
     }
 
     public BufferedImage loadImage(final String relativeImagePath) {
-        if (imageCache.containsKey(relativeImagePath)) {
-            debug("relativeimagepath = " + relativeImagePath);
-            return imageCache.get(relativeImagePath);
+        String image = "resources/net.automaters.script/" + relativeImagePath;
+        if (imageCache.containsKey(image)) {
+            return imageCache.get(image);
         }
 
-        try (InputStream imageInputStream = loadFile(relativeImagePath)) {
+        try (InputStream imageInputStream = loadFile(image)) {
             if (imageInputStream == null) {
-                debug("imageInputStream = " + imageInputStream);
                 return null;
             }
-
-            BufferedImage image =  ImageIO.read(imageInputStream);
-
-            debug("image = " + image);
-            imageCache.put(relativeImagePath, image);
-            debug("imageCache = " + imageCache);
-
-            debug("image = " + image);
-            return image;
+            BufferedImage bufferedImage =  ImageIO.read(imageInputStream);
+            imageCache.put(image, bufferedImage);
+            return bufferedImage;
         } catch (IOException e) {
             e.printStackTrace();
         }

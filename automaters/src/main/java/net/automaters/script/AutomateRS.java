@@ -48,6 +48,7 @@ import static net.automaters.gui.GUI.*;
 import static net.automaters.script.panel.AutomateRSPanel.*;
 import static net.automaters.script.panel.auto_login.ProfilePanel.init;
 
+@SuppressWarnings("ALL")
 @PluginDescriptor(name = "AutomateRS", description = "RuneScape - Automated")
 @Extension
 @Slf4j
@@ -156,20 +157,11 @@ public class AutomateRS extends TaskPlugin {
 					try {
 						debug("panel.init");
 						panel.init();
-					} catch (IllegalBlockSizeException e) {
-						throw new RuntimeException(e);
-					} catch (NoSuchPaddingException e) {
-						throw new RuntimeException(e);
-					} catch (NoSuchAlgorithmException e) {
-						throw new RuntimeException(e);
-					} catch (InvalidKeySpecException e) {
-						throw new RuntimeException(e);
-					} catch (BadPaddingException e) {
-						throw new RuntimeException(e);
-					} catch (InvalidKeyException e) {
+					} catch (IllegalBlockSizeException | NoSuchPaddingException | NoSuchAlgorithmException |
+                             InvalidKeySpecException | BadPaddingException | InvalidKeyException e) {
 						throw new RuntimeException(e);
 					}
-				}, true);
+                }, true);
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			} catch (InterruptedException e) {
@@ -178,7 +170,7 @@ public class AutomateRS extends TaskPlugin {
 
 			navButton = NavigationButton.builder()
 					.tooltip("AutomateRS")
-					.icon(ImageManager.getInstance().loadImage("resources/net.automaters.script/panel/navButton.png"))
+					.icon(ImageManager.getInstance().loadImage("panel/navButton.png"))
 					.priority(0)
 					.panel(panel)
 					.build();
