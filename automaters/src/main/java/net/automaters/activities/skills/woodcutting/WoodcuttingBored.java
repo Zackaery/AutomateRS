@@ -18,7 +18,7 @@ import net.unethicalite.api.plugins.LoopedPlugin;
 import java.util.Comparator;
 import java.util.Random;
 
-import static net.automaters.api.entities.LocalPlayer.openBank;
+import static net.automaters.api.entities.LocalPlayer.*;
 import static net.automaters.api.entities.SkillCheck.getAttackLevel;
 import static net.automaters.api.entities.SkillCheck.getWoodcuttingLevel;
 import static net.automaters.api.walking.Walking.automateWalk;
@@ -48,8 +48,8 @@ public class WoodcuttingBored extends LoopedPlugin {
 
         WorldPoint playerPosition = Players.getLocal().getWorldLocation();
 
-        if (Inventory.isFull() || !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
-                || !Inventory.isFull() && !Equipment.contains(Predicates.nameContains("axe")) && Inventory.contains(Predicates.nameContains("axe"))
+        if (!Bank.isOpen() && Inventory.isFull() ||!Bank.isOpen() &&  !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
+                ||!Bank.isOpen() &&  !Inventory.isFull() && !Equipment.contains(Predicates.nameContains("axe")) && Inventory.contains(Predicates.nameContains("axe"))
                 || !Bank.isOpen() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
             // do something
             openBank();
@@ -65,20 +65,20 @@ public class WoodcuttingBored extends LoopedPlugin {
                 || Bank.isOpen() && Inventory.isFull()
                 || Bank.isOpen() && !Inventory.isFull() && Inventory.contains(Predicates.nameContains("Logs"))
                 || !Inventory.isFull() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
-                || Inventory.isFull() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
-        ) {
+                || Inventory.isFull() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
+            debug("trying to deposit now?");
             Bank.depositInventory();
             return 100;
-        } else {
+        }
 
-            if (Bank.isOpen() && Inventory.contains(Predicates.nameContains("Logs"))
+        if (Bank.isOpen() && Inventory.contains(Predicates.nameContains("Logs"))
                     || Bank.isOpen() && Inventory.isFull()
                     || Bank.isOpen() && !Inventory.isFull() && Inventory.contains(Predicates.nameContains("Logs"))
                     || !Inventory.isFull() && Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
                     || Inventory.isFull() && Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
+                debug("trying to deposit");
                 Bank.depositInventory();
                 return 100;
-            }
         }
 
         // handle gear upgrades if available
@@ -214,7 +214,7 @@ public class WoodcuttingBored extends LoopedPlugin {
 
             debug("Location chosen: " + randomIndex);
 
-            if (randomIndex == 0) {
+            if (randomIndex == 0 && !playerPosition.isInArea(Falador_Tree_TreeArea_I_Area.toWorldArea())) {
 
                 debug("Walking");
 
@@ -231,7 +231,7 @@ public class WoodcuttingBored extends LoopedPlugin {
                         automateWalk(Falador_Tree_TreeArea_I_Area.toWorldArea());
                     }
 
-                    if (randomIndex == 1) {
+                    if (randomIndex == 1 && !playerPosition.isInArea(Falador_Tree_TreeArea_II_Area.toWorldArea())) {
 
                         automateWalk(Falador_Tree_TreeArea_II_Area.toWorldArea());
                         while (!playerPosition.isInArea(Falador_Tree_TreeArea_II_Area.toWorldArea())) {
@@ -246,7 +246,7 @@ public class WoodcuttingBored extends LoopedPlugin {
                                 automateWalk(Falador_Tree_TreeArea_II_Area.toWorldArea());
                             }
                         }
-                        if (randomIndex == 2) {
+                        if (randomIndex == 2 && !playerPosition.isInArea(Falador_Tree_TreeArea_III_Area.toWorldArea())) {
 
                             automateWalk(Falador_Tree_TreeArea_III_Area.toWorldArea());
                             while (!playerPosition.isInArea(Falador_Tree_TreeArea_III_Area.toWorldArea())) {
@@ -261,7 +261,7 @@ public class WoodcuttingBored extends LoopedPlugin {
                                     automateWalk(Falador_Tree_TreeArea_III_Area.toWorldArea());
                                 }
                             }
-                            if (randomIndex == 3) {
+                            if (randomIndex == 3 && !playerPosition.isInArea(Falador_Tree_TreeArea_IV_Area.toWorldArea())) {
 
                                 automateWalk(Falador_Tree_TreeArea_IV_Area.toWorldArea());
                                 while (!playerPosition.isInArea(Falador_Tree_TreeArea_IV_Area.toWorldArea())) {
@@ -276,7 +276,7 @@ public class WoodcuttingBored extends LoopedPlugin {
                                         automateWalk(Falador_Tree_TreeArea_IV_Area.toWorldArea());
                                     }
                                 }
-                                if (randomIndex == 4) {
+                                if (randomIndex == 4 && !playerPosition.isInArea(Falador_Tree_TreeArea_V_Area.toWorldArea())) {
 
                                     automateWalk(Falador_Tree_TreeArea_V_Area.toWorldArea());
                                     while (!playerPosition.isInArea(Falador_Tree_TreeArea_V_Area.toWorldArea())) {
@@ -315,17 +315,18 @@ public class WoodcuttingBored extends LoopedPlugin {
                     || playerPosition.isInArea(Falador_Tree_TreeArea_V_Area.toWorldArea())) {
                 debug("I should chop a tree down...");
                 while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
-                    debug("Chop suey!");
 
                     var tree = TileObjects
                             .getSurrounding(playerPosition, 8, 1276,1278)
                             .stream()
-                            .filter(tileObject -> Reachable.isWalkable(tileObject.getWorldLocation()))
+                            //.filter(tileObject -> Reachable.isWalkable(tileObject.getWorldLocation()))
                             .min(Comparator.comparing(x -> x.distanceTo(playerPosition)))
                             .orElse(null);
 
-                    if (!local.isAnimating() && !local.isMoving() && tree != null) {
+                    if (!local.isAnimating() && !local.isInteracting() && !Inventory.isFull() && !local.isMoving()) {
+                        debug("Chop suey!");
                         tree.interact("Chop down");
+                        sleep(600,1500);
                     }
                 }
             }
