@@ -28,7 +28,7 @@ public class LocalPlayer {
      * @return if local can interact.
      */
     public static boolean localCanInteract() {
-        return ((localPlayer == null) || !scriptStarted || localPlayer.isAnimating() || localPlayer.isInteracting());
+        return ((localPlayer == null) || !scriptStarted || !localPlayer.isAnimating() || !localPlayer.isInteracting());
     }
 
     /**

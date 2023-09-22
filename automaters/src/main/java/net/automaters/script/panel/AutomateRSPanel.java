@@ -45,6 +45,7 @@ import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.gui.GUI.*;
 import static net.automaters.gui.GUI.started;
 import static net.automaters.script.AutomateRS.debug;
@@ -401,13 +402,14 @@ public class AutomateRSPanel extends PluginPanel {
                     @Override
                     public void mouseClicked(MouseEvent e)
                     {
-                        var local = Players.getLocal();
-                        if (local == null) {
+                        if (localPlayer == null) {
                             AutomateRS.debug("Local Player not located");
                             return;
                         }
                         if (!GUI.started) {
-                            GUI.selectedBuild = loadBuildFromGUI();
+//                            GUI.selectedBuild = loadBuildFromGUI();
+                            selectedBuild = "ALPHA_TESTER";
+                            started = true;
                             scriptPanel.remove(startButton);
                             scriptPanel.add(pauseButton);
                             scriptPanel.add(stopButton);

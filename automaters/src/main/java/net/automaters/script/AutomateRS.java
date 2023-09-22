@@ -41,9 +41,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 
+import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.gui.GUI.*;
 import static net.automaters.script.panel.AutomateRSPanel.*;
 import static net.automaters.script.panel.auto_login.ProfilePanel.init;
@@ -80,9 +83,6 @@ public class AutomateRS extends TaskPlugin {
 
 	@Getter(AccessLevel.PROTECTED)
 
-	@Inject
-	private ScheduledExecutorService executorService;
-
 	private AutomateRSPanel panel;
 	private NavigationButton navButton;
 
@@ -97,6 +97,7 @@ public class AutomateRS extends TaskPlugin {
 	public static boolean debugEnabled = true;
 	public static boolean scriptStarted;
 	private boolean hotswapEnabled = true;
+	private ExecutorService executorService = Executors.newFixedThreadPool(1);
 
 	@Subscribe
 	private void onExternalPluginChanged(OPRSPluginChanged e)
@@ -195,29 +196,32 @@ public class AutomateRS extends TaskPlugin {
 
 	@Subscribe
 	public void onConfigButtonPressed(ConfigButtonClicked event) throws InterruptedException {
+		executorService.submit(() -> {
+			if (event.getGroup().contains("automaters")) {
+				if (event.getKey().toLowerCase().contains("start")) {
 
-		if (event.getGroup().contains("automaters")) {
-			if (event.getKey().toLowerCase().contains("start")) {
-				var local = Players.getLocal();
-				if (local == null) {
-					debug("Local Player not located");
-					return;
-				}
-				if (!started) {
-					selectedBuild = loadBuildFromGUI();
+					if (localPlayer == null) {
+						debug("Local Player not located");
+						return;
+					}
+					if (!started) {
+//					selectedBuild = loadBuildFromGUI();
+						selectedBuild = "ALPHA_TESTER";
+						started = true;
+					} else {
+						this.scriptStarted = true;
+						debug("Started - AutomateRS");
+					}
+				} else if (event.getKey().toLowerCase().contains("pause")) {
+					scriptStarted = false;
+					debug("Paused - AutomateRS");
 				} else {
-					this.scriptStarted = true;
-					debug("Started - AutomateRS");
+					started = false;
+					scriptStarted = false;
+					debug("Stopped - AutomateRS");
 				}
-			} else if (event.getKey().toLowerCase().contains("pause")) {
-				scriptStarted = false;
-				debug("Paused - AutomateRS");
-			} else {
-				started = false;
-				scriptStarted = false;
-				debug("Stopped - AutomateRS");
 			}
-		}
+		});
 	}
 
 

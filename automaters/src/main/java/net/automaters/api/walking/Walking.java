@@ -18,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
+import static net.automaters.api.game.Game.getFromClientThread;
 import static net.automaters.script.AutomateRS.debug;
 import static net.unethicalite.api.commons.Time.sleep;
 import static net.unethicalite.api.movement.Movement.toggleRun;
@@ -103,21 +104,6 @@ public class Walking {
 
     }
 
-    public static ClientThread clientThread() {
-        return clientThread;
-    }
 
-    public static <T> T getFromClientThread(Supplier<T> supplier) {
-        if (!client.isClientThread()) {
-            CompletableFuture<T> future = new CompletableFuture<>();
-
-            clientThread().invoke(() -> {
-                future.complete(supplier.get());
-            });
-            return future.join();
-        } else {
-            return supplier.get();
-        }
-    }
 
 }

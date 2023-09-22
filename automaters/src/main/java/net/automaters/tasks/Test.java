@@ -18,6 +18,11 @@ public class Test extends LoopedPlugin {
     @Override
     protected int loop() {
 
+        while (scriptStarted) {
+            debug("STUCK IN WHILE LOOP");
+        }
+
+
         var local = Players.getLocal();
         if ((local == null) || !scriptStarted) {
             debug("Player does not exist.");
