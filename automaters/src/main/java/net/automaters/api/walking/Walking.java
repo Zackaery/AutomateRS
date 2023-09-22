@@ -56,11 +56,11 @@ public class Walking {
         while (!area.contains(localPlayer) && attempts < 15) {
             if (Players.getLocal().isMoving() || Movement.isWalking()) {
                 attempts = 0;
-                if (!isRunning() && client.getEnergy() > minEnergy) {
+               /* if (!isRunning() && client.getEnergy() > minEnergy) {
                     minEnergy = new Random().nextInt(MAX_MIN_ENERGY - MIN_ENERGY + 1) + MIN_ENERGY;
                     debug("[Walking] Enabling run, next minimum run energy: " + minEnergy);
                     setRun(true);
-                }
+                }*/
             } else {
                 Movement.walkTo(area);
                 attempts++;
@@ -93,10 +93,10 @@ public class Walking {
     }
 
     public static void setRun(boolean run) {
-        if (isRunning() != run) {
+     /*   if (minEnergy == client.getEnergy()) {
             toggleRun();
-            game.waitUntil(() -> isRunning() == run, 10);
-        }
+            setRun(false);
+        }*/
     }
 
     public static boolean isRunning() {
