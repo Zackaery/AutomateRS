@@ -50,7 +50,7 @@ public class Walking {
     }
 
     public static boolean automateWalk(WorldArea area) {
-        debug("Walking to: "+ area.toString());
+        debug("Walking to area...");
         var attempts = 0;
         while (!area.contains(localPlayer) && attempts < 15) {
             if (Players.getLocal().isMoving() || Movement.isWalking()) {
@@ -63,17 +63,17 @@ public class Walking {
             } else {
                 Movement.walkTo(area);
                 attempts++;
-                debug("Walking to: " + area + ", Total attempts: " + attempts);
-                sleep(600,2400);
+                debug("Walking to area... Add an attempt: " + attempts);
             }
             Movement.walkTo(area);
-            debug("Final walking to: " + area + ", Total attempts: " + attempts);
+            sleep(600, 2400);
+            debug("Walking to area... Total attempts: " + attempts);
         }
         if (attempts >= 15) {
-            debug("Failed to walk to: "+ String.valueOf(area));
+            debug("Failed to walk to area.");
             return false;
         } else {
-            debug("Arrived at: "+ area.toString());
+            debug("Arrived at area.");
             return true;
         }
     }
