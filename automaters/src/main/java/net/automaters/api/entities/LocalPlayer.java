@@ -19,7 +19,7 @@ public class LocalPlayer {
 
     }
 
-    public static Player local = Players.getLocal();
+    public static Player localPlayer = Players.getLocal();
 
 
     /**
@@ -28,7 +28,7 @@ public class LocalPlayer {
      * @return if local can interact.
      */
     public static boolean localCanInteract() {
-        return ((local == null) || !scriptStarted || local.isAnimating() || local.isInteracting());
+        return ((localPlayer == null) || !scriptStarted || localPlayer.isAnimating() || localPlayer.isInteracting());
     }
 
     /**
@@ -37,7 +37,7 @@ public class LocalPlayer {
      * @return if local is in area.
      */
     public static boolean localInArea(RectangularArea area) {
-        return area.contains(local.getWorldLocation());
+        return area.contains(localPlayer.getWorldLocation());
     }
 
     /**
@@ -46,7 +46,7 @@ public class LocalPlayer {
      * @return if local is at nearest bank.
      */
     public static boolean isInBank() {
-        return BankLocation.getNearest().getArea().contains(local.getWorldLocation());
+        return BankLocation.getNearest().getArea().contains(localPlayer.getWorldLocation());
     }
 
     /**
@@ -62,8 +62,8 @@ public class LocalPlayer {
      * Opens the closest bank to your player.
      */
     public static void openBank() {
-        TileObject bank = TileObjects.getFirstSurrounding(local.getWorldLocation(), 10, obj -> obj.hasAction("Bank"));
-        TileObject bankChest = TileObjects.getFirstSurrounding(local.getWorldLocation(), 10, obj -> obj.getName().startsWith("Bank chest"));
+        TileObject bank = TileObjects.getFirstSurrounding(localPlayer.getWorldLocation(), 10, obj -> obj.hasAction("Bank"));
+        TileObject bankChest = TileObjects.getFirstSurrounding(localPlayer.getWorldLocation(), 10, obj -> obj.getName().startsWith("Bank chest"));
         if (!Bank.isOpen() && !LocalPlayer.isInBank()) {
             walkToNearestBank();
         } else if (!Bank.isOpen() && LocalPlayer.isInBank()) {

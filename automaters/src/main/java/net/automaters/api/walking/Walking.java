@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-import static net.automaters.api.entities.LocalPlayer.local;
+import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.script.AutomateRS.debug;
 import static net.unethicalite.api.commons.Time.sleep;
 import static net.unethicalite.api.movement.Movement.toggleRun;
@@ -26,9 +26,9 @@ import static net.unethicalite.api.movement.Movement.toggleRun;
 public class Walking {
 
     @Inject
-    static Client client;
+    static Client client = Static.getClient();
     @Inject
-    static ClientThread clientThread;
+    static ClientThread clientThread = Static.getClientThread();
 
     private static final int MAX_MIN_ENERGY = 50;
     private static final int MIN_ENERGY = 15;
@@ -52,20 +52,8 @@ public class Walking {
     public static boolean automateWalk(WorldArea area) {
         debug("Walking to: "+ area.toString());
         var attempts = 0;
-        Movement.walkTo(area);
-
-        while (!area.contains(Players.getLocal())) {
-            debug("Walking and sleeping is sleep walking!");
-            sleep(1000,5000);
-            Movement.walkTo(area);
-        }
-//        game.tick();
-        while (!area.contains(Players.getLocal()) && attempts < 15 && !Thread.currentThread().isInterrupted()) {
-            if (Players.getLocal().isMoving()) {
-                attempts = 0;
-            }
-
-            if (Movement.isWalking()) {
+        while (!area.contains(localPlayer) && attempts < 15) {
+            if (Players.getLocal().isMoving() || Movement.isWalking()) {
                 attempts = 0;
                 if (!isRunning() && client.getEnergy() > minEnergy) {
                     minEnergy = new Random().nextInt(MAX_MIN_ENERGY - MIN_ENERGY + 1) + MIN_ENERGY;
@@ -73,16 +61,15 @@ public class Walking {
                     setRun(true);
                 }
             } else {
-                debug("The area? --> " + area.toString());
                 Movement.walkTo(area);
                 attempts++;
                 debug("Walking to: " + area + ", Total attempts: " + attempts);
             }
-//            game.tick();
+            Movement.walkTo(area);
+            debug("Final walking to: " + area + ", Total attempts: " + attempts);
         }
-
         if (attempts >= 15) {
-            debug("Failed to walk to: "+ area.toString());
+            debug("Failed to walk to: "+ String.valueOf(area));
             return false;
         } else {
             debug("Arrived at: "+ area.toString());
@@ -90,41 +77,17 @@ public class Walking {
         }
     }
 
-    public boolean automateWalk(WorldPoint target) {
-        debug("Walking to: "+ target.toString());
-        var attempts = 0;
-        Movement.walkTo(target);
-        game.tick();
-        while (local.getWorldLocation().distanceTo(target) > 1 && attempts < 15 && !Thread.currentThread().isInterrupted()) {
-            if (Players.getLocal().isMoving()) {
-                attempts = 0;
-            }
+    public static boolean boredWalk(WorldArea area) {
+        debug("Walking to: "+ area.toString());
+        Movement.walkTo(area);
 
-            if (Movement.isWalking()) {
-                attempts = 0;
-                if (!isRunning() && client.getEnergy() > minEnergy) {
-                    minEnergy = new Random().nextInt(MAX_MIN_ENERGY - MIN_ENERGY + 1) + MIN_ENERGY;
-                    debug("[Walking] Enabling run, next minimum run energy: " + minEnergy);
-                    setRun(true);
-                }
-            } else if (Movement.getDestination() != null && Movement.getDestination().equals(target)) {
-                debug("Last walk step: "+ Movement.getDestination().toString() + ", "+target.toString());
-                game.waitUntil(() -> !Static.getClient().getLocalPlayer().isMoving(), 20);
-            } else {
-                Movement.walkTo(target);
-                attempts++;
-                debug("Attempting to walk, attempt: "+ attempts);
-            }
-            game.tick();
+        while (!area.contains(Players.getLocal())) {
+            debug("Walking and sleeping is sleep walking!");
+            sleep(1000,5000);
+            Movement.walkTo(area);
         }
-
-        if (attempts >= 15) {
-            debug("Failed to walk to: "+ target.toString());
-            return false;
-        } else {
-            debug("Arrived at: "+ target.toString());
-            return true;
-        }
+        debug("Arrived at: "+ area.toString());
+        return true;
     }
 
     public static void setRun(boolean run) {
