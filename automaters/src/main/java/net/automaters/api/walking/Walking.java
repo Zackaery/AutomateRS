@@ -64,6 +64,7 @@ public class Walking {
                 Movement.walkTo(area);
                 attempts++;
                 debug("Walking to: " + area + ", Total attempts: " + attempts);
+                sleep(600,2400);
             }
             Movement.walkTo(area);
             debug("Final walking to: " + area + ", Total attempts: " + attempts);

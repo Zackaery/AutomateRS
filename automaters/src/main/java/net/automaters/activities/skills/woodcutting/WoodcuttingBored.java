@@ -18,7 +18,7 @@ import net.unethicalite.api.plugins.LoopedPlugin;
 import java.util.Comparator;
 import java.util.Random;
 
-import static net.automaters.api.entities.LocalPlayer.openBank;
+import static net.automaters.api.entities.LocalPlayer.*;
 import static net.automaters.api.entities.SkillCheck.getAttackLevel;
 import static net.automaters.api.entities.SkillCheck.getWoodcuttingLevel;
 import static net.automaters.api.walking.Walking.automateWalk;
@@ -315,17 +315,18 @@ public class WoodcuttingBored extends LoopedPlugin {
                     || playerPosition.isInArea(Falador_Tree_TreeArea_V_Area.toWorldArea())) {
                 debug("I should chop a tree down...");
                 while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
-                    debug("Chop suey!");
 
                     var tree = TileObjects
                             .getSurrounding(playerPosition, 8, 1276,1278)
                             .stream()
-                            .filter(tileObject -> Reachable.isWalkable(tileObject.getWorldLocation()))
+                            //.filter(tileObject -> Reachable.isWalkable(tileObject.getWorldLocation()))
                             .min(Comparator.comparing(x -> x.distanceTo(playerPosition)))
                             .orElse(null);
 
-                    if (!local.isAnimating() && !local.isMoving() && tree != null) {
+                    if (!local.isAnimating() && !local.isInteracting() && !Inventory.isFull() && !local.isMoving()) {
+                        debug("Chop suey!");
                         tree.interact("Chop down");
+                        sleep(600,1500);
                     }
                 }
             }
