@@ -410,13 +410,15 @@ public class AutomateRSPanel extends PluginPanel {
 //                            GUI.selectedBuild = loadBuildFromGUI();
                             selectedBuild = "ALPHA_TESTER";
                             started = true;
+                            scriptStarted = true;
                             scriptPanel.remove(startButton);
                             scriptPanel.add(pauseButton);
                             scriptPanel.add(stopButton);
                             scriptPanel.repaint();
                             scriptPanel.revalidate();
                         } else {
-                            AutomateRS.scriptStarted = true;
+                            selectedBuild = "ALPHA_TESTER";
+                            scriptStarted = true;
                             scriptPanel.remove(startButton);
                             scriptPanel.add(pauseButton);
                             scriptPanel.add(stopButton);

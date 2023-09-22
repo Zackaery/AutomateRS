@@ -196,32 +196,40 @@ public class AutomateRS extends TaskPlugin {
 
 	@Subscribe
 	public void onConfigButtonPressed(ConfigButtonClicked event) throws InterruptedException {
-		executorService.submit(() -> {
 			if (event.getGroup().contains("automaters")) {
 				if (event.getKey().toLowerCase().contains("start")) {
-
 					if (localPlayer == null) {
-						debug("Local Player not located");
-						return;
+						executorService.submit(() -> {
+							debug("Local Player not located");
+							return;
+						});
 					}
 					if (!started) {
 //					selectedBuild = loadBuildFromGUI();
-						selectedBuild = "ALPHA_TESTER";
-						started = true;
+						executorService.submit(() -> {
+							selectedBuild = "ALPHA_TESTER";
+							started = true;
+							this.scriptStarted = true;
+						});
 					} else {
-						this.scriptStarted = true;
-						debug("Started - AutomateRS");
+						executorService.submit(() -> {
+							this.scriptStarted = true;
+							debug("Started - AutomateRS");
+						});
 					}
 				} else if (event.getKey().toLowerCase().contains("pause")) {
-					scriptStarted = false;
-					debug("Paused - AutomateRS");
+					executorService.submit(() -> {
+						scriptStarted = false;
+						debug("Paused - AutomateRS");
+					});
 				} else {
-					started = false;
-					scriptStarted = false;
-					debug("Stopped - AutomateRS");
+					executorService.submit(() -> {
+						started = false;
+						scriptStarted = false;
+						debug("Stopped - AutomateRS");
+					});
 				}
 			}
-		});
 	}
 
 
