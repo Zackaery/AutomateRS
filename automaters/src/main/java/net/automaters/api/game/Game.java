@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.callback.ClientThread;
+import net.unethicalite.client.Static;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -18,13 +19,12 @@ import java.util.function.Supplier;
 public class Game {
 
     @Inject
-    public Client client;
+    static Client client = Static.getClient();
+    @Inject
+    static ClientThread clientThread = Static.getClientThread();
 
     @Inject
     public ExecutorService executorService;
-
-    @Inject
-    public ClientThread clientThread;
 
     public Client client() {
         return client;
@@ -123,6 +123,23 @@ public class Game {
             CompletableFuture<T> future = new CompletableFuture<>();
 
             executorService.submit(() -> {
+                future.complete(supplier.get());
+            });
+            return future.join();
+        } else {
+            return supplier.get();
+        }
+    }
+
+    public static ClientThread clientThread() {
+        return clientThread;
+    }
+
+    public static <T> T getFromClientThread(Supplier<T> supplier) {
+        if (!client.isClientThread()) {
+            CompletableFuture<T> future = new CompletableFuture<>();
+
+            clientThread().invoke(() -> {
                 future.complete(supplier.get());
             });
             return future.join();
