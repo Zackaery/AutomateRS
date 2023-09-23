@@ -101,56 +101,68 @@ public class WoodcuttingBored extends LoopedPlugin {
             Bank.close();
         }
 
-        // handle gear upgrades if available
+//        String[] itemsToHandle = {
+//                "Lumberjack hat", "Lumberjack top", "Lumberjack legs", "Lumberjack boots",
+//                "Graceful hood", "Graceful top", "Graceful legs", "Graceful boots",
+//                "Graceful gloves", "Graceful cape", "ronman helm", "ron helm"
+//        };
+//
+//        boolean lumberjackHatEquipped = Equipment.contains("Lumberjack hat");
+//        boolean gracefulHoodEquipped = Equipment.contains("Graceful hood");
+//
+//        for (String itemName : itemsToHandle) {
+//            // Check if the item should be skipped
+//            boolean shouldSkipItem = false;
+//
+//            if (itemName.startsWith("Lumberjack")) {
+//                // Check Woodcutting level
+//                if (Skills.getBoostedLevel(Skill.WOODCUTTING) < 44) {
+//                    shouldSkipItem = true;
+//                }
+//            } else if (itemName.startsWith("Graceful")) {
+//                // Wear Graceful items only if Lumberjack isn't equipped and Graceful hood isn't equipped
+//                if (lumberjackHatEquipped || gracefulHoodEquipped) {
+//                    shouldSkipItem = true;
+//                }
+//            } else if (itemName.startsWith("ronman") || itemName.startsWith("ron")) {
+//                // Wear Ronman items only if Lumberjack hat and Graceful hood aren't equipped
+//                if (lumberjackHatEquipped || gracefulHoodEquipped) {
+//                    shouldSkipItem = true;
+//                }
+//            }
+//
+//            // Skip item if needed
+//            if (shouldSkipItem) {
+//                continue;
+//            }
+//
+//            // Withdraw item
+//            if (Bank.isOpen() && !Equipment.contains(itemName)
+//                    && Bank.contains(itemName) && !Inventory.contains(itemName)
+//                    && Skills.getBoostedLevel(Skill.WOODCUTTING) >= 44) {
+//                Bank.withdraw(itemName, 1, Bank.WithdrawMode.ITEM);
+//                sleep(1500);
+//              //  Bank.close();
+//                sleep(1000);
+//            }
+//
+//            // Wear item
+//            if (Inventory.contains(itemName) && !Equipment.contains(itemName)) {
+//                if (!Bank.isOpen()) {
+//                    Item item = Inventory.getFirst(itemName);
+//                    if (item != null) {
+//                        debug("Equipping item: " + itemName);
+//                        item.interact("Wear");
+//                        Time.sleepUntil(() -> Equipment.contains(itemName), 3000);
+//                    }
+//                } else {
+//                    Bank.Inventory.getFirst(itemName).interact("Wear");
+//                    Time.sleepUntil(() -> Equipment.contains(itemName), 3000);
+//                }
+//            }
+//        }
 
-        String[] itemsToHandle = {
-                "Lumberjack hat", "Lumberjack top", "Lumberjack legs", "Lumberjack boots",
-                "Graceful hood", "Graceful top", "Graceful legs", "Graceful boots",
-                "Graceful gloves", "Graceful cape", "ronman helm", "ron helm"
-        };
 
-        boolean lumberjackHatEquipped = Equipment.contains("Lumberjack hat");
-        boolean gracefulHoodEquipped = Equipment.contains("Graceful hood");
-
-        for (String itemName : itemsToHandle) {
-            if (itemName.startsWith("Lumberjack")) {
-                // Check Woodcutting level
-                if (Skills.getBoostedLevel(Skill.WOODCUTTING) < 44) {
-                    continue; // Skip wearing Lumberjack items if Woodcutting level is less than 44
-                }
-            } else if (itemName.startsWith("Graceful")) {
-                // Wear Graceful items only if Lumberjack isn't equipped and Graceful hood isn't equipped
-                if (!lumberjackHatEquipped) {
-                    continue; // Skip wearing Graceful items if Lumberjack is equipped
-                }
-            } else if (itemName.startsWith("ronman") || itemName.startsWith("ron")) {
-                // Wear Graceful items only if Lumberjack isn't equipped and Graceful hood isn't equipped
-                if (!lumberjackHatEquipped || !gracefulHoodEquipped) {
-                    continue; // Skip wearing Graceful items if Lumberjack hat or Graceful hood is equipped
-                }
-            }
-
-            // Wear item
-            if (Inventory.contains(itemName) && !Equipment.contains(itemName)) {
-                if (!Bank.isOpen()) {
-                    Item item = Inventory.getFirst(itemName);
-                    if (item != null) {
-                        item.interact("Wear");
-                        Time.sleepUntil(() -> Equipment.contains(itemName), 3000);
-                    }
-                } else {
-                    Bank.Inventory.getFirst(itemName).interact("Wear");
-                    Time.sleepUntil(() -> Equipment.contains(itemName), 3000);
-                }
-            }
-
-            // Withdraw item
-            if (Bank.isOpen() && !Equipment.contains(itemName)
-                    && Bank.contains(itemName) && !Inventory.contains(itemName)
-                    && getWoodcuttingLevel() >= 44) {
-                Bank.withdraw(itemName, 1, Bank.WithdrawMode.ITEM);
-            }
-        }
 
         // handle axe upgrades if available
 
@@ -158,79 +170,75 @@ public class WoodcuttingBored extends LoopedPlugin {
                 "Bronze axe", "Iron axe", "Steel axe", "Black axe",
                 "Mithril axe", "Adamant axe", "Rune axe", "Dragon axe", "Crystal axe"
         };
-if (Bank.isOpen() && Inventory.isEmpty() && !Equipment.contains(Predicates.nameContains("axe"))) {
-    for (String itemName : axesToHandle) {
-        if (itemName.contains("Steel axe")) {
-            // Check Woodcutting level
-            if (getWoodcuttingLevel() < 6 && getAttackLevel() < 5
-                    || getWoodcuttingLevel() >= 11 && getAttackLevel() >= 10 && Bank.contains("Black axe")) {
-                continue; // Skip wearing Steel items if Woodcutting level is less than 44
-            }
-        } else if (itemName.contains("Black axe")) {
-            // Check Woodcutting level
-            if (getWoodcuttingLevel() < 11 && getAttackLevel() < 10
-                    || getWoodcuttingLevel() >= 21 && getAttackLevel() >= 20 && Bank.contains("Mithril axe")) {
-                continue; // Skip wearing Black items if Woodcutting level is less than 44
-            }
-        } else if (itemName.contains("Mithril axe")) {
-            // Check Woodcutting level
-            if (getWoodcuttingLevel() < 21 && getAttackLevel() < 20
-                    || getWoodcuttingLevel() >= 31 && getAttackLevel() >= 30 && Bank.contains("Adamant axe")) {
-                continue; // Skip wearing Mithril items if Woodcutting level is less than 44
-            }
-        } else if (itemName.contains("Adamant axe")) {
-            // Check Woodcutting level
-            if (getWoodcuttingLevel() < 31 && getAttackLevel() < 30
-                    || getWoodcuttingLevel() >= 41 && getAttackLevel() >= 40 && Bank.contains("Rune axe")) {
-                continue; // Skip wearing Adamant items if Woodcutting level is less than 44
-            }
-        } else if (itemName.contains("Rune axe")) {
-            // Check Woodcutting level
-            if (getWoodcuttingLevel() < 41 && getAttackLevel() < 40
-                    || getWoodcuttingLevel() >= 61 && getAttackLevel() >= 60 && Bank.contains("Dragon axe")) {
-                continue; // Skip wearing Black items if Woodcutting level is less than 44
-            }
-        } else if (itemName.contains("Dragon axe")) {
-            // Check Woodcutting level
-            if (getWoodcuttingLevel() < 61 && getAttackLevel() < 60
-                    || getWoodcuttingLevel() >= 71 && getAttackLevel() >= 70 && Bank.contains("Crystal axe")) {
-                continue; // Skip wearing Black items if Woodcutting level is less than 44
-            }
-        } else if (itemName.contains("Crystal axe")) {
-            // Check Woodcutting level
-            if (getWoodcuttingLevel() < 71 && getAttackLevel() < 70) {
-                continue; // Skip wearing Black items if Woodcutting level is less than 44
-            }
-        }
+        if (Bank.isOpen() && Inventory.isEmpty() && !Equipment.contains(Predicates.nameContains("axe"))) {
+            // Iterate through the axes in reverse order (highest-tier first)
+            for (int i = axesToHandle.length - 1; i >= 0; i--) {
+                String itemName = axesToHandle[i];
 
+                // Check if the axe should be skipped based on Woodcutting level
+                boolean shouldSkipAxe = false;
 
-        // Withdraw item
-        if (Bank.isOpen() && !Equipment.contains(itemName)
-                && Bank.contains(itemName) && !Inventory.contains(itemName)) {
-            Bank.withdraw(itemName, 1, Bank.WithdrawMode.ITEM);
-            sleep(1500);
-            Bank.close();
-            sleep(1000);
-        }
-
-        // Wear item
-        if (Inventory.contains(itemName) && !Equipment.contains(itemName)) {
-            if (!Bank.isOpen()) {
-                Item item = Inventory.getFirst(itemName);
-                if (item != null) {
-                    debug("Equipping axe!");
-                    item.interact("Wield");
-                    Time.sleepUntil(() -> Equipment.contains(itemName), 3000);
+                switch (itemName) {
+                    case "Steel axe":
+                        shouldSkipAxe = getWoodcuttingLevel() < 6 && getAttackLevel() < 5;
+                        break;
+                    case "Black axe":
+                        shouldSkipAxe = getWoodcuttingLevel() < 11 && getAttackLevel() < 10;
+                        break;
+                    case "Mithril axe":
+                        shouldSkipAxe = getWoodcuttingLevel() < 21 && getAttackLevel() < 20;
+                        break;
+                    case "Adamant axe":
+                        shouldSkipAxe = getWoodcuttingLevel() < 31 && getAttackLevel() < 30;
+                        break;
+                    case "Rune axe":
+                        shouldSkipAxe = getWoodcuttingLevel() < 41 && getAttackLevel() < 40;
+                        break;
+                    case "Dragon axe":
+                        shouldSkipAxe = getWoodcuttingLevel() < 61 && getAttackLevel() < 60;
+                        break;
+                    case "Crystal axe":
+                        shouldSkipAxe = getWoodcuttingLevel() < 71 && getAttackLevel() < 70;
+                        break;
                 }
-            } else {
-                if (Bank.isOpen()) {
-                    Bank.Inventory.getFirst(itemName).interact("Wield");
-                    Time.sleepUntil(() -> Equipment.contains(itemName), 3000);
+
+                // If the axe should be skipped, continue to the next axe
+                if (shouldSkipAxe) {
+                    continue;
+                }
+
+                // Withdraw item
+                if (Bank.isOpen() && !Equipment.contains(itemName) && Bank.contains(itemName) && !Inventory.contains(itemName)) {
+                    Bank.withdraw(itemName, 1, Bank.WithdrawMode.ITEM);
+                    sleep(1500);
+                    Bank.close();
+                    sleep(1000);
+                }
+
+                // Wear item
+                if (Inventory.contains(itemName) && !Equipment.contains(itemName)) {
+                    if (!Bank.isOpen()) {
+                        Item item = Inventory.getFirst(itemName);
+                        if (item != null) {
+                            debug("Equipping axe!");
+                            item.interact("Wield");
+                            Time.sleepUntil(() -> Equipment.contains(itemName), 3000);
+                        }
+                    } else {
+                        if (Bank.isOpen()) {
+                            Bank.Inventory.getFirst(itemName).interact("Wield");
+                            Time.sleepUntil(() -> Equipment.contains(itemName), 3000);
+                        }
+                    }
+                }
+
+                // If you successfully equipped an axe, break out of the loop
+                if (Equipment.contains(itemName)) {
+                    break;
                 }
             }
         }
-    }
-}
+
 
         if (!local.isMoving() && getWoodcuttingLevel() <= 95 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_I_Area.toWorldArea())
                 ||!local.isMoving() && getWoodcuttingLevel() <= 95 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_II_Area.toWorldArea())
@@ -245,18 +253,6 @@ if (Bank.isOpen() && Inventory.isEmpty() && !Equipment.contains(Predicates.nameC
                 automateWalk(Falador_Tree_TreeArea_I_Area.toWorldArea());
                 sleep(2000);
                 readytochop = true;
-//                while (!playerPosition.isInArea(Falador_Tree_TreeArea_I_Area.toWorldArea())) {
-//                    sleep(1500, 3000);
-//                    debug("walking 2");
-//                    automateWalk(Falador_Tree_TreeArea_I_Area.toWorldArea());
-//                }
-//                if (!Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_I_Area.toWorldArea())) {
-//                    while (!playerPosition.isInArea(Falador_Tree_TreeArea_I_Area.toWorldArea())) {
-//                        sleep(1500, 3000);
-//                        debug("walking 3");
-//                        automateWalk(Falador_Tree_TreeArea_I_Area.toWorldArea());
-//                    }
-//                }
             }
 
             // end of tree
@@ -266,18 +262,6 @@ if (Bank.isOpen() && Inventory.isEmpty() && !Equipment.contains(Predicates.nameC
                 automateWalk(Falador_Tree_TreeArea_II_Area.toWorldArea());
                 sleep(2000);
                 readytochop = true;
-//                while (!playerPosition.isInArea(Falador_Tree_TreeArea_II_Area.toWorldArea())) {
-//                    sleep(1500, 3000);
-//                    debug("walking 2");
-//                    automateWalk(Falador_Tree_TreeArea_II_Area.toWorldArea());
-//                }
-//                if (!Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_II_Area.toWorldArea())) {
-//                    while (!playerPosition.isInArea(Falador_Tree_TreeArea_II_Area.toWorldArea())) {
-//                        sleep(1500, 3000);
-//                        debug("walking 2");
-//                        automateWalk(Falador_Tree_TreeArea_II_Area.toWorldArea());
-//                    }
-//                }
             }
 
             // end of tree
@@ -287,18 +271,6 @@ if (Bank.isOpen() && Inventory.isEmpty() && !Equipment.contains(Predicates.nameC
                 automateWalk(Falador_Tree_TreeArea_III_Area.toWorldArea());
                 sleep(2000);
                 readytochop = true;
-//                while (!playerPosition.isInArea(Falador_Tree_TreeArea_III_Area.toWorldArea())) {
-//                    sleep(1500, 3000);
-//                    debug("walking 2");
-//                    automateWalk(Falador_Tree_TreeArea_III_Area.toWorldArea());
-//                }
-//                if (!Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_III_Area.toWorldArea())) {
-//                    while (!playerPosition.isInArea(Falador_Tree_TreeArea_III_Area.toWorldArea())) {
-//                        sleep(1500, 3000);
-//                        debug("walking 2");
-//                        automateWalk(Falador_Tree_TreeArea_III_Area.toWorldArea());
-//                    }
-//                }
             }
 
             // end of tree
@@ -308,18 +280,6 @@ if (Bank.isOpen() && Inventory.isEmpty() && !Equipment.contains(Predicates.nameC
                 automateWalk(Falador_Tree_TreeArea_IV_Area.toWorldArea());
                 sleep(2000);
                 readytochop = true;
-//                while (!playerPosition.isInArea(Falador_Tree_TreeArea_IV_Area.toWorldArea())) {
-//                    sleep(1500, 3000);
-//                    debug("walking 2");
-//                    automateWalk(Falador_Tree_TreeArea_IV_Area.toWorldArea());
-//                }
-//                if (!Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_IV_Area.toWorldArea())) {
-//                    while (!playerPosition.isInArea(Falador_Tree_TreeArea_IV_Area.toWorldArea())) {
-//                        sleep(1500, 3000);
-//                        debug("walking 2");
-//                        automateWalk(Falador_Tree_TreeArea_IV_Area.toWorldArea());
-//                    }
-//                }
             }
 
             // end of tree
@@ -329,28 +289,11 @@ if (Bank.isOpen() && Inventory.isEmpty() && !Equipment.contains(Predicates.nameC
                 automateWalk(Falador_Tree_TreeArea_V_Area.toWorldArea());
                 sleep(2000);
                 readytochop = true;
-//                while (!playerPosition.isInArea(Falador_Tree_TreeArea_V_Area.toWorldArea())) {
-//                    sleep(1500, 3000);
-//                    debug("walking 2");
-//                    automateWalk(Falador_Tree_TreeArea_V_Area.toWorldArea());
-//                }
-//                if (!Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_V_Area.toWorldArea())) {
-//                    while (!playerPosition.isInArea(Falador_Tree_TreeArea_V_Area.toWorldArea())) {
-//                        sleep(1500, 3000);
-//                        debug("walking 2");
-//                        automateWalk(Falador_Tree_TreeArea_V_Area.toWorldArea());
-//                    }
-//                    debug("1");
-//                }
             }
-
             // end of tree
-
         }
-        debug("8");
+
         // normal tree
-
-
 
         if (randomIndex == 0 && readytochop) {
             debug("inside index");
@@ -490,32 +433,7 @@ if (Bank.isOpen() && Inventory.isEmpty() && !Equipment.contains(Predicates.nameC
                         return -1;
                 }
             }
-
         }
-
-      /*  if (playerPosition.isInArea(Falador_Tree_TreeArea_I_Area.toWorldArea())
-                || playerPosition.isInArea(Falador_Tree_TreeArea_II_Area.toWorldArea())
-                || playerPosition.isInArea(Falador_Tree_TreeArea_III_Area.toWorldArea())
-                || playerPosition.isInArea(Falador_Tree_TreeArea_IV_Area.toWorldArea())
-                || playerPosition.isInArea(Falador_Tree_TreeArea_V_Area.toWorldArea())) {
-            debug("I should chop a tree down...");
-            while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
-
-                var tree = TileObjects
-                        .getSurrounding(playerPosition, 8, 1276,1278)
-                        .stream()
-                        //.filter(tileObject -> Reachable.isWalkable(tileObject.getWorldLocation()))
-                        .min(Comparator.comparing(x -> x.distanceTo(playerPosition)))
-                        .orElse(null);
-
-                if (!local.isAnimating() && !local.isInteracting() && !Inventory.isFull() && !local.isMoving()) {
-                    debug("Chop suey!");
-                    tree.interact("Chop down");
-                    sleep(600,1500);
-                }
-            }
-        }*/
-        debug("9");
         return 0;
     }
 
