@@ -12,6 +12,7 @@ import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 
 import static net.automaters.script.AutomateRS.debug;
 import static net.automaters.script.AutomateRS.scriptStarted;
+import static net.unethicalite.api.commons.Time.sleep;
 
 public class LocalPlayer {
 
@@ -62,11 +63,14 @@ public class LocalPlayer {
      * Opens the closest bank to your player.
      */
     public static void openBank() {
+        debug("Walking to nearest bank!");
         TileObject bank = TileObjects.getFirstSurrounding(localPlayer.getWorldLocation(), 10, obj -> obj.hasAction("Bank"));
         TileObject bankChest = TileObjects.getFirstSurrounding(localPlayer.getWorldLocation(), 10, obj -> obj.getName().startsWith("Bank chest"));
-        if (!Bank.isOpen() && !LocalPlayer.isInBank()) {
+        while (!Bank.isOpen() && !LocalPlayer.isInBank()) {
             walkToNearestBank();
-        } else if (!Bank.isOpen() && LocalPlayer.isInBank()) {
+            sleep(600, 2400);
+        }
+        if (!Bank.isOpen() && LocalPlayer.isInBank()) {
             if (bank != null) {
                 bank.interact("Bank");
             } else if (bankChest != null) {
