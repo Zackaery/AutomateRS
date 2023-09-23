@@ -23,7 +23,6 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
-import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.events.LobbyWorldSelectToggled;
 import net.unethicalite.api.game.Worlds;
 import net.unethicalite.api.plugins.Task;
@@ -43,6 +42,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -93,6 +94,8 @@ public class AutomateRS extends TaskPlugin {
 		return configManager.getConfig(AutomateRSConfig.class);
 	}
 
+	public static long scriptTimer;
+	public static long elapsedTime;
 	private GUI GUI;
 	private final Task[] tasks = new Task[] {};
 	public static boolean scriptStarted;
@@ -200,38 +203,34 @@ public class AutomateRS extends TaskPlugin {
 				if (event.getKey().toLowerCase().contains("start")) {
 					if (client != null && client.getGameState() == GameState.LOGGED_IN) {
 						if (localPlayer == null) {
-							executorService.submit(() -> {
-								debug("Local Player not located");
-								return;
-							});
+							debug("Local Player not located");
+							return;
 						} else if (!started) {
 //							selectedBuild = loadBuildFromGUI();
-							executorService.submit(() -> {
-								selectedBuild = "ALPHA_TESTER";
-								started = true;
-								this.scriptStarted = true;
-							});
+							selectedBuild = "ALPHA_TESTER";
+							started = true;
+							this.scriptStarted = true;
+							scriptTimer = (System.currentTimeMillis() - elapsedTime);
+							debug("Started - AutomateRS");
 						} else {
-							executorService.submit(() -> {
-								this.scriptStarted = true;
-								debug("Started - AutomateRS");
-							});
+							this.scriptStarted = true;
+							scriptTimer = (System.currentTimeMillis() - elapsedTime);
+							debug("Started - AutomateRS");
 						}
 					} else {
 						JOptionPane.showMessageDialog(null, "You're not logged in, please login before starting the plugin.", "Starting... AutomateRS", JOptionPane.ERROR_MESSAGE);
 						debug("You're not logged in.");
 					}
 				} else if (event.getKey().toLowerCase().contains("pause")) {
-					executorService.submit(() -> {
 						scriptStarted = false;
+						elapsedTime = System.currentTimeMillis() - scriptTimer;
 						debug("Paused - AutomateRS");
-					});
 				} else {
-					executorService.submit(() -> {
+						scriptTimer = 0;
+						elapsedTime = 0;
 						started = false;
 						scriptStarted = false;
 						debug("Stopped - AutomateRS");
-					});
 				}
 			}
 	}

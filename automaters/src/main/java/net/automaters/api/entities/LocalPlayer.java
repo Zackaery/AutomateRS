@@ -3,12 +3,14 @@ package net.automaters.api.entities;
 import net.automaters.api.walking.Position;
 import net.runelite.api.Player;
 import net.runelite.api.TileObject;
+import net.runelite.api.widgets.Widget;
 import net.unethicalite.api.coords.RectangularArea;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
+import net.unethicalite.api.widgets.Widgets;
 
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.script.AutomateRS.scriptStarted;
@@ -79,7 +81,11 @@ public class LocalPlayer {
             }
         } else {
             debug("The bank is open!");
+            Widget widget = Widgets.get(664, 29, 0);
+            if (widget != null) {
+                widget.interact("Close");
+                debug("Closed bank tutorial widget.");
+            }
         }
     }
-
 }

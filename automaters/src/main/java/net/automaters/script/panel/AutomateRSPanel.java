@@ -40,6 +40,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.regex.Matcher;
@@ -49,12 +50,15 @@ import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.gui.GUI.*;
 import static net.automaters.gui.GUI.started;
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.script.AutomateRS.scriptStarted;
+import static net.automaters.script.AutomateRS.elapsedTime;
+import static net.automaters.script.AutomateRS.scriptTimer;
 
 public class AutomateRSPanel extends PluginPanel {
     @Inject
     @Nullable
     private Client client;
+
+//    private final AutomateRS automate;
 
     @Inject
     private AutomateRSConfig automateRSConfig;
@@ -410,23 +414,27 @@ public class AutomateRSPanel extends PluginPanel {
 //                            GUI.selectedBuild = loadBuildFromGUI();
                                 selectedBuild = "ALPHA_TESTER";
                                 started = true;
-                                scriptStarted = true;
+                                AutomateRS.scriptStarted = true;
                                 scriptPanel.remove(startButton);
                                 scriptPanel.add(pauseButton);
                                 scriptPanel.add(stopButton);
                                 scriptPanel.repaint();
                                 scriptPanel.revalidate();
+                                scriptTimer = (System.currentTimeMillis() - elapsedTime);
                             } else {
                                 selectedBuild = "ALPHA_TESTER";
-                                scriptStarted = true;
+                                AutomateRS.scriptStarted = true;
                                 scriptPanel.remove(startButton);
                                 scriptPanel.add(pauseButton);
                                 scriptPanel.add(stopButton);
                                 scriptPanel.repaint();
                                 scriptPanel.revalidate();
+                                elapsedTime = System.currentTimeMillis() - scriptTimer;
                                 debug("Started - AutomateRS");
                             }
                         } else {
+                            scriptTimer = 0;
+                            elapsedTime = 0;
                             JOptionPane.showMessageDialog(null, "You're not logged in, please login before starting the plugin.", "Starting... AutomateRS", JOptionPane.ERROR_MESSAGE);
                             debug("You're not logged in.");
                         }

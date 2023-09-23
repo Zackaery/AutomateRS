@@ -18,7 +18,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
-import static net.automaters.api.game.Game.getFromClientThread;
 import static net.automaters.api.utils.Debug.debug;
 import static net.unethicalite.api.commons.Time.sleep;
 import static net.unethicalite.api.movement.Movement.toggleRun;
@@ -100,7 +99,7 @@ public class Walking {
     }
 
     public static boolean isRunning() {
-        return (getFromClientThread(() -> client.getVarpValue(173) == 1));
+        return (game.getFromClientThread(() -> client.getVarpValue(173) == 1));
 
     }
 

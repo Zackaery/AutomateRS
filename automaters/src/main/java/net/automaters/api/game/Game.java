@@ -24,14 +24,24 @@ public class Game {
     static ClientThread clientThread = Static.getClientThread();
 
     @Inject
-    public ExecutorService executorService;
+    public static ExecutorService executorService;
 
-    public Client client() {
+    public static Client client() {
         return client;
     }
 
     public static boolean waiting = false;
     public static long gameTickDelay = 0;
+
+    public static ItemContainer container(InventoryID inventoryID) {
+        return client.getItemContainer(inventoryID);
+    }
+
+    public ItemContainer container(int containerId) {
+        InventoryID inventoryID = InventoryID.getValue(containerId);
+        return client.getItemContainer(inventoryID);
+    }
+
 
     public int tick(int tickMin, int tickMax) {
         Random r = new Random();
@@ -55,7 +65,7 @@ public class Game {
         }
     }
 
-    public void tick() {
+    public static void tick() {
         if (client.getGameState() == GameState.LOGIN_SCREEN || client.getGameState() == GameState.LOGIN_SCREEN_AUTHENTICATOR) {
             return;
         }
@@ -79,11 +89,11 @@ public class Game {
         }
     }
 
-    public long ticks() {
+    public static long ticks() {
         return client.getTickCount();
     }
 
-    public void waitUntil(BooleanSupplier condition) {
+    public static void waitUntil(BooleanSupplier condition) {
         waiting = true;
 
         if (client.isClientThread()) {
@@ -99,7 +109,7 @@ public class Game {
         waiting = false;
     }
 
-    public boolean waitUntil(BooleanSupplier condition, int ticks) {
+    public static boolean waitUntil(BooleanSupplier condition, int ticks) {
         waiting = true;
         if (client.isClientThread()) {
             log.info("Submitting waitUntil on Executor");
@@ -118,7 +128,7 @@ public class Game {
             return false;
         }
     }
-    public <T> T getFromExecutorThread(Supplier<T> supplier) {
+    public static <T> T getFromExecutorThread(Supplier<T> supplier) {
         if (client.isClientThread()) {
             CompletableFuture<T> future = new CompletableFuture<>();
 

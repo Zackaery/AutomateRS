@@ -6,6 +6,7 @@ import java.util.Date;
 
 public class Debug {
 
+    public static String displayMessage;
     private static String lastMessage = null;
     private static int consecutiveCount = 0;
 
@@ -37,6 +38,7 @@ public class Debug {
                     consecutiveCount = 0;
                 }
                 out.println(logMessage);
+                displayMessage = message;
                 lastMessage = message;
                 consecutiveCount = 0;
                 System.out.println("[AutomateRS] - " + message);

@@ -11,21 +11,19 @@ import java.util.List;
 import static net.runelite.api.Constants.CHUNK_SIZE;
 
 public class Tile implements RSTile {
-    final Game game;
     final Tile tile;
 
-    Tile(Game game, Tile tile) {
-        this.game = game;
+    Tile(Tile tile) {
         this.tile = tile;
     }
 
     //    @Override
-    public Game game() {
-        return game;
-    }
+//    public static Game game() {
+////        return Game;
+//    }
 
     public Client client() {
-        return game.client;
+        return Game.client;
     }
 
     public Position position() {

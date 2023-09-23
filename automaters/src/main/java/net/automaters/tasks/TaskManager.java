@@ -1,8 +1,7 @@
 package net.automaters.tasks;
 
 //import net.automaters.activities.skills.mining.Mining;
-import net.automaters.activities.money_making.low_value.PotOfFlour;
-import net.automaters.activities.skills.woodcutting.Woodcutting;
+
 import net.automaters.activities.skills.woodcutting.WoodcuttingBored;
 
 import static net.automaters.api.utils.Debug.debug;
@@ -25,13 +24,12 @@ public class TaskManager {
 
     public void executeTask(String task) {
         currentTask = task;
+        debug("Executing Task: "+task);
         switch (task) {
             case "Woodcutting":
-                debug("EXECUTING WOODCUTTING TASK");
                 new WoodcuttingBored().loop();
                 break;
             case "Mining":
-                debug("EXECUTING MINING TASK");
 //                new Mining();
                 break;
         }
