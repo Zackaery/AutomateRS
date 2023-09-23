@@ -188,21 +188,10 @@ public class WoodcuttingBored extends LoopedPlugin {
             axecheck = false;
             debug("Axe check complete!");
             sleep(500);
-            Bank.close();
+            if (armorcheck && axecheck) {
+                Bank.close();
+            }
         }
-
-
-
-//        // handle axe upgrades if available
-//
-//        String[] axesToHandle = {
-//                "Bronze axe", "Iron axe", "Steel axe", "Black axe",
-//                "Mithril axe", "Adamant axe", "Rune axe", "Dragon axe", "Crystal axe"
-//        };
-//        if (Bank.isOpen() && !axecheck) {
-//            debug("Axe check complete!");
-//            axecheck = false;
-//        }
 
 
         if (!local.isMoving() && getWoodcuttingLevel() <= 95 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_I_Area.toWorldArea())

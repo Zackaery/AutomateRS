@@ -58,8 +58,19 @@ public class GearUpgrade {
             }
 
             // Wear item
-            if (Inventory.contains(itemName) && !Equipment.contains(itemName)) {
+            if (Inventory.contains(itemName) && !Equipment.contains(itemName) && !Bank.isOpen()) {
                 Item item = Inventory.getFirst(itemName);
+                if (item != null) {
+                    item.interact("Wear");
+                    debug("Equipped item: " + itemName);
+                    Time.sleepUntil(() -> Equipment.contains(itemName), 3000);
+                }
+            }
+
+            // Wear item if bank is open
+            // Wear item
+            if (Inventory.contains(itemName) && !Equipment.contains(itemName) && Bank.isOpen()) {
+                Item item = Bank.Inventory.getFirst(itemName);
                 if (item != null) {
                     item.interact("Wear");
                     debug("Equipped item: " + itemName);
