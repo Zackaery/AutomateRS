@@ -14,7 +14,7 @@ import static net.automaters.gui.tabbed_panel.skilling_goals.Artisan.*;
 import static net.automaters.gui.tabbed_panel.skilling_goals.Combat.*;
 import static net.automaters.gui.tabbed_panel.skilling_goals.Gathering.*;
 import static net.automaters.gui.tabbed_panel.skilling_goals.Support.*;
-import static net.automaters.script.AutomateRS.debug;
+import static net.automaters.api.utils.Debug.debug;
 
 public class TabSkillingGoals
 {

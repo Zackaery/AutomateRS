@@ -5,7 +5,7 @@ import net.automaters.activities.money_making.low_value.PotOfFlour;
 import net.automaters.activities.skills.woodcutting.Woodcutting;
 import net.automaters.activities.skills.woodcutting.WoodcuttingBored;
 
-import static net.automaters.script.AutomateRS.debug;
+import static net.automaters.api.utils.Debug.debug;
 
 import java.util.ArrayList;
 import java.util.List;

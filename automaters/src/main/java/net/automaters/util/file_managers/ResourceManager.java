@@ -1,8 +1,5 @@
 package net.automaters.util.file_managers;
 
-
-import net.automaters.script.AutomateRS;
-
 import java.io.*;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -12,6 +9,8 @@ import java.nio.file.*;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import static net.automaters.api.utils.Debug.debug;
 
 public class ResourceManager {
 
@@ -44,7 +43,7 @@ public class ResourceManager {
 
     private static InputStream loadFileFromJar(final String relativeFilePath) {
         String jarFilePath = "/resources/" + relativeFilePath;
-        AutomateRS.debug(jarFilePath);
+        debug(jarFilePath);
         return ResourceManager.class.getResourceAsStream(jarFilePath);
     }
 
@@ -57,7 +56,7 @@ public class ResourceManager {
         File file = Paths.get(DIRECTORY, relativeFilePath).toFile();
 
         if (!file.exists()) {
-            AutomateRS.debug(
+            debug(
                     String.format("'%s' does not exist", file.toString())
             );
             return null;
@@ -66,7 +65,7 @@ public class ResourceManager {
         try {
             return new FileInputStream(file);
         } catch (IOException e) {
-            AutomateRS.debug(
+            debug(
                     String.format("Failed to load file '%s' from '%s'", relativeFilePath, DIRECTORY)
             );
         }
@@ -77,7 +76,7 @@ public class ResourceManager {
     private static void downloadResourcesFromGitHubToDataDirectory() {
         try {
             URL url = new URL(GITHUB_URL + "/raw/main/resources.zip");
-            AutomateRS.debug("Downloading file from url: " + url.toString() + ", to: " + DIRECTORY);
+            debug("Downloading file from url: " + url.toString() + ", to: " + DIRECTORY);
 
             ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
 
@@ -89,7 +88,7 @@ public class ResourceManager {
             FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
             fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
 
-            AutomateRS.debug(String.format("Extracting file: %s, to: %s", outputFile.getAbsolutePath(), DIRECTORY));
+            debug(String.format("Extracting file: %s, to: %s", outputFile.getAbsolutePath(), DIRECTORY));
 
             unzipArchive(outputFile, new File(DIRECTORY));
 
@@ -110,7 +109,7 @@ public class ResourceManager {
 
         if (!parentDir.exists()) {
             if (!parentDir.mkdirs()) {
-                AutomateRS.debug("Failed to make directory: " + parentDir.toString());
+                debug("Failed to make directory: " + parentDir.toString());
                 return false;
             }
         }
@@ -131,27 +130,27 @@ public class ResourceManager {
         try(ZipFile zipFile = new ZipFile(archive))
         {
 
-            AutomateRS.debug("zipFile = " + archive.toString());
+            debug("zipFile = " + archive.toString());
             FileSystem fileSystem = FileSystems.getDefault();
 
-            AutomateRS.debug("fileSystem = " + fileSystem.toString());
+            debug("fileSystem = " + fileSystem.toString());
 
             destinationDir.mkdirs();
 
-            AutomateRS.debug("destinationDir = " + destinationDir.toString());
+            debug("destinationDir = " + destinationDir.toString());
 
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
-            AutomateRS.debug("entries = " + entries.toString());
+            debug("entries = " + entries.toString());
 
             while (entries.hasMoreElements())
             {
                 ZipEntry entry = entries.nextElement();
-                AutomateRS.debug("ZipEntry = " + entry.toString());
+                debug("ZipEntry = " + entry.toString());
 
                 Path filePath = fileSystem.getPath(destinationDir.getAbsolutePath(), entry.getName());
 
-                AutomateRS.debug("Unzipping file to: " + filePath.toString());
+                debug("Unzipping file to: " + filePath.toString());
 
                 if (entry.isDirectory())
                 {

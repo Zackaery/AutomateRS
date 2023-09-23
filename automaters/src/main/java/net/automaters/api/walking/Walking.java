@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.game.Game.getFromClientThread;
-import static net.automaters.script.AutomateRS.debug;
+import static net.automaters.api.utils.Debug.debug;
 import static net.unethicalite.api.commons.Time.sleep;
 import static net.unethicalite.api.movement.Movement.toggleRun;
 

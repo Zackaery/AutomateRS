@@ -24,11 +24,8 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
-import static net.automaters.script.AutomateRS.debug;
+import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.script.panel.AutomateRSPanel.*;
-import static net.unethicalite.api.commons.Time.sleep;
-import static net.unethicalite.api.input.Keyboard.sendEnter;
-
 
 public class ProfilePanel extends JPanel {
 
@@ -69,11 +66,11 @@ public class ProfilePanel extends JPanel {
             this.useWorld = Boolean.valueOf(parts[3]);
             this.world = Integer.valueOf(parts[4]);
         }
-        AutomateRS.debug("profile = "+parts[0]);
-        AutomateRS.debug("loginText = "+loginText);
-        AutomateRS.debug("password = "+password);
-        AutomateRS.debug("useWorld = "+useWorld);
-        AutomateRS.debug("world = "+world);
+        debug("profile = "+parts[0]);
+        debug("loginText = "+loginText);
+        debug("password = "+password);
+        debug("useWorld = "+useWorld);
+        debug("world = "+world);
         AutomateRSPanel.useWorld = world;
         AutomateRSPanel.boolWorld = useWorld;
 
@@ -104,17 +101,17 @@ public class ProfilePanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e)
             {
-                AutomateRS.debug("delete - mousePressed");
+                debug("delete - mousePressed");
                 panel.getParent().remove(panel);
                 try
                 {
-                    AutomateRS.debug("removeProfile: "+data);
+                    debug("removeProfile: "+data);
                     parent.removeProfile(data);
                 }
                 catch (InvalidKeySpecException | NoSuchAlgorithmException | IllegalBlockSizeException |
                        InvalidKeyException | BadPaddingException | NoSuchPaddingException ex)
                 {
-                    AutomateRS.debug(e.toString());
+                    debug(e.toString());
                 }
             }
 
@@ -139,9 +136,9 @@ public class ProfilePanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e)
             {
-                AutomateRS.debug("start - mousePressed");
+                debug("start - mousePressed");
                 if (useWorld && client.getWorld() != world) {
-                    AutomateRS.debug("prepareLogin");
+                    debug("prepareLogin");
                     prepareLogin();
                 } else {
                     login(client);
@@ -179,7 +176,7 @@ public class ProfilePanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e)
             {
-                AutomateRS.debug("label - mousePressed");
+                debug("label - mousePressed");
                 if (SwingUtilities.isLeftMouseButton(e) && (client.getGameState() == GameState.LOGIN_SCREEN || client.getGameState() == GameState.LOGIN_SCREEN_AUTHENTICATOR))
                 {
                     init(client);
@@ -195,7 +192,7 @@ public class ProfilePanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e)
             {
-                AutomateRS.debug("bottomContainer - mousePressed");
+                debug("bottomContainer - mousePressed");
                 if (SwingUtilities.isLeftMouseButton(e) && (client.getGameState() == GameState.LOGIN_SCREEN || client.getGameState() == GameState.LOGIN_SCREEN_AUTHENTICATOR))
                 {
                     init(client);
@@ -210,30 +207,30 @@ public class ProfilePanel extends JPanel {
 
 
     private void prepareLogin() {
-        AutomateRS.debug("prepareLogin");
+        debug("prepareLogin");
         if (useWorld && thisClient.getWorld() != world) {
-            AutomateRS.debug("loadWorlds");
+            debug("loadWorlds");
             thisClient.loadWorlds();
         } else {
-            AutomateRS.debug("promptCredentials");
+            debug("promptCredentials");
             thisClient.promptCredentials(false);
         }
     }
 
     public static void init(Client client) {
-        AutomateRS.debug("init");
-        AutomateRS.debug("login");
+        debug("init");
+        debug("login");
         login(client);
     }
     private static void login(Client client) {
-        AutomateRS.debug("login");
-        AutomateRS.debug("setUsername");
+        debug("login");
+        debug("setUsername");
         client.setUsername(loginText);
-        AutomateRS.debug("setPassword");
+        debug("setPassword");
         client.setPassword(password);
-        AutomateRS.debug("sendEnter from username to password");
+        debug("sendEnter from username to password");
         Keyboard.sendEnter();
-        AutomateRS.debug("sendEnter from password to login");
+        debug("sendEnter from password to login");
         Keyboard.sendEnter();
     }
 }

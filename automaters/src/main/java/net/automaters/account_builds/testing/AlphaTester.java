@@ -2,7 +2,7 @@ package net.automaters.account_builds.testing;
 
 import net.automaters.tasks.TaskManager;
 
-import static net.automaters.script.AutomateRS.debug;
+import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.tasks.TaskManager.currentTask;
 import static net.automaters.tasks.TaskManager.taskSelected;
 

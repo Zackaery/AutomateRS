@@ -1,6 +1,6 @@
 package net.automaters.util.file_managers;
 
-import net.automaters.script.AutomateRS;
+import static net.automaters.api.utils.Debug.debug;
 
 import java.awt.*;
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class FontManager extends ResourceManager {
             String relativeFontPath = FONT_DIR + font;
 
             if (!loadFont(relativeFontPath)) {
-                AutomateRS.debug("Failed to load font: " + font);
+                debug("Failed to load font: " + font);
             }
         }
     }

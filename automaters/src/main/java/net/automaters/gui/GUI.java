@@ -12,7 +12,8 @@ import net.automaters.gui.tabbed_panel.skilling_goals.Support;
 import net.automaters.script.AutomateRS;
 import net.automaters.util.file_managers.ImageManager;
 
-import static net.automaters.script.AutomateRS.*;
+import static net.automaters.api.utils.Debug.debug;
+import static net.automaters.script.AutomateRS.scriptStarted;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +22,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
-import static net.automaters.script.AutomateRS.debug;
 
 public class GUI implements ActionListener {
 

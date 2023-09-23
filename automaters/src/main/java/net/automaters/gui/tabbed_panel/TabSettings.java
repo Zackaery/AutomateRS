@@ -8,7 +8,7 @@ import net.automaters.gui.tabbed_panel.settings.Webhook;
 import javax.swing.*;
 
 import static net.automaters.gui.GUI.tabSettingsInitialized;
-import static net.automaters.script.AutomateRS.debug;
+import static net.automaters.api.utils.Debug.debug;
 
 public class TabSettings {
 

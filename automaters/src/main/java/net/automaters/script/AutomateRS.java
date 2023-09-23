@@ -47,6 +47,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
+import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.gui.GUI.*;
 import static net.automaters.script.panel.AutomateRSPanel.*;
 import static net.automaters.script.panel.auto_login.ProfilePanel.init;
@@ -94,7 +95,6 @@ public class AutomateRS extends TaskPlugin {
 
 	private GUI GUI;
 	private final Task[] tasks = new Task[] {};
-	public static boolean debugEnabled = true;
 	public static boolean scriptStarted;
 	private boolean hotswapEnabled = true;
 	private ExecutorService executorService = Executors.newFixedThreadPool(1);
@@ -246,9 +246,5 @@ public class AutomateRS extends TaskPlugin {
 		return 600;
 	}
 
-	public static void debug(String message) {
-		if (debugEnabled) {
-			System.out.println("[AutomateRS] - " + message);
-		}
-	}
+
 }
