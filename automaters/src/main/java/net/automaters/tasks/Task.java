@@ -1,11 +1,6 @@
 package net.automaters.tasks;
 
-import net.automaters.script.AutomateRS;
-import net.unethicalite.api.plugins.LoopedPlugin;
-
-import java.util.Timer;
-
-import static net.automaters.script.AutomateRS.debug;
+import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.tasks.TaskManager.*;
 
 public abstract class Task {

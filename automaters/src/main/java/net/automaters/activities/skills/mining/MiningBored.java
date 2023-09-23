@@ -23,7 +23,7 @@ import java.util.Random;
 
 import static net.automaters.api.entities.LocalPlayer.openBank;
 import static net.automaters.api.entities.SkillCheck.*;
-import static net.automaters.script.AutomateRS.debug;
+import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.automaters.util.locations.woodcutting_rectangularareas.*;
 

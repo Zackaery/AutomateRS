@@ -14,9 +14,10 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.Locale;
 
-import static net.automaters.script.AutomateRS.*;
+import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.unethicalite.api.commons.Time.sleep;
 import static net.unethicalite.api.items.Inventory.isFull;
+import static net.automaters.api.utils.Debug.debug;
 
 @SuppressWarnings({"ConstantConditions","unused"})
 public class Woodcutting extends LoopedPlugin {

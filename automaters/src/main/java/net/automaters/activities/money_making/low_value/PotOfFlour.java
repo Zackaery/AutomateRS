@@ -15,7 +15,7 @@ import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.packets.DialogPackets;
 
 import static net.automaters.api.entities.LocalPlayer.openBank;
-import static net.automaters.script.AutomateRS.debug;
+import static net.automaters.api.utils.Debug.debug;
 
 
 public class PotOfFlour extends Task {

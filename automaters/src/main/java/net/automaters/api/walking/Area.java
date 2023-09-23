@@ -5,7 +5,7 @@ import net.runelite.api.Locatable;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 
-import static net.automaters.script.AutomateRS.debug;
+import static net.automaters.api.utils.Debug.debug;
 
 public class Area {
     public final int minX;

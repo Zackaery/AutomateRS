@@ -7,7 +7,7 @@ import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.plugins.LoopedPlugin;
 
 import static net.automaters.api.walking.Walking.automateWalk;
-import static net.automaters.script.AutomateRS.debug;
+import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.script.AutomateRS.scriptStarted;
 
 

@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.automaters.script.AutomateRS.debug;
+import static net.automaters.api.utils.Debug.debug;
 
 public class ImageManager extends ResourceManager {
 
