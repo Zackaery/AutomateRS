@@ -64,6 +64,7 @@ public class LocalPlayer {
      */
     public static void openBank() {
         debug("Walking to nearest bank!");
+        sleep(1000);
         TileObject bank = TileObjects.getFirstSurrounding(localPlayer.getWorldLocation(), 10, obj -> obj.hasAction("Bank"));
         TileObject bankChest = TileObjects.getFirstSurrounding(localPlayer.getWorldLocation(), 10, obj -> obj.getName().startsWith("Bank chest"));
         while (!Bank.isOpen() && !LocalPlayer.isInBank()) {
