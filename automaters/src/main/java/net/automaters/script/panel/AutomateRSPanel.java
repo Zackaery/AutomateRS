@@ -7,6 +7,7 @@ import net.automaters.script.AutomateRSConfig;
 import net.automaters.script.panel.auto_login.ProfilePanel;
 import net.automaters.api.client.ui.components.PluginInfoPanel;
 import net.runelite.api.Client;
+import net.runelite.api.GameState;
 import net.runelite.client.ui.ClientUI;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.DynamicGridLayout;
@@ -398,32 +399,36 @@ public class AutomateRSPanel extends PluginPanel {
             {
                 startButton.addMouseListener(new MouseAdapter()
                 {
+
                     @Override
                     public void mouseClicked(MouseEvent e)
                     {
-                        if (localPlayer == null) {
-                            debug("Local Player not located");
-                            return;
-                        }
-                        if (!GUI.started) {
+                        if (client != null && client.getGameState() == GameState.LOGGED_IN) {
+                            if (localPlayer == null) {
+                                debug("Local Player not located");
+                            } else if (!started) {
 //                            GUI.selectedBuild = loadBuildFromGUI();
-                            selectedBuild = "ALPHA_TESTER";
-                            started = true;
-                            scriptStarted = true;
-                            scriptPanel.remove(startButton);
-                            scriptPanel.add(pauseButton);
-                            scriptPanel.add(stopButton);
-                            scriptPanel.repaint();
-                            scriptPanel.revalidate();
+                                selectedBuild = "ALPHA_TESTER";
+                                started = true;
+                                scriptStarted = true;
+                                scriptPanel.remove(startButton);
+                                scriptPanel.add(pauseButton);
+                                scriptPanel.add(stopButton);
+                                scriptPanel.repaint();
+                                scriptPanel.revalidate();
+                            } else {
+                                selectedBuild = "ALPHA_TESTER";
+                                scriptStarted = true;
+                                scriptPanel.remove(startButton);
+                                scriptPanel.add(pauseButton);
+                                scriptPanel.add(stopButton);
+                                scriptPanel.repaint();
+                                scriptPanel.revalidate();
+                                debug("Started - AutomateRS");
+                            }
                         } else {
-                            selectedBuild = "ALPHA_TESTER";
-                            scriptStarted = true;
-                            scriptPanel.remove(startButton);
-                            scriptPanel.add(pauseButton);
-                            scriptPanel.add(stopButton);
-                            scriptPanel.repaint();
-                            scriptPanel.revalidate();
-                            debug("Started - AutomateRS");
+                            JOptionPane.showMessageDialog(null, "You're not logged in, please login before starting the plugin.", "Starting... AutomateRS", JOptionPane.ERROR_MESSAGE);
+                            debug("You're not logged in.");
                         }
                     }
 

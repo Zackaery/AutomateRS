@@ -11,6 +11,7 @@ import net.automaters.gui.utils.EventDispatchThreadRunner;
 import net.automaters.script.panel.AutomateRSPanel;
 import net.automaters.util.file_managers.ImageManager;
 import net.runelite.api.Client;
+import net.runelite.api.GameState;
 import net.runelite.api.World;
 import net.runelite.api.events.ConfigButtonClicked;
 import net.runelite.api.events.WidgetLoaded;
@@ -37,14 +38,13 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.inject.Inject;
+import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-
 
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.utils.Debug.debug;
@@ -198,24 +198,28 @@ public class AutomateRS extends TaskPlugin {
 	public void onConfigButtonPressed(ConfigButtonClicked event) throws InterruptedException {
 			if (event.getGroup().contains("automaters")) {
 				if (event.getKey().toLowerCase().contains("start")) {
-					if (localPlayer == null) {
-						executorService.submit(() -> {
-							debug("Local Player not located");
-							return;
-						});
-					}
-					if (!started) {
-//					selectedBuild = loadBuildFromGUI();
-						executorService.submit(() -> {
-							selectedBuild = "ALPHA_TESTER";
-							started = true;
-							this.scriptStarted = true;
-						});
+					if (client != null && client.getGameState() == GameState.LOGGED_IN) {
+						if (localPlayer == null) {
+							executorService.submit(() -> {
+								debug("Local Player not located");
+								return;
+							});
+						} else if (!started) {
+//							selectedBuild = loadBuildFromGUI();
+							executorService.submit(() -> {
+								selectedBuild = "ALPHA_TESTER";
+								started = true;
+								this.scriptStarted = true;
+							});
+						} else {
+							executorService.submit(() -> {
+								this.scriptStarted = true;
+								debug("Started - AutomateRS");
+							});
+						}
 					} else {
-						executorService.submit(() -> {
-							this.scriptStarted = true;
-							debug("Started - AutomateRS");
-						});
+						JOptionPane.showMessageDialog(null, "You're not logged in, please login before starting the plugin.", "Starting... AutomateRS", JOptionPane.ERROR_MESSAGE);
+						debug("You're not logged in.");
 					}
 				} else if (event.getKey().toLowerCase().contains("pause")) {
 					executorService.submit(() -> {
