@@ -353,6 +353,7 @@ public class WoodcuttingBored extends LoopedPlugin {
                 var tree = TileObjects
                         .getSurrounding(local.getWorldLocation(), 8, 1276, 1278, 2091, 2092)
                         .stream()
+                        .filter(Reachable::isInteractable)
                         .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
                         .orElse(null);
                 sleep(1000);
@@ -380,6 +381,7 @@ public class WoodcuttingBored extends LoopedPlugin {
                 var tree = TileObjects
                         .getSurrounding(local.getWorldLocation(), 8, 1276,1278,2091,2092)
                         .stream()
+                        .filter(Reachable::isInteractable)
                         .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
                         .orElse(null);
                 sleep(1000);
@@ -407,6 +409,7 @@ public class WoodcuttingBored extends LoopedPlugin {
                 var tree = TileObjects
                         .getSurrounding(local.getWorldLocation(), 8, 1276,1278,2091,2092)
                         .stream()
+                        .filter(Reachable::isInteractable)
                         .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
                         .orElse(null);
                 sleep(1000);
@@ -434,6 +437,7 @@ public class WoodcuttingBored extends LoopedPlugin {
                 var tree = TileObjects
                         .getSurrounding(local.getWorldLocation(), 8, 1276,1278,2091,2092)
                         .stream()
+                        .filter(Reachable::isInteractable)
                         .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
                         .orElse(null);
                 sleep(1000);
@@ -463,6 +467,7 @@ public class WoodcuttingBored extends LoopedPlugin {
                 var tree = TileObjects
                         .getSurrounding(local.getWorldLocation(), 8, 1276,1278,2091,2092)
                         .stream()
+                        .filter(Reachable::isInteractable)
                         .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
                         .orElse(null);
                 sleep(1000);
