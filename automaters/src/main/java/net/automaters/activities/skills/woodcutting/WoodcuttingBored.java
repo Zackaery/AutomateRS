@@ -11,7 +11,6 @@ import net.unethicalite.api.game.Skills;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
-import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
 import net.unethicalite.api.plugins.LoopedPlugin;
 
@@ -19,7 +18,6 @@ import java.util.Comparator;
 import java.util.Random;
 
 import static net.automaters.api.entities.LocalPlayer.*;
-import static net.automaters.api.entities.SkillCheck.getAttackLevel;
 import static net.automaters.api.entities.SkillCheck.getWoodcuttingLevel;
 import static net.automaters.api.walking.Walking.automateWalk;
 import static net.automaters.api.utils.Debug.debug;
@@ -55,15 +53,23 @@ public class WoodcuttingBored extends LoopedPlugin {
         sleep(1000, 2500);
 
         boolean readytochop = false;
+        boolean gearcheck = false;
+        boolean axecheck = false;
+        boolean armorcheck = false;
 
         WorldPoint playerPosition = Players.getLocal().getWorldLocation();
 
-        if (!Bank.isOpen() && Inventory.isFull() ||!Bank.isOpen() &&  !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
-                ||!Bank.isOpen() &&  !Inventory.isFull() && !Equipment.contains(Predicates.nameContains("axe")) && Inventory.contains(Predicates.nameContains("axe"))
+        if (!Bank.isOpen() && Inventory.isFull() || !Bank.isOpen() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
+                || !Bank.isOpen() && !Inventory.isFull() && !Equipment.contains(Predicates.nameContains("axe")) && Inventory.contains(Predicates.nameContains("axe"))
                 || !Bank.isOpen() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
             // do something
             openBank();
+            sleep(250);
             readytochop = false;
+            sleep(250);
+            armorcheck = true;
+            sleep(250);
+            axecheck = true;
             return 100;
         }
 
@@ -87,18 +93,14 @@ public class WoodcuttingBored extends LoopedPlugin {
         }
 
         if (Bank.isOpen() && Inventory.contains(Predicates.nameContains("Logs"))
-                    || Bank.isOpen() && Inventory.isFull()
-                    || Bank.isOpen() && !Inventory.isFull() && Inventory.contains(Predicates.nameContains("Logs"))
-                    || !Inventory.isFull() && Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
-                    || Inventory.isFull() && Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
-                debug("trying to deposit");
-                Bank.depositInventory();
+                || Bank.isOpen() && Inventory.isFull()
+                || Bank.isOpen() && !Inventory.isFull() && Inventory.contains(Predicates.nameContains("Logs"))
+                || !Inventory.isFull() && Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
+                || Inventory.isFull() && Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
+            debug("trying to deposit");
+            Bank.depositInventory();
             debug("Location chosen after banking: " + randomIndex);
-                return 100;
-        }
-
-        if (Bank.isOpen() && Inventory.isEmpty() && Equipment.contains(Predicates.nameContains("axe"))){
-            Bank.close();
+            return 100;
         }
 
 //        String[] itemsToHandle = {
@@ -107,6 +109,7 @@ public class WoodcuttingBored extends LoopedPlugin {
 //                "Graceful gloves", "Graceful cape", "ronman helm", "ron helm"
 //        };
 //
+//        if (!armorcheck && Bank.isOpen()) {
 //        boolean lumberjackHatEquipped = Equipment.contains("Lumberjack hat");
 //        boolean gracefulHoodEquipped = Equipment.contains("Graceful hood");
 //
@@ -142,7 +145,7 @@ public class WoodcuttingBored extends LoopedPlugin {
 //                    && Skills.getBoostedLevel(Skill.WOODCUTTING) >= 44) {
 //                Bank.withdraw(itemName, 1, Bank.WithdrawMode.ITEM);
 //                sleep(1500);
-//              //  Bank.close();
+//                //  Bank.close();
 //                sleep(1000);
 //            }
 //
@@ -161,83 +164,45 @@ public class WoodcuttingBored extends LoopedPlugin {
 //                }
 //            }
 //        }
+//        armorcheck = false;
+//    }
 
 
+        // start of new upgrade axe
+//
+//        GearUpgrade gearUpgrade = new GearUpgrade();
+//        gearUpgrade.upgradeGear();
+//        sleep(250,1500);
 
-        // handle axe upgrades if available
 
-        String[] axesToHandle = {
-                "Bronze axe", "Iron axe", "Steel axe", "Black axe",
-                "Mithril axe", "Adamant axe", "Rune axe", "Dragon axe", "Crystal axe"
-        };
-        if (Bank.isOpen() && Inventory.isEmpty() && !Equipment.contains(Predicates.nameContains("axe"))) {
-            // Iterate through the axes in reverse order (highest-tier first)
-            for (int i = axesToHandle.length - 1; i >= 0; i--) {
-                String itemName = axesToHandle[i];
-
-                // Check if the axe should be skipped based on Woodcutting level
-                boolean shouldSkipAxe = false;
-
-                switch (itemName) {
-                    case "Steel axe":
-                        shouldSkipAxe = getWoodcuttingLevel() < 6 && getAttackLevel() < 5;
-                        break;
-                    case "Black axe":
-                        shouldSkipAxe = getWoodcuttingLevel() < 11 && getAttackLevel() < 10;
-                        break;
-                    case "Mithril axe":
-                        shouldSkipAxe = getWoodcuttingLevel() < 21 && getAttackLevel() < 20;
-                        break;
-                    case "Adamant axe":
-                        shouldSkipAxe = getWoodcuttingLevel() < 31 && getAttackLevel() < 30;
-                        break;
-                    case "Rune axe":
-                        shouldSkipAxe = getWoodcuttingLevel() < 41 && getAttackLevel() < 40;
-                        break;
-                    case "Dragon axe":
-                        shouldSkipAxe = getWoodcuttingLevel() < 61 && getAttackLevel() < 60;
-                        break;
-                    case "Crystal axe":
-                        shouldSkipAxe = getWoodcuttingLevel() < 71 && getAttackLevel() < 70;
-                        break;
-                }
-
-                // If the axe should be skipped, continue to the next axe
-                if (shouldSkipAxe) {
-                    continue;
-                }
-
-                // Withdraw item
-                if (Bank.isOpen() && !Equipment.contains(itemName) && Bank.contains(itemName) && !Inventory.contains(itemName)) {
-                    Bank.withdraw(itemName, 1, Bank.WithdrawMode.ITEM);
-                    sleep(1500);
-                    Bank.close();
-                    sleep(1000);
-                }
-
-                // Wear item
-                if (Inventory.contains(itemName) && !Equipment.contains(itemName)) {
-                    if (!Bank.isOpen()) {
-                        Item item = Inventory.getFirst(itemName);
-                        if (item != null) {
-                            debug("Equipping axe!");
-                            item.interact("Wield");
-                            Time.sleepUntil(() -> Equipment.contains(itemName), 3000);
-                        }
-                    } else {
-                        if (Bank.isOpen()) {
-                            Bank.Inventory.getFirst(itemName).interact("Wield");
-                            Time.sleepUntil(() -> Equipment.contains(itemName), 3000);
-                        }
-                    }
-                }
-
-                // If you successfully equipped an axe, break out of the loop
-                if (Equipment.contains(itemName)) {
-                    break;
-                }
-            }
+        if (Bank.isOpen() && Inventory.isEmpty() && !armorcheck && !axecheck) {
+            debug("checking armor now.");
+            GearUpgrade gearUpgrade = new GearUpgrade();
+            gearUpgrade.upgradeGear();
+            sleep(250,1500);
+            armorcheck = false;
+            debug("Armor check complete. Now checking axes");
+            AxeUpgrade axeUpgrade = new AxeUpgrade();
+            axeUpgrade.executeAxeUpgrade();
+            sleep(1500);
+            axecheck = false;
+            debug("Axe check complete!");
+            sleep(500);
+            Bank.close();
         }
+
+
+
+//        // handle axe upgrades if available
+//
+//        String[] axesToHandle = {
+//                "Bronze axe", "Iron axe", "Steel axe", "Black axe",
+//                "Mithril axe", "Adamant axe", "Rune axe", "Dragon axe", "Crystal axe"
+//        };
+//        if (Bank.isOpen() && !axecheck) {
+//            debug("Axe check complete!");
+//            axecheck = false;
+//        }
 
 
         if (!local.isMoving() && getWoodcuttingLevel() <= 95 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_I_Area.toWorldArea())
