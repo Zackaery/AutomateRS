@@ -46,6 +46,16 @@ public class WoodcuttingBored extends LoopedPlugin {
             return -1;
         }
 
+        // Choosing tree location
+        debug("Choosing location");
+        Random random = new Random();
+        int randomIndex = random.nextInt(5);
+
+        debug("Location chosen: " + randomIndex);
+        sleep(1000, 2500);
+
+        boolean readytochop = false;
+
         WorldPoint playerPosition = Players.getLocal().getWorldLocation();
 
         if (!Bank.isOpen() && Inventory.isFull() ||!Bank.isOpen() &&  !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
@@ -53,12 +63,15 @@ public class WoodcuttingBored extends LoopedPlugin {
                 || !Bank.isOpen() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
             // do something
             openBank();
+            readytochop = false;
             return 100;
         }
 
         if (Bank.isOpen() && Inventory.contains(Predicates.nameContains("axe")) && Equipment.contains(Predicates.nameContains("axe"))) {
             Bank.depositInventory();
             Bank.depositEquipment();
+            random.nextInt(5);
+            debug("Location chosen after banking: " + randomIndex);
         }
 
         if (Bank.isOpen() && Inventory.contains(Predicates.nameContains("Logs"))
@@ -68,6 +81,8 @@ public class WoodcuttingBored extends LoopedPlugin {
                 || Inventory.isFull() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
             debug("trying to deposit now?");
             Bank.depositInventory();
+            random.nextInt(5);
+            debug("Location chosen after banking: " + randomIndex);
             return 100;
         }
 
@@ -78,6 +93,7 @@ public class WoodcuttingBored extends LoopedPlugin {
                     || Inventory.isFull() && Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
                 debug("trying to deposit");
                 Bank.depositInventory();
+            debug("Location chosen after banking: " + randomIndex);
                 return 100;
         }
 
@@ -209,19 +225,11 @@ public class WoodcuttingBored extends LoopedPlugin {
             }
         }
 
-        // Choosing tree location
-        debug("Choosing location");
-        Random random = new Random();
-        int randomIndex = random.nextInt(5);
-
-        debug("Location chosen: " + randomIndex);
-        sleep(1000, 2500);
-
-        if (!local.isMoving() && getWoodcuttingLevel() <= 15 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_I_Area.toWorldArea())
-                ||!local.isMoving() && getWoodcuttingLevel() <= 15 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_II_Area.toWorldArea())
-                ||!local.isMoving() && getWoodcuttingLevel() <= 15 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_III_Area.toWorldArea())
-                ||!local.isMoving() && getWoodcuttingLevel() <= 15 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_IV_Area.toWorldArea())
-                ||!local.isMoving() && getWoodcuttingLevel() <= 15 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_V_Area.toWorldArea())) {
+        if (!local.isMoving() && getWoodcuttingLevel() <= 95 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_I_Area.toWorldArea())
+                ||!local.isMoving() && getWoodcuttingLevel() <= 95 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_II_Area.toWorldArea())
+                ||!local.isMoving() && getWoodcuttingLevel() <= 95 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_III_Area.toWorldArea())
+                ||!local.isMoving() && getWoodcuttingLevel() <= 95 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_IV_Area.toWorldArea())
+                ||!local.isMoving() && getWoodcuttingLevel() <= 95 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_V_Area.toWorldArea())) {
 
             // start of tree locations
 
@@ -229,6 +237,7 @@ public class WoodcuttingBored extends LoopedPlugin {
                 debug("Walking 1");
                 automateWalk(Falador_Tree_TreeArea_I_Area.toWorldArea());
                 sleep(2000);
+                readytochop = true;
 //                while (!playerPosition.isInArea(Falador_Tree_TreeArea_I_Area.toWorldArea())) {
 //                    sleep(1500, 3000);
 //                    debug("walking 2");
@@ -249,6 +258,7 @@ public class WoodcuttingBored extends LoopedPlugin {
                 debug("Walking 1");
                 automateWalk(Falador_Tree_TreeArea_II_Area.toWorldArea());
                 sleep(2000);
+                readytochop = true;
 //                while (!playerPosition.isInArea(Falador_Tree_TreeArea_II_Area.toWorldArea())) {
 //                    sleep(1500, 3000);
 //                    debug("walking 2");
@@ -269,6 +279,7 @@ public class WoodcuttingBored extends LoopedPlugin {
                 debug("Walking 1");
                 automateWalk(Falador_Tree_TreeArea_III_Area.toWorldArea());
                 sleep(2000);
+                readytochop = true;
 //                while (!playerPosition.isInArea(Falador_Tree_TreeArea_III_Area.toWorldArea())) {
 //                    sleep(1500, 3000);
 //                    debug("walking 2");
@@ -289,6 +300,7 @@ public class WoodcuttingBored extends LoopedPlugin {
                 debug("Walking 1");
                 automateWalk(Falador_Tree_TreeArea_IV_Area.toWorldArea());
                 sleep(2000);
+                readytochop = true;
 //                while (!playerPosition.isInArea(Falador_Tree_TreeArea_IV_Area.toWorldArea())) {
 //                    sleep(1500, 3000);
 //                    debug("walking 2");
@@ -309,6 +321,7 @@ public class WoodcuttingBored extends LoopedPlugin {
                 debug("Walking 1");
                 automateWalk(Falador_Tree_TreeArea_V_Area.toWorldArea());
                 sleep(2000);
+                readytochop = true;
 //                while (!playerPosition.isInArea(Falador_Tree_TreeArea_V_Area.toWorldArea())) {
 //                    sleep(1500, 3000);
 //                    debug("walking 2");
@@ -332,20 +345,20 @@ public class WoodcuttingBored extends LoopedPlugin {
 
 
 
-        if (randomIndex == 0) {
+        if (randomIndex == 0 && readytochop) {
             debug("inside index");
             sleep(1000);
             while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
                 sleep(1000);
                 var tree = TileObjects
-                        .getSurrounding(playerPosition, 8, 1276, 1278, 2091, 2092)
+                        .getSurrounding(local.getWorldLocation(), 8, 1276, 1278, 2091, 2092)
                         .stream()
                         .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
                         .orElse(null);
+                sleep(1000);
 
                 if (!local.isAnimating() && !local.isInteracting() && !Inventory.isFull() && !local.isMoving() && tree != null) {
                     debug("Chop suey!");
-                    sleep(1000);
                     tree.interact("Chop down");
                     sleep(600, 1500);
                 }
@@ -359,20 +372,20 @@ public class WoodcuttingBored extends LoopedPlugin {
 
         }
 
-        if (randomIndex == 1) {
+        if (randomIndex == 1 && readytochop) {
             debug("inside index");
             sleep(1000);
             while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
                 sleep(1000);
                 var tree = TileObjects
-                        .getSurrounding(playerPosition, 8, 1276,1278,2091,2092)
+                        .getSurrounding(local.getWorldLocation(), 8, 1276,1278,2091,2092)
                         .stream()
                         .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
                         .orElse(null);
+                sleep(1000);
 
                 if (!local.isAnimating() && !local.isInteracting() && !Inventory.isFull() && !local.isMoving() && tree != null) {
                     debug("Chop suey!");
-                    sleep(1000);
                     tree.interact("Chop down");
                     sleep(600,1500);
                 }
@@ -386,20 +399,20 @@ public class WoodcuttingBored extends LoopedPlugin {
 
         }
 
-        if (randomIndex == 2) {
+        if (randomIndex == 2 && readytochop) {
             debug("inside index");
             sleep(1000);
             while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
                 sleep(1000);
                 var tree = TileObjects
-                        .getSurrounding(playerPosition, 8, 1276,1278,2091,2092)
+                        .getSurrounding(local.getWorldLocation(), 8, 1276,1278,2091,2092)
                         .stream()
                         .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
                         .orElse(null);
+                sleep(1000);
 
                 if (!local.isAnimating() && !local.isInteracting() && !Inventory.isFull() && !local.isMoving() && tree != null) {
                     debug("Chop suey!");
-                    sleep(1000);
                     tree.interact("Chop down");
                     sleep(600,1500);
                 }
@@ -413,20 +426,20 @@ public class WoodcuttingBored extends LoopedPlugin {
 
         }
 
-        if (randomIndex == 3) {
+        if (randomIndex == 3 && readytochop) {
             debug("inside index");
             sleep(1000);
             while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
                 sleep(1000);
                 var tree = TileObjects
-                        .getSurrounding(playerPosition, 8, 1276,1278,2091,2092)
+                        .getSurrounding(local.getWorldLocation(), 8, 1276,1278,2091,2092)
                         .stream()
                         .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
                         .orElse(null);
+                sleep(1000);
 
                 if (!local.isAnimating() && !local.isInteracting() && !Inventory.isFull() && !local.isMoving() && tree != null) {
                     debug("Chop suey!");
-                    sleep(1000);
                     tree.interact("Chop down");
                     sleep(600,1500);
                 }
@@ -440,21 +453,22 @@ public class WoodcuttingBored extends LoopedPlugin {
 
         }
 
-        if (randomIndex == 4) {
+        if (randomIndex == 4 && readytochop) {
             debug("inside index");
             sleep(1000);
             while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
                 sleep(1000);
 
+
                 var tree = TileObjects
-                        .getSurrounding(playerPosition, 8, 1276,1278,2091,2092)
+                        .getSurrounding(local.getWorldLocation(), 8, 1276,1278,2091,2092)
                         .stream()
                         .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
                         .orElse(null);
+                sleep(1000);
 
                 if (!local.isAnimating() && !local.isInteracting() && !Inventory.isFull() && !local.isMoving() && tree != null) {
                     debug("Chop suey!");
-                    sleep(1000);
                     tree.interact("Chop down");
                     sleep(600,1500);
                 }
@@ -462,7 +476,6 @@ public class WoodcuttingBored extends LoopedPlugin {
                         debug("Cannot find tree, need to reposition");
                         sleep(150, 500);
                         return -1;
-
                 }
             }
 
