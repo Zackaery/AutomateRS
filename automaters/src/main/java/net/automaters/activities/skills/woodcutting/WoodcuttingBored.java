@@ -47,11 +47,11 @@ public class WoodcuttingBored extends LoopedPlugin {
         }
 
         // Choosing tree location
-        debug("Choosing location");
+        debug("Setting location to initial thought...");
         Random random = new Random();
         int randomIndex = random.nextInt(5);
 
-        debug("Location chosen: " + randomIndex);
+        debug("I'm thinking... " + randomIndex);
         sleep(1000, 2500);
 
         boolean readytochop = false;
