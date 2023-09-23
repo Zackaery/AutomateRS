@@ -103,78 +103,6 @@ public class WoodcuttingBored extends LoopedPlugin {
             return 100;
         }
 
-//        String[] itemsToHandle = {
-//                "Lumberjack hat", "Lumberjack top", "Lumberjack legs", "Lumberjack boots",
-//                "Graceful hood", "Graceful top", "Graceful legs", "Graceful boots",
-//                "Graceful gloves", "Graceful cape", "ronman helm", "ron helm"
-//        };
-//
-//        if (!armorcheck && Bank.isOpen()) {
-//        boolean lumberjackHatEquipped = Equipment.contains("Lumberjack hat");
-//        boolean gracefulHoodEquipped = Equipment.contains("Graceful hood");
-//
-//        for (String itemName : itemsToHandle) {
-//            // Check if the item should be skipped
-//            boolean shouldSkipItem = false;
-//
-//            if (itemName.startsWith("Lumberjack")) {
-//                // Check Woodcutting level
-//                if (Skills.getBoostedLevel(Skill.WOODCUTTING) < 44) {
-//                    shouldSkipItem = true;
-//                }
-//            } else if (itemName.startsWith("Graceful")) {
-//                // Wear Graceful items only if Lumberjack isn't equipped and Graceful hood isn't equipped
-//                if (lumberjackHatEquipped || gracefulHoodEquipped) {
-//                    shouldSkipItem = true;
-//                }
-//            } else if (itemName.startsWith("ronman") || itemName.startsWith("ron")) {
-//                // Wear Ronman items only if Lumberjack hat and Graceful hood aren't equipped
-//                if (lumberjackHatEquipped || gracefulHoodEquipped) {
-//                    shouldSkipItem = true;
-//                }
-//            }
-//
-//            // Skip item if needed
-//            if (shouldSkipItem) {
-//                continue;
-//            }
-//
-//            // Withdraw item
-//            if (Bank.isOpen() && !Equipment.contains(itemName)
-//                    && Bank.contains(itemName) && !Inventory.contains(itemName)
-//                    && Skills.getBoostedLevel(Skill.WOODCUTTING) >= 44) {
-//                Bank.withdraw(itemName, 1, Bank.WithdrawMode.ITEM);
-//                sleep(1500);
-//                //  Bank.close();
-//                sleep(1000);
-//            }
-//
-//            // Wear item
-//            if (Inventory.contains(itemName) && !Equipment.contains(itemName)) {
-//                if (!Bank.isOpen()) {
-//                    Item item = Inventory.getFirst(itemName);
-//                    if (item != null) {
-//                        debug("Equipping item: " + itemName);
-//                        item.interact("Wear");
-//                        Time.sleepUntil(() -> Equipment.contains(itemName), 3000);
-//                    }
-//                } else {
-//                    Bank.Inventory.getFirst(itemName).interact("Wear");
-//                    Time.sleepUntil(() -> Equipment.contains(itemName), 3000);
-//                }
-//            }
-//        }
-//        armorcheck = false;
-//    }
-
-
-        // start of new upgrade axe
-//
-//        GearUpgrade gearUpgrade = new GearUpgrade();
-//        gearUpgrade.upgradeGear();
-//        sleep(250,1500);
-
-
         if (Bank.isOpen() && Inventory.isEmpty() && !armorcheck && !axecheck) {
             debug("checking armor now.");
             GearUpgrade gearUpgrade = new GearUpgrade();
@@ -193,6 +121,7 @@ public class WoodcuttingBored extends LoopedPlugin {
             }
         }
 
+        // woodcutting regular tree start
 
         if (!local.isMoving() && getWoodcuttingLevel() <= 95 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_I_Area.toWorldArea())
                 ||!local.isMoving() && getWoodcuttingLevel() <= 95 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_II_Area.toWorldArea())
@@ -244,12 +173,16 @@ public class WoodcuttingBored extends LoopedPlugin {
                 sleep(2000);
                 readytochop = true;
             }
-            // end of tree
+            // end of tree locations
         }
 
         // normal tree
 
-        if (randomIndex == 0 && readytochop) {
+        if (randomIndex == 0 && readytochop
+                || randomIndex == 1 && readytochop
+                || randomIndex == 2 && readytochop
+                || randomIndex == 3 && readytochop
+                || randomIndex == 4 && readytochop) {
             debug("inside index");
             sleep(1000);
             while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
@@ -277,117 +210,8 @@ public class WoodcuttingBored extends LoopedPlugin {
 
         }
 
-        if (randomIndex == 1 && readytochop) {
-            debug("inside index");
-            sleep(1000);
-            while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
-                sleep(1000);
-                var tree = TileObjects
-                        .getSurrounding(local.getWorldLocation(), 8, 1276,1278,2091,2092)
-                        .stream()
-                        .filter(Reachable::isInteractable)
-                        .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
-                        .orElse(null);
-                sleep(1000);
+        // end of regular tree
 
-                if (!local.isAnimating() && !local.isInteracting() && !Inventory.isFull() && !local.isMoving() && tree != null) {
-                    debug("Chop suey!");
-                    tree.interact("Chop down");
-                    sleep(600,1500);
-                }
-                if (tree == null) {
-                    debug("Cannot find tree, need to reposition");
-                    sleep(150, 500);
-                    return -1;
-                }
-
-            }
-
-        }
-
-        if (randomIndex == 2 && readytochop) {
-            debug("inside index");
-            sleep(1000);
-            while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
-                sleep(1000);
-                var tree = TileObjects
-                        .getSurrounding(local.getWorldLocation(), 8, 1276,1278,2091,2092)
-                        .stream()
-                        .filter(Reachable::isInteractable)
-                        .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
-                        .orElse(null);
-                sleep(1000);
-
-                if (!local.isAnimating() && !local.isInteracting() && !Inventory.isFull() && !local.isMoving() && tree != null) {
-                    debug("Chop suey!");
-                    tree.interact("Chop down");
-                    sleep(600,1500);
-                }
-                if (tree == null) {
-                        debug("Cannot find tree, need to reposition");
-                        sleep(150, 500);
-                        return -1;
-
-                }
-            }
-
-        }
-
-        if (randomIndex == 3 && readytochop) {
-            debug("inside index");
-            sleep(1000);
-            while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
-                sleep(1000);
-                var tree = TileObjects
-                        .getSurrounding(local.getWorldLocation(), 8, 1276,1278,2091,2092)
-                        .stream()
-                        .filter(Reachable::isInteractable)
-                        .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
-                        .orElse(null);
-                sleep(1000);
-
-                if (!local.isAnimating() && !local.isInteracting() && !Inventory.isFull() && !local.isMoving() && tree != null) {
-                    debug("Chop suey!");
-                    tree.interact("Chop down");
-                    sleep(600,1500);
-                }
-                if (tree == null) {
-                        debug("Cannot find tree, need to reposition");
-                        sleep(150, 500);
-                        return -1;
-
-                }
-            }
-
-        }
-
-        if (randomIndex == 4 && readytochop) {
-            debug("inside index");
-            sleep(1000);
-            while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
-                sleep(1000);
-
-
-                var tree = TileObjects
-                        .getSurrounding(local.getWorldLocation(), 8, 1276,1278,2091,2092)
-                        .stream()
-                        .filter(Reachable::isInteractable)
-                        .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
-                        .orElse(null);
-                sleep(1000);
-
-                if (!local.isAnimating() && !local.isInteracting() && !Inventory.isFull() && !local.isMoving() && tree != null) {
-                    debug("Chop suey!");
-                    tree.interact("Chop down");
-                    sleep(600,1500);
-                }
-                if (tree == null) {
-                        debug("Cannot find tree, need to reposition");
-                        sleep(150, 500);
-                        return -1;
-                }
-            }
-        }
         return 0;
     }
 
