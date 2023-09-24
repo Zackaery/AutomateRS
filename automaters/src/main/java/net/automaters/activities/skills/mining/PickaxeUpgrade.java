@@ -1,4 +1,4 @@
-package net.automaters.activities.skills.woodcutting;
+package net.automaters.activities.skills.mining;
 
 import net.runelite.api.Item;
 import net.unethicalite.api.commons.Time;
@@ -11,22 +11,22 @@ import static net.automaters.api.entities.SkillCheck.getWoodcuttingLevel;
 import static net.automaters.api.utils.Debug.debug;
 import static net.unethicalite.api.commons.Time.sleep;
 
-public class AxeUpgrade {
-    public AxeUpgrade() {
+public class PickaxeUpgrade {
+    public PickaxeUpgrade() {
         // Constructor
     }
 
     public void executeAxeUpgrade() {
         String[] axesToHandle = {
-                "Bronze axe", "Iron axe", "Steel axe", "Black axe",
-                "Mithril axe", "Adamant axe", "Rune axe", "Dragon axe", "Crystal axe"
+                "Bronze pickaxe", "Iron pickaxe", "Steel pickaxe", "Black pickaxe",
+                "Mithril pickaxe", "Adamant pickaxe", "Rune pickaxe", "Dragon pickaxe", "Crystal pickaxe"
         };
 
         if (Bank.isOpen()) {
             String bestAxe = findBestAxe();
 
             if (bestAxe != null) {
-                debug("Swapping for the best available axe: " + bestAxe);
+                debug("Swapping for the best available pickaxe: " + bestAxe);
                 debug("Attack level: " + getAttackLevel() + " Woodcutting level: " + getWoodcuttingLevel());
                 withdrawAndEquipAxe(bestAxe);
                 sleep(500);
@@ -40,8 +40,8 @@ public class AxeUpgrade {
 
     private String findBestAxe() {
         String[] axesToHandle = {
-                "Bronze axe", "Iron axe", "Steel axe", "Black axe",
-                "Mithril axe", "Adamant axe", "Rune axe", "Dragon axe", "Crystal axe"
+                "Bronze pickaxe", "Iron pickaxe", "Steel pickaxe", "Black pickaxe",
+                "Mithril pickaxe", "Adamant pickaxe", "Rune pickaxe", "Dragon pickaxe", "Crystal pickaxe"
         };
 
         String bestAxe = null; // Initialize with no best axe
@@ -54,33 +54,33 @@ public class AxeUpgrade {
             boolean shouldConsiderAxe = true;
 
             switch (itemName) {
-                case "Steel axe":
+                case "Steel pickaxe":
                     shouldConsiderAxe = getWoodcuttingLevel() >= 6 && getAttackLevel() >= 5;
-                    debug("Considering Steel axe.");
+                    debug("Considering Steel pickaxe.");
                     break;
-                case "Black axe":
+                case "Black pickaxe":
                     shouldConsiderAxe = getWoodcuttingLevel() >= 11 && getAttackLevel() >= 10;
-                    debug("Considering Black axe.");
+                    debug("Considering Black pickaxe.");
                     break;
-                case "Mithril axe":
+                case "Mithril pickaxe":
                     shouldConsiderAxe = getWoodcuttingLevel() >= 21 && getAttackLevel() >= 20;
-                    debug("Considering Mithril axe.");
+                    debug("Considering Mithril pickaxe.");
                     break;
-                case "Adamant axe":
+                case "Adamant pickaxe":
                     shouldConsiderAxe = getWoodcuttingLevel() >= 31 && getAttackLevel() >= 30;
-                    debug("Considering Adamant axe.");
+                    debug("Considering Adamant pickaxe.");
                     break;
-                case "Rune axe":
+                case "Rune pickaxe":
                     shouldConsiderAxe = getWoodcuttingLevel() >= 41 && getAttackLevel() >= 40;
-                    debug("Considering Rune axe.");
+                    debug("Considering Rune pickaxe.");
                     break;
-                case "Dragon axe":
+                case "Dragon pickaxe":
                     shouldConsiderAxe = getWoodcuttingLevel() >= 61 && getAttackLevel() >= 60;
-                    debug("Considering Dragon axe.");
+                    debug("Considering Dragon pickaxe.");
                     break;
-                case "Crystal axe":
+                case "Crystal pickaxe":
                     shouldConsiderAxe = getWoodcuttingLevel() >= 71 && getAttackLevel() >= 70;
-                    debug("Considering Crystal axe.");
+                    debug("Considering Crystal pickaxe.");
                     break;
             }
 
@@ -107,7 +107,7 @@ public class AxeUpgrade {
             if (!Bank.isOpen()) {
                 Item item = Inventory.getFirst(axeName);
                 if (item != null) {
-                    debug("Equipping axe!");
+                    debug("Equipping pickaxe!");
                     item.interact("Wield");
                     Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
                 }
@@ -121,13 +121,13 @@ public class AxeUpgrade {
     }
     private void depositLowerTierAxes(String bestAxeName) {
         String[] lowerTierAxes = {
-                "Bronze axe", "Iron axe", "Steel axe", "Black axe",
-                "Mithril axe", "Adamant axe", "Rune axe", "Dragon axe"
+                "Bronze pickaxe", "Iron pickaxe", "Steel pickaxe", "Black pickaxe",
+                "Mithril pickaxe", "Adamant pickaxe", "Rune pickaxe", "Dragon pickaxe"
         };
 
         for (String axeName : lowerTierAxes) {
             if (Inventory.contains(axeName) && !axeName.equals(bestAxeName)) {
-                debug("Depositing lower-tier axe: " + axeName);
+                debug("Depositing lower-tier pickaxe: " + axeName);
                 Bank.deposit(axeName, Inventory.getCount(axeName));
                 sleep(250,500);
             }
