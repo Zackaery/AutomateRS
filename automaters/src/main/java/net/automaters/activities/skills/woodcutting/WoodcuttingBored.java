@@ -63,14 +63,13 @@ public class WoodcuttingBored extends LoopedPlugin {
                 || !Bank.isOpen() && !Inventory.isFull() && !Equipment.contains(Predicates.nameContains("axe")) && Inventory.contains(Predicates.nameContains("axe"))
                 || !Bank.isOpen() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
             // do something
-            openBank();
             sleep(250);
             readytochop = false;
             sleep(250);
             armorcheck = true;
             sleep(250);
             axecheck = true;
-            return 100;
+            openBank();
         }
 
         if (Bank.isOpen() && Inventory.contains(Predicates.nameContains("axe")) && Equipment.contains(Predicates.nameContains("axe"))) {
@@ -83,8 +82,8 @@ public class WoodcuttingBored extends LoopedPlugin {
         if (Bank.isOpen() && Inventory.contains(Predicates.nameContains("Logs"))
                 || Bank.isOpen() && Inventory.isFull()
                 || Bank.isOpen() && !Inventory.isFull() && Inventory.contains(Predicates.nameContains("Logs"))
-                || Inventory.isFull() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
-                || Inventory.isFull() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
+                || Bank.isOpen() && Inventory.isFull() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
+                || Bank.isOpen() && Inventory.isFull() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
             debug("trying to deposit now?");
             Bank.depositInventory();
             random.nextInt(5);
@@ -96,9 +95,13 @@ public class WoodcuttingBored extends LoopedPlugin {
                 || Bank.isOpen() && !Inventory.isFull() && Inventory.contains(Predicates.nameContains("Logs"))
                 || !Inventory.isFull() && Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
                 || Inventory.isFull() && Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
+            sleep(500);
             debug("trying to deposit");
             Bank.depositInventory();
             debug("Location chosen after banking: " + randomIndex);
+            sleep(500);
+            axecheck = true;
+            armorcheck = true;
         }
 
         if (Bank.isOpen() && Inventory.isEmpty() && !armorcheck && !axecheck) {
@@ -116,6 +119,7 @@ public class WoodcuttingBored extends LoopedPlugin {
             sleep(500);
             if (armorcheck && axecheck) {
                 Bank.close();
+                readytochop = true;
             }
         }
 

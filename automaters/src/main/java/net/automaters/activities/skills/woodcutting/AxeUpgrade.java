@@ -43,6 +43,8 @@ public class AxeUpgrade {
                 "Mithril axe", "Adamant axe", "Rune axe", "Dragon axe", "Crystal axe"
         };
 
+        String bestAxe = null; // Initialize with no best axe
+
         // Iterate through the axes in reverse order (highest-tier first)
         for (int i = axesToHandle.length - 1; i >= 0; i--) {
             String itemName = axesToHandle[i];
@@ -86,14 +88,15 @@ public class AxeUpgrade {
                 continue;
             }
 
-            // Check if the axe is in the bank
+            // Check if the axe is in the bank and the attack level is sufficient
             if (Bank.isOpen() && !Equipment.contains(itemName) && Bank.contains(itemName) && !Inventory.contains(itemName)) {
-                return itemName; // Return the best available axe
+                bestAxe = itemName; // Update the best available axe
             }
         }
 
-        return null; // No suitable axe found
+        return bestAxe; // Return the best available axe or null if none found
     }
+
 
     private void withdrawAndEquipAxe(String axeName) {
         // Withdraw item
