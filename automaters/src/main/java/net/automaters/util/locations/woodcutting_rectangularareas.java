@@ -29,6 +29,14 @@ public class woodcutting_rectangularareas {
 
     public static final Area Falador_Oak_TreeArea_V_Area = new Area(2930, 3365, 2926, 3368, 0);
 
+
+    public static final Area Varrock_TreeArea_I = new Area(3172, 3424, 3163, 3415, 0);
+    public static final Area Varrock_TreeArea_II = new Area(3192, 3463, 3196, 3458, 0);
+    public static final Area Varrock_TreeArea_III = new Area(3278, 3432, 3283, 3424, 0);
+    public static final Area Varrock_TreeArea_IV = new Area(3199, 3372, 3209, 3364, 0);
+    public static final Area Varrock_TreeArea_V = new Area(3307, 3462, 3311, 3458, 0);
+
+
     // Willow tree areas
     public static final Area DraynorVillage_Willow_TreeArea_I_Area = new Area(2960, 3198, 2966, 3193, 0);
 
