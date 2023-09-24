@@ -1,5 +1,6 @@
 package net.automaters.activities.skills.woodcutting;
 
+import net.runelite.api.EquipmentInventorySlot;
 import net.runelite.api.Item;
 import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.items.Bank;
@@ -11,6 +12,7 @@ import static net.automaters.api.entities.SkillCheck.getWoodcuttingLevel;
 import static net.automaters.api.utils.Debug.debug;
 import static net.unethicalite.api.commons.Time.sleep;
 
+@SuppressWarnings({"ConstantConditions","unused"})
 public class AxeUpgrade {
     public AxeUpgrade() {
         // Constructor
@@ -27,6 +29,7 @@ public class AxeUpgrade {
 
             if (bestAxe != null) {
                 debug("Swapping for the best available axe: " + bestAxe);
+                debug("Attack level: " + getAttackLevel() + " Woodcutting level: " + getWoodcuttingLevel());
                 withdrawAndEquipAxe(bestAxe);
                 sleep(500);
                 depositLowerTierAxes(bestAxe);
@@ -45,57 +48,61 @@ public class AxeUpgrade {
 
         String bestAxe = null; // Initialize with no best axe
 
+        // Initialize the currently equipped axe to null
+        String currentlyEquippedAxe = Equipment.fromSlot(EquipmentInventorySlot.WEAPON).getName();
+
         // Iterate through the axes in reverse order (highest-tier first)
         for (int i = axesToHandle.length - 1; i >= 0; i--) {
             String itemName = axesToHandle[i];
 
-            // Check if the axe should be skipped based on Woodcutting level
-            boolean shouldSkipAxe = false;
+            // Check if the axe should be considered based on Woodcutting level
+            boolean shouldConsiderAxe = true;
 
             switch (itemName) {
                 case "Steel axe":
-                    shouldSkipAxe = getWoodcuttingLevel() < 6 && getAttackLevel() < 5;
-                    debug("Skipping Steel axe.");
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 6 && getAttackLevel() >= 5;
+                    debug("Considering Steel axe.");
                     break;
                 case "Black axe":
-                    shouldSkipAxe = getWoodcuttingLevel() < 11 && getAttackLevel() < 10;
-                    debug("Skipping Black axe.");
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 11 && getAttackLevel() >= 10;
+                    debug("Considering Black axe.");
                     break;
                 case "Mithril axe":
-                    shouldSkipAxe = getWoodcuttingLevel() < 21 && getAttackLevel() < 20;
-                    debug("Skipping Mithril axe.");
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 21 && getAttackLevel() >= 20;
+                    debug("Considering Mithril axe.");
                     break;
                 case "Adamant axe":
-                    shouldSkipAxe = getWoodcuttingLevel() < 31 && getAttackLevel() < 30;
-                    debug("Skipping Adamant axe.");
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 31 && getAttackLevel() >= 30;
+                    debug("Considering Adamant axe.");
                     break;
                 case "Rune axe":
-                    shouldSkipAxe = getWoodcuttingLevel() < 41 && getAttackLevel() < 40;
-                    debug("Skipping Rune axe.");
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 41 && getAttackLevel() >= 40;
+                    debug("Considering Rune axe.");
                     break;
                 case "Dragon axe":
-                    shouldSkipAxe = getWoodcuttingLevel() < 61 && getAttackLevel() < 60;
-                    debug("Skipping Dragon axe.");
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 61 && getAttackLevel() >= 60;
+                    debug("Considering Dragon axe.");
                     break;
                 case "Crystal axe":
-                    shouldSkipAxe = getWoodcuttingLevel() < 71 && getAttackLevel() < 70;
-                    debug("Skipping Crystal axe.");
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 71 && getAttackLevel() >= 70;
+                    debug("Considering Crystal axe.");
                     break;
             }
 
-            // If the axe should be skipped, continue to the next axe
-            if (shouldSkipAxe) {
-                continue;
-            }
-
-            // Check if the axe is in the bank and the attack level is sufficient
-            if (Bank.isOpen() && !Equipment.contains(itemName) && Bank.contains(itemName) && !Inventory.contains(itemName)) {
-                bestAxe = itemName; // Update the best available axe
+            // If the axe should be considered and it's in the bank, return it as the best axe
+            if (shouldConsiderAxe && Bank.isOpen() && !Inventory.contains(itemName) && Bank.contains(itemName)) {
+                // Check if it's better than the currently equipped axe
+                if (currentlyEquippedAxe == null || itemName.compareTo(currentlyEquippedAxe) > 0) {
+                    bestAxe = itemName;
+                    currentlyEquippedAxe = itemName;
+                }
             }
         }
 
         return bestAxe; // Return the best available axe or null if none found
     }
+
+
 
 
     private void withdrawAndEquipAxe(String axeName) {
