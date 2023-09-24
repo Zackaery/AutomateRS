@@ -30,7 +30,7 @@ public abstract class Task {
     }
 
     public abstract void onStart();
-    public abstract void onLoop();
+    public abstract int onLoop();
     public abstract boolean taskFinished();
     public void onEnd() {
         debug("Completed Task: "+currentTask+"\n\n");

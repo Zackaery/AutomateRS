@@ -1,5 +1,6 @@
 package net.automaters.activities.skills.woodcutting;
 
+import net.automaters.tasks.Task;
 import net.runelite.api.*;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.mixins.Inject;
@@ -26,22 +27,28 @@ import static net.unethicalite.api.commons.Time.sleep;
 
 
 @SuppressWarnings({"ConstantConditions","unused"})
-public class WoodcuttingBored extends LoopedPlugin {
+public class WoodcuttingBored extends Task {
 
     @Inject
     private Client client;
 
-    // Just another woodcutting script...
+
+    public WoodcuttingBored() {
+        // Just another woodcutting script...
+        super();
+    }
 
     @Override
-    public int loop() {
+    public void onStart() {
+        setStarted(true);
+    }
+
+    @Override
+    public int onLoop() {
         debug("Holy shit this is in the loop");
 
         var local = Players.getLocal();
-        if ((local == null) || !scriptStarted) {
-            debug("Player does not exist.");
-            return -1;
-        }
+
 
         // Choosing tree location
         debug("Setting location to initial thought...");
@@ -200,10 +207,10 @@ public class WoodcuttingBored extends LoopedPlugin {
                     tree.interact("Chop down");
                     sleep(600, 1500);
                 }
-                    if (tree == null) {
-                        debug("Cannot find tree, need to reposition");
-                        sleep(150, 500);
-                        return -1;
+                if (tree == null) {
+                    debug("Cannot find tree, need to reposition");
+                    sleep(150, 500);
+                    return -1;
 
                 }
             }
@@ -394,5 +401,9 @@ public class WoodcuttingBored extends LoopedPlugin {
         return 0;
     }
 
+    @Override
+    public boolean taskFinished() {
+        return false;
+    }
 }
 

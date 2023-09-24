@@ -65,11 +65,11 @@ public class GrandExchangePrices {
             String json = new String(Files.readAllBytes(Paths.get(filePath)));
 
             // Parse the JSON and format it with proper indentation
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            String formattedJson = gson.toJson(gson.fromJson(json, Object.class));
+//            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//            String formattedJson = gson.toJson(gson.fromJson(json, Object.class));
 
             // Write the formatted JSON back to the file
-            Files.write(Paths.get(filePath), formattedJson.getBytes(StandardCharsets.UTF_8));
+//            Files.write(Paths.get(filePath), formattedJson.getBytes(StandardCharsets.UTF_8));
             System.out.println("File formatted successfully.");
         } catch (IOException e) {
             e.printStackTrace();

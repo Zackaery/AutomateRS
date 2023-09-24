@@ -2,6 +2,7 @@ package net.automaters.activities.skills.mining;
 
 import net.automaters.activities.skills.woodcutting.AxeUpgrade;
 import net.automaters.activities.skills.woodcutting.GearUpgrade;
+import net.automaters.tasks.Task;
 import net.runelite.api.Client;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.mixins.Inject;
@@ -18,6 +19,7 @@ import net.automaters.util.locations.mining_rectangularareas;
 import java.util.Comparator;
 import java.util.Random;
 
+import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.entities.LocalPlayer.openBank;
 import static net.automaters.api.entities.SkillCheck.*;
 import static net.automaters.api.utils.Debug.debug;
@@ -27,22 +29,24 @@ import static net.automaters.util.locations.woodcutting_rectangularareas.*;
 import static net.unethicalite.api.commons.Time.sleep;
 
 @SuppressWarnings({"ConstantConditions","unused"})
-public class MiningBored extends LoopedPlugin {
+public class MiningBored extends Task {
 
     @Inject
     private Client client;
 
-    // Just another mining script...
+    public MiningBored() {
+        // Just another mining script...
+        super();
+    }
 
     @Override
-    public int loop() {
-        debug("Holy shit this is in the loop");
+    public void onStart() {
+        setStarted(true);
+    }
 
-        var local = Players.getLocal();
-        if ((local == null) || !scriptStarted) {
-            debug("Player does not exist.");
-            return -1;
-        }
+    @Override
+    public int onLoop() {
+        debug("Holy shit this is in the loop");
 
         // Choosing tree location
         debug("Setting location to initial thought...");
@@ -134,7 +138,7 @@ public class MiningBored extends LoopedPlugin {
         }
         // woodcutting regular tree start
 
-        if (!local.isMoving() && getWoodcuttingLevel() <= 15 && Equipment.contains(Predicates.nameContains("pickaxe")) && !Inventory.isFull() && !local.isInteracting()) {
+        if (!localPlayer.isMoving() && getWoodcuttingLevel() <= 15 && Equipment.contains(Predicates.nameContains("pickaxe")) && !Inventory.isFull() && !localPlayer.isInteracting()) {
 
             // start of copper locations
 
@@ -195,14 +199,14 @@ public class MiningBored extends LoopedPlugin {
             while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("pickaxe"))) {
                 sleep(1000);
                 var tree = TileObjects
-                        .getSurrounding(local.getWorldLocation(), 8, 1276, 1278, 2091, 2092)
+                        .getSurrounding(localPlayer.getWorldLocation(), 8, 1276, 1278, 2091, 2092)
                         .stream()
                         .filter(Reachable::isInteractable)
-                        .min(Comparator.comparing(x -> x.distanceTo(local.getWorldLocation())))
+                        .min(Comparator.comparing(x -> x.distanceTo(localPlayer.getWorldLocation())))
                         .orElse(null);
                 sleep(1000);
 
-                if (!local.isAnimating() && !local.isInteracting() && !Inventory.isFull() && !local.isMoving() && tree != null) {
+                if (!localPlayer.isAnimating() && !localPlayer.isInteracting() && !Inventory.isFull() && !localPlayer.isMoving() && tree != null) {
                     debug("Chop suey!");
                     tree.interact("Chop down");
                     sleep(600, 1500);
@@ -223,4 +227,8 @@ public class MiningBored extends LoopedPlugin {
         return 0;
     }
 
+    @Override
+    public boolean taskFinished() {
+        return false;
+    }
 }
