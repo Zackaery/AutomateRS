@@ -8,6 +8,8 @@ import static net.automaters.api.utils.Debug.debug;
 
 public class Items {
 
+    public static int totalCoins;
+
     public static int getAmountBank(String name) {
         while (!Bank.isOpen()) {
             openBank();
@@ -23,8 +25,10 @@ public class Items {
 
     public static int getAmountTotal(String name, Boolean checkBank){
         if (checkBank) {
+            totalCoins = getAmountBank("Coins") + getAmountInventory("Coins");
             return getAmountBank(name) + getAmountInventory(name);
         } else {
+            totalCoins = getAmountInventory("Coins");
             return getAmountInventory(name);
         }
     }
