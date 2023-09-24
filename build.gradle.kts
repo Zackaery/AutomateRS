@@ -43,6 +43,7 @@ allprojects {
         compileOnly("net.unethicalite:runelite-client:$unethicaliteVersion+")
         compileOnly("net.unethicalite.rs:runescape-api:$unethicaliteVersion+")
 
+        compileOnly(Libraries.gson)
         compileOnly(Libraries.guice)
         compileOnly(Libraries.javax)
         compileOnly(Libraries.lombok)
