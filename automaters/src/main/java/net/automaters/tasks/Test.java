@@ -4,8 +4,8 @@ import net.automaters.api.walking.Area;
 import net.unethicalite.api.plugins.LoopedPlugin;
 
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
-import static net.automaters.api.items.Items.getAmountTotal;
 import static net.automaters.api.utils.Debug.debug;
+import static net.automaters.api.utils.GrandExchangePrices.updatePrices;
 import static net.automaters.script.AutomateRS.scriptStarted;
 
 
@@ -13,6 +13,8 @@ public class Test extends LoopedPlugin{
 
     private static final Area TEST_AREA = new Area(3208, 3243, 3222, 3246, 0);
 
+    int axeCost;
+    static boolean updated;
     @Override
     protected int loop() {
 
@@ -21,8 +23,15 @@ public class Test extends LoopedPlugin{
             return -1;
         }
 
-        debug(String.valueOf(getAmountTotal("Coins", true)));
+        if (!updated) {
+            updatePrices();
+            updated = true;
+        }
+
+        debug("Item prices set to at - Steel axe: {}gp"+ axeCost);
 
        return 50;
     }
+
+
 }
