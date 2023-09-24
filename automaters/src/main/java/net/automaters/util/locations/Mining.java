@@ -2,7 +2,7 @@ package net.automaters.util.locations;
 
 import net.automaters.api.walking.Area;
 
-public class mining_rectangularareas {
+public class Mining {
 
     // copper areas
 

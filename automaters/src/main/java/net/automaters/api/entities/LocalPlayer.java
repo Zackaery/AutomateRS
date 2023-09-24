@@ -1,6 +1,5 @@
 package net.automaters.api.entities;
 
-import net.automaters.api.walking.Position;
 import net.runelite.api.Player;
 import net.runelite.api.TileObject;
 import net.runelite.api.widgets.Widget;
@@ -8,12 +7,15 @@ import net.unethicalite.api.coords.RectangularArea;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.items.Bank;
+import net.unethicalite.api.items.GrandExchange;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Widgets;
 
 import static net.automaters.api.utils.Debug.debug;
+import static net.automaters.api.walking.Walking.automateWalk;
 import static net.automaters.script.AutomateRS.scriptStarted;
+import static net.automaters.util.locations.Constants.GRAND_EXCHANGE;
 import static net.unethicalite.api.commons.Time.sleep;
 
 public class LocalPlayer {
@@ -56,7 +58,7 @@ public class LocalPlayer {
      * Walks your player to the closest bank.
      */
     public static void walkToNearestBank() {
-        if (!Bank.isOpen() && !LocalPlayer.isInBank()) {
+        if (!Bank.isOpen() && !isInBank()) {
             Movement.walkTo(BankLocation.getNearest());
         }
     }
@@ -69,22 +71,22 @@ public class LocalPlayer {
         sleep(1000);
         TileObject bank = TileObjects.getFirstSurrounding(localPlayer.getWorldLocation(), 20, obj -> obj.hasAction("Bank"));
         TileObject bankChest = TileObjects.getFirstSurrounding(localPlayer.getWorldLocation(), 20, obj -> obj.getName().startsWith("Bank chest"));
-        while (!Bank.isOpen() && !LocalPlayer.isInBank()) {
+        while (!Bank.isOpen() && !isInBank()) {
             walkToNearestBank();
             sleep(600, 2400);
         }
-        if (bank != null && LocalPlayer.isInBank()) {
+        if (bank != null && isInBank()) {
             debug("i can see the bank");
             bank.interact("Bank");
             sleep(2200);
-        } else if (bankChest != null && LocalPlayer.isInBank()) {
+        } else if (bankChest != null && isInBank()) {
             debug("i can see a bank booth");
             bankChest.interact("Use");
             sleep(2200);
         }
 
 
-        while (!Bank.isOpen() && localPlayer.isMoving() && LocalPlayer.isInBank()) {
+        while (!Bank.isOpen() && localPlayer.isMoving() && isInBank()) {
             debug("Moving around wildly");
             sleep(1250, 1800);
         }
@@ -96,6 +98,47 @@ public class LocalPlayer {
                 widget.interact("Close");
                 debug("Closed bank tutorial widget.");
             }
+        }
+    }
+
+    /**
+     * Checks to see if local character is at the Grand Exchange.
+     *
+     * @return if local is at the Grand Exchange.
+     */
+    public static boolean isInGE() {
+        return GRAND_EXCHANGE.toWorldArea().contains(localPlayer.getWorldLocation());
+    }
+
+    /**
+     * Walks your player to the Grand Exchange.
+     */
+    public static void walkToGE() {
+        if (!isInGE()) {
+            automateWalk(GRAND_EXCHANGE.toWorldArea());
+        }
+    }
+
+    /**
+     * Opens the Grand Exchange.
+     */
+    public static void openGE() {
+        while (!isInGE()) {
+            debug("Walking to Grand Exchange!");
+            walkToGE();
+            sleep(600, 2400);
+        }
+        if (!GrandExchange.isOpen() && isInGE()) {
+            debug("I can see the Grand Exchange.");
+            GrandExchange.open();
+            sleep(2200);
+        }
+        while (!GrandExchange.isOpen() && localPlayer.isMoving() && isInGE()) {
+            debug("Moving around wildly.");
+            sleep(350, 600);
+        }
+        if (GrandExchange.isOpen()) {
+            debug("The Grand Exchange is open!");
         }
     }
 

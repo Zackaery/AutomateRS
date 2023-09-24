@@ -1,10 +1,8 @@
 package net.automaters.util.locations;
 
-import net.runelite.api.coords.WorldArea;
-import net.unethicalite.api.coords.RectangularArea;
 import net.automaters.api.walking.Area;
 
-public class woodcutting_rectangularareas {
+public class Woodcutting {
 
     // new areas for woodcuttingbored
 // Tree areas

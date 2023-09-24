@@ -8,7 +8,7 @@ import static net.automaters.api.utils.Debug.debug;
 
 public class Items {
 
-    public static int totalCoins;
+    public static int totalCoins = -1;
 
     public static int getAmountBank(String name) {
         while (!Bank.isOpen()) {

@@ -11,7 +11,6 @@ import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Reachable;
-import net.unethicalite.api.plugins.LoopedPlugin;
 
 import java.util.Comparator;
 import java.util.Random;
@@ -20,9 +19,7 @@ import static net.automaters.api.entities.LocalPlayer.*;
 import static net.automaters.api.entities.SkillCheck.getWoodcuttingLevel;
 import static net.automaters.api.walking.Walking.automateWalk;
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.script.AutomateRS.scriptStarted;
-import static net.automaters.util.locations.woodcutting_rectangularareas.*;
-import static net.automaters.util.locations.woodcutting_rectangularareas.Falador_Oak_TreeArea_V_Area;
+import static net.automaters.util.locations.Woodcutting.*;
 import static net.unethicalite.api.commons.Time.sleep;
 
 

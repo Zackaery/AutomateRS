@@ -9,7 +9,7 @@ import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
 
-public class wooductting_polyareas
+public class WoodcuttingPoly
 {
     private static final Map<String, Area> areas = new HashMap<>();
 

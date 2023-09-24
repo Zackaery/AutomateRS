@@ -1,7 +1,5 @@
 package net.automaters.activities.skills.mining;
 
-import net.automaters.activities.skills.woodcutting.AxeUpgrade;
-import net.automaters.activities.skills.woodcutting.GearUpgrade;
 import net.automaters.tasks.Task;
 import net.runelite.api.Client;
 import net.runelite.api.coords.WorldPoint;
@@ -13,7 +11,6 @@ import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Reachable;
-import net.automaters.util.locations.mining_rectangularareas;
 
 import java.util.Comparator;
 import java.util.Random;
@@ -23,8 +20,7 @@ import static net.automaters.api.entities.LocalPlayer.openBank;
 import static net.automaters.api.entities.SkillCheck.*;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.walking.Walking.automateWalk;
-import static net.automaters.script.AutomateRS.scriptStarted;
-import static net.automaters.util.locations.mining_rectangularareas.*;
+import static net.automaters.util.locations.Mining.*;
 import static net.unethicalite.api.commons.Time.sleep;
 
 @SuppressWarnings({"ConstantConditions","unused"})
