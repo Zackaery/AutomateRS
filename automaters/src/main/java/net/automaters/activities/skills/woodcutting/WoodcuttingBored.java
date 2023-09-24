@@ -89,7 +89,6 @@ public class WoodcuttingBored extends LoopedPlugin {
             Bank.depositInventory();
             random.nextInt(5);
             debug("Location chosen after banking: " + randomIndex);
-            return 100;
         }
 
         if (Bank.isOpen() && Inventory.contains(Predicates.nameContains("Logs"))
@@ -100,7 +99,6 @@ public class WoodcuttingBored extends LoopedPlugin {
             debug("trying to deposit");
             Bank.depositInventory();
             debug("Location chosen after banking: " + randomIndex);
-            return 100;
         }
 
         if (Bank.isOpen() && Inventory.isEmpty() && !armorcheck && !axecheck) {

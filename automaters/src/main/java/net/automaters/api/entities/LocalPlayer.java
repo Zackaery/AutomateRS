@@ -67,24 +67,28 @@ public class LocalPlayer {
     public static void openBank() {
         debug("Walking to nearest bank!");
         sleep(1000);
-        TileObject bank = TileObjects.getFirstSurrounding(localPlayer.getWorldLocation(), 10, obj -> obj.hasAction("Bank"));
-        TileObject bankChest = TileObjects.getFirstSurrounding(localPlayer.getWorldLocation(), 10, obj -> obj.getName().startsWith("Bank chest"));
+        TileObject bank = TileObjects.getFirstSurrounding(localPlayer.getWorldLocation(), 20, obj -> obj.hasAction("Bank"));
+        TileObject bankChest = TileObjects.getFirstSurrounding(localPlayer.getWorldLocation(), 20, obj -> obj.getName().startsWith("Bank chest"));
         while (!Bank.isOpen() && !LocalPlayer.isInBank()) {
             walkToNearestBank();
             sleep(600, 2400);
-//        }
-//
-//        while (!Bank.isOpen() && LocalPlayer.isInBank()) {
-            if (bank != null) {
+        }
+            if (bank != null && LocalPlayer.isInBank()) {
                 debug("i can see the bank");
                 bank.interact("Bank");
                 sleep(1200);
-            } else if (bankChest != null) {
+            } else if (bankChest != null && LocalPlayer.isInBank()) {
                 debug("i can see a bank booth");
                 bankChest.interact("Use");
                 sleep(1200);
             }
+
+
+        while (!Bank.isOpen() && localPlayer.isMoving() && LocalPlayer.isInBank()) {
+            debug("Moving around wildly");
+            sleep(250,800);
         }
+
             if (Bank.isOpen()) {
                 debug("The bank is open!");
                 Widget widget = Widgets.get(664, 29, 0);
