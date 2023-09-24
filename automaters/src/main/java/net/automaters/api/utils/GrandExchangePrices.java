@@ -1,5 +1,8 @@
 package net.automaters.api.utils;
-import lombok.extern.slf4j.Slf4j;
+
+import com.google.gson.*;
+import net.runelite.api.Item;
+
 import java.io.*;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -7,72 +10,80 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
-@Slf4j
+import static net.automaters.util.file_managers.FileManager.*;
+
 public class GrandExchangePrices {
+
+
+    private static AllPricesData data;
     public static void updatePrices() {
         try {
-            // Define the URL to download
             String urlToDownload = "https://prices.runescape.wiki/api/v1/osrs/latest";
+            String directoryPath = PATH_AUTOMATE_RS + "Grand Exchange Prices";
+            Path directory = Paths.get(directoryPath);
+            Files.createDirectories(directory);
+            String filePath = directory.resolve("prices.json").toString();
 
-            // Define the directory to save the file
-            String userHome = System.getProperty("user.home");
-            String directoryPath = userHome + File.separator + ".openosrs" + File.separator + "data" + File.separator + "AutomateRS" + File.separator + "Grand Exchange Prices";
-            File directory = new File(directoryPath);
-
-            // Create the directory if it doesn't exist
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
-
-            // Define the file path
-            String filePath = directoryPath + File.separator + "latest.json";
-
-            // Create a URL object
             URL url = new URL(urlToDownload);
-
-            // Open a connection to the URL
             try (InputStream in = url.openStream();
                  ReadableByteChannel rbc = Channels.newChannel(in);
                  FileOutputStream fos = new FileOutputStream(filePath)) {
 
-                // Create a buffer to read from the URL and write to the file
                 ByteBuffer buffer = ByteBuffer.allocate(1024);
 
-                // Read from the URL and write to the file
                 while (rbc.read(buffer) != -1) {
                     buffer.flip();
                     fos.getChannel().write(buffer);
                     buffer.clear();
                 }
-
                 System.out.println("File downloaded successfully to: " + filePath);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            // Format the JSON file with proper indentation
             formatJsonFile(filePath);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static void formatJsonFile(String filePath) {
-        try {
-            // Read the JSON file
-            String json = new String(Files.readAllBytes(Paths.get(filePath)));
+    public static ItemPrice getPrice(int ItemID) {
+        String filePath = PATH_GE_PRICES;
+        String jsonData = readJsonFromFile(filePath);
 
-            // Parse the JSON and format it with proper indentation
-//            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//            String formattedJson = gson.toJson(gson.fromJson(json, Object.class));
+        if (jsonData != null) {
+            data = new Gson().fromJson(jsonData, AllPricesData.class);
+            return data.data.get(ItemID);
+        } else {
+            return null;
+        }
+    }
 
-            // Write the formatted JSON back to the file
-//            Files.write(Paths.get(filePath), formattedJson.getBytes(StandardCharsets.UTF_8));
-            System.out.println("File formatted successfully.");
-        } catch (IOException e) {
-            e.printStackTrace();
+    private static class AllPricesData {
+        private final Map<Integer, ItemPrice> data;
+        private AllPricesData(Map<Integer, ItemPrice> data) {
+            this.data = data;
+        }
+    }
+
+    public static class ItemPrice {
+        public final int high;
+        public final int low;
+        public final long highTime;
+        public final int lowTime;
+
+        private ItemPrice(int high, int low, long highTime, int lowTime) {
+            this.high = high;
+            this.low = low;
+            this.highTime = highTime;
+            this.lowTime = lowTime;
+        }
+
+        public String toString() {
+            return low + "-" + high;
         }
     }
 }
