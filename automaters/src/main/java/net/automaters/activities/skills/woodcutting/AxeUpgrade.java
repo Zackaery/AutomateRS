@@ -47,9 +47,13 @@ public class AxeUpgrade {
         };
 
         String bestAxe = null; // Initialize with no best axe
+        String currentlyEquippedAxe = null; // Initialize the currently equipped axe to null
 
-        // Initialize the currently equipped axe to null
-        String currentlyEquippedAxe = Equipment.fromSlot(EquipmentInventorySlot.WEAPON).getName();
+        // Check if a weapon is equipped before attempting to get its name
+        if (Equipment.fromSlot(EquipmentInventorySlot.WEAPON) != null) {
+            currentlyEquippedAxe = Equipment.fromSlot(EquipmentInventorySlot.WEAPON).getName();
+        }
+
 
         // Iterate through the axes in reverse order (highest-tier first)
         for (int i = axesToHandle.length - 1; i >= 0; i--) {

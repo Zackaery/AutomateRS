@@ -45,9 +45,12 @@ public class PickaxeUpgrade {
         };
 
         String bestPickaxe = null; // Initialize with no best pickaxe
+        String currentlyEquippedPickaxe = null; // Initialize the currently equipped pickaxe to null
 
-        // Initialize the currently equipped pickaxe to null
-        String currentlyEquippedPickaxe = Equipment.fromSlot(EquipmentInventorySlot.WEAPON).getName();
+        // Check if a weapon is equipped before attempting to get its name
+        if (Equipment.fromSlot(EquipmentInventorySlot.WEAPON) != null) {
+            currentlyEquippedPickaxe = Equipment.fromSlot(EquipmentInventorySlot.WEAPON).getName();
+        }
 
         // Iterate through the pickaxes in reverse order (highest-tier first)
         for (int i = pickaxesToHandle.length - 1; i >= 0; i--) {
