@@ -48,6 +48,7 @@ public class ProfilePanel extends JPanel {
     }
 
     AutomateRSConfig config;
+    public static String profileName = null;
     private static String loginText = null;
     private static String password = null;
     private static Boolean useWorld = null;
@@ -59,6 +60,7 @@ public class ProfilePanel extends JPanel {
 
         thisClient = client;
         String[] parts = data.split(":", 5);
+        this.profileName = parts[0];
         this.loginText = parts[1];
         if (parts.length == 5)
         {

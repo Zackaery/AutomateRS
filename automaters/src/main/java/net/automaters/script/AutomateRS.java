@@ -78,6 +78,9 @@ public class AutomateRS extends TaskPlugin {
 	private ClientThread clientThread;
 
 	@Inject
+	ConfigManager configManager;
+
+	@Inject
 	private BlockingEventManager blockingEventManager;
 
 	@Getter
@@ -154,6 +157,8 @@ public class AutomateRS extends TaskPlugin {
 	@Override
 	protected void startUp() throws IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {
 
+
+		configManager.setConfiguration("unethicalite", "avoidWilderness", true);
 		if (hotswapEnabled) {
 			panel = injector.getInstance(AutomateRSPanel.class);
 			try {

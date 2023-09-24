@@ -73,31 +73,32 @@ public class LocalPlayer {
             walkToNearestBank();
             sleep(600, 2400);
         }
-            if (bank != null && LocalPlayer.isInBank()) {
-                debug("i can see the bank");
-                bank.interact("Bank");
-                sleep(2200);
-            } else if (bankChest != null && LocalPlayer.isInBank()) {
-                debug("i can see a bank booth");
-                bankChest.interact("Use");
-                sleep(2200);
-            }
+        if (bank != null && LocalPlayer.isInBank()) {
+            debug("i can see the bank");
+            bank.interact("Bank");
+            sleep(2200);
+        } else if (bankChest != null && LocalPlayer.isInBank()) {
+            debug("i can see a bank booth");
+            bankChest.interact("Use");
+            sleep(2200);
+        }
 
 
         while (!Bank.isOpen() && localPlayer.isMoving() && LocalPlayer.isInBank()) {
             debug("Moving around wildly");
-            sleep(1250,1800);
+            sleep(1250, 1800);
         }
 
-            if (Bank.isOpen()) {
-                debug("The bank is open!");
-                Widget widget = Widgets.get(664, 29, 0);
-                if (widget != null) {
-                    widget.interact("Close");
-                    debug("Closed bank tutorial widget.");
-                }
+        if (Bank.isOpen()) {
+            debug("The bank is open!");
+            Widget widget = Widgets.get(664, 29, 0);
+            if (widget != null) {
+                widget.interact("Close");
+                debug("Closed bank tutorial widget.");
             }
         }
     }
+
+}
 
 

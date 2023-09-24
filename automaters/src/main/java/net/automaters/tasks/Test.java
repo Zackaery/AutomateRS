@@ -4,6 +4,7 @@ import net.automaters.api.walking.Area;
 import net.unethicalite.api.plugins.LoopedPlugin;
 
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
+import static net.automaters.api.items.Items.getAmountTotal;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.script.AutomateRS.scriptStarted;
 
@@ -19,6 +20,8 @@ public class Test extends LoopedPlugin{
             debug("Player does not exist.");
             return -1;
         }
+
+        debug(String.valueOf(getAmountTotal("Coins", true)));
 
        return 50;
     }
