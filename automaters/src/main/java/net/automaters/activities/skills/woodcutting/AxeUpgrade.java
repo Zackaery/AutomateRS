@@ -11,6 +11,7 @@ import static net.automaters.api.entities.SkillCheck.getWoodcuttingLevel;
 import static net.automaters.api.utils.Debug.debug;
 import static net.unethicalite.api.commons.Time.sleep;
 
+@SuppressWarnings({"ConstantConditions","unused"})
 public class AxeUpgrade {
     public AxeUpgrade() {
         // Constructor
