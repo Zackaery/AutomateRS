@@ -6,8 +6,7 @@ import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 
-import static net.automaters.api.entities.SkillCheck.getAttackLevel;
-import static net.automaters.api.entities.SkillCheck.getWoodcuttingLevel;
+import static net.automaters.api.entities.SkillCheck.*;
 import static net.automaters.api.utils.Debug.debug;
 import static net.unethicalite.api.commons.Time.sleep;
 @SuppressWarnings({"ConstantConditions","unused"})
@@ -16,21 +15,21 @@ public class PickaxeUpgrade {
         // Constructor
     }
 
-    public void executeAxeUpgrade() {
-        String[] axesToHandle = {
+    public void executePickaxeUpgrade() {
+        String[] PickaxesToHandle = {
                 "Bronze pickaxe", "Iron pickaxe", "Steel pickaxe", "Black pickaxe",
                 "Mithril pickaxe", "Adamant pickaxe", "Rune pickaxe", "Dragon pickaxe", "Crystal pickaxe"
         };
 
         if (Bank.isOpen()) {
-            String bestAxe = findBestAxe();
+            String bestPickaxe = findBestPickaxe();
 
-            if (bestAxe != null) {
-                debug("Swapping for the best available pickaxe: " + bestAxe);
-                debug("Attack level: " + getAttackLevel() + " Woodcutting level: " + getWoodcuttingLevel());
-                withdrawAndEquipAxe(bestAxe);
+            if (bestPickaxe != null) {
+                debug("Swapping for the best available pickaxe: " + bestPickaxe);
+                debug("Attack level: " + getAttackLevel() + " Woodcutting level: " + getMiningLevel());
+                withdrawAndEquipPickaxe(bestPickaxe);
                 sleep(500);
-                depositLowerTierAxes(bestAxe);
+                depositLowerTierPickaxes(bestPickaxe);
                 sleep(500);
                 Bank.close();
                 sleep(250);
@@ -38,97 +37,97 @@ public class PickaxeUpgrade {
         }
     }
 
-    private String findBestAxe() {
-        String[] axesToHandle = {
+    private String findBestPickaxe() {
+        String[] pickaxesToHandle = {
                 "Bronze pickaxe", "Iron pickaxe", "Steel pickaxe", "Black pickaxe",
                 "Mithril pickaxe", "Adamant pickaxe", "Rune pickaxe", "Dragon pickaxe", "Crystal pickaxe"
         };
 
-        String bestAxe = null; // Initialize with no best axe
+        String bestPickaxe = null; // Initialize with no best axe
 
         // Iterate through the axes in reverse order (highest-tier first)
-        for (int i = axesToHandle.length - 1; i >= 0; i--) {
-            String itemName = axesToHandle[i];
+        for (int i = pickaxesToHandle.length - 1; i >= 0; i--) {
+            String itemName = pickaxesToHandle[i];
 
             // Check if the axe should be considered based on Woodcutting level
-            boolean shouldConsiderAxe = true;
+            boolean shouldConsiderPickaxe = true;
 
             switch (itemName) {
                 case "Steel pickaxe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 6 && getAttackLevel() >= 5;
+                    shouldConsiderPickaxe = getMiningLevel() >= 6 && getAttackLevel() >= 5;
                     debug("Considering Steel pickaxe.");
                     break;
                 case "Black pickaxe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 11 && getAttackLevel() >= 10;
+                    shouldConsiderPickaxe = getMiningLevel() >= 11 && getAttackLevel() >= 10;
                     debug("Considering Black pickaxe.");
                     break;
                 case "Mithril pickaxe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 21 && getAttackLevel() >= 20;
+                    shouldConsiderPickaxe = getMiningLevel() >= 21 && getAttackLevel() >= 20;
                     debug("Considering Mithril pickaxe.");
                     break;
                 case "Adamant pickaxe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 31 && getAttackLevel() >= 30;
+                    shouldConsiderPickaxe = getMiningLevel() >= 31 && getAttackLevel() >= 30;
                     debug("Considering Adamant pickaxe.");
                     break;
                 case "Rune pickaxe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 41 && getAttackLevel() >= 40;
+                    shouldConsiderPickaxe = getMiningLevel() >= 41 && getAttackLevel() >= 40;
                     debug("Considering Rune pickaxe.");
                     break;
                 case "Dragon pickaxe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 61 && getAttackLevel() >= 60;
+                    shouldConsiderPickaxe = getMiningLevel() >= 61 && getAttackLevel() >= 60;
                     debug("Considering Dragon pickaxe.");
                     break;
                 case "Crystal pickaxe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 71 && getAttackLevel() >= 70;
+                    shouldConsiderPickaxe = getMiningLevel() >= 71 && getAttackLevel() >= 70;
                     debug("Considering Crystal pickaxe.");
                     break;
             }
 
             // If the axe should be considered and it's in the bank, return it as the best axe
-            if (shouldConsiderAxe && Bank.isOpen() && !Equipment.contains(itemName) && Bank.contains(itemName) && !Inventory.contains(itemName)) {
+            if (shouldConsiderPickaxe && Bank.isOpen() && !Equipment.contains(itemName) && Bank.contains(itemName) && !Inventory.contains(itemName)) {
                 return itemName; // Return the first suitable axe found
             }
         }
 
-        return bestAxe; // Return null if no suitable axe is found
+        return bestPickaxe; // Return null if no suitable axe is found
     }
 
 
 
-    private void withdrawAndEquipAxe(String axeName) {
+    private void withdrawAndEquipPickaxe(String pickaxeName) {
         // Withdraw item
-        if (Bank.isOpen() && !Equipment.contains(axeName) && Bank.contains(axeName) && !Inventory.contains(axeName)) {
-            Bank.withdraw(axeName, 1, Bank.WithdrawMode.ITEM);
+        if (Bank.isOpen() && !Equipment.contains(pickaxeName) && Bank.contains(pickaxeName) && !Inventory.contains(pickaxeName)) {
+            Bank.withdraw(pickaxeName, 1, Bank.WithdrawMode.ITEM);
             sleep(800,1500);
         }
 
         // Wear item
-        if (Inventory.contains(axeName) && !Equipment.contains(axeName)) {
+        if (Inventory.contains(pickaxeName) && !Equipment.contains(pickaxeName)) {
             if (!Bank.isOpen()) {
-                Item item = Inventory.getFirst(axeName);
+                Item item = Inventory.getFirst(pickaxeName);
                 if (item != null) {
                     debug("Equipping pickaxe!");
                     item.interact("Wield");
-                    Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+                    Time.sleepUntil(() -> Equipment.contains(pickaxeName), 3000);
                 }
             } else {
                 if (Bank.isOpen()) {
-                    Bank.Inventory.getFirst(axeName).interact("Wield");
-                    Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+                    Bank.Inventory.getFirst(pickaxeName).interact("Wield");
+                    Time.sleepUntil(() -> Equipment.contains(pickaxeName), 3000);
                 }
             }
         }
     }
-    private void depositLowerTierAxes(String bestAxeName) {
-        String[] lowerTierAxes = {
+    private void depositLowerTierPickaxes(String bestPickaxeName) {
+        String[] lowerTierPickaxes = {
                 "Bronze pickaxe", "Iron pickaxe", "Steel pickaxe", "Black pickaxe",
                 "Mithril pickaxe", "Adamant pickaxe", "Rune pickaxe", "Dragon pickaxe"
         };
 
-        for (String axeName : lowerTierAxes) {
-            if (Inventory.contains(axeName) && !axeName.equals(bestAxeName)) {
-                debug("Depositing lower-tier pickaxe: " + axeName);
-                Bank.deposit(axeName, Inventory.getCount(axeName));
+        for (String pickaxeName : lowerTierPickaxes) {
+            if (Inventory.contains(pickaxeName) && !pickaxeName.equals(bestPickaxeName)) {
+                debug("Depositing lower-tier pickaxe: " + pickaxeName);
+                Bank.deposit(pickaxeName, Inventory.getCount(pickaxeName));
                 sleep(250,500);
             }
         }

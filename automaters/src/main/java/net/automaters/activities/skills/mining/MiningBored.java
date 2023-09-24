@@ -13,7 +13,6 @@ import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Reachable;
-import net.unethicalite.api.plugins.LoopedPlugin;
 import net.automaters.util.locations.mining_rectangularareas;
 
 import java.util.Comparator;
@@ -25,7 +24,7 @@ import static net.automaters.api.entities.SkillCheck.*;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.walking.Walking.automateWalk;
 import static net.automaters.script.AutomateRS.scriptStarted;
-import static net.automaters.util.locations.woodcutting_rectangularareas.*;
+import static net.automaters.util.locations.mining_rectangularareas.*;
 import static net.unethicalite.api.commons.Time.sleep;
 
 @SuppressWarnings({"ConstantConditions","unused"})
@@ -65,7 +64,7 @@ public class MiningBored extends Task {
         boolean readytomine = false;
         boolean gearcheck = false;
         boolean pickaxecheck = false;
-        boolean armorcheck = false;
+//        boolean armorcheck = false;
         boolean dropore = false;
 
         WorldPoint playerPosition = Players.getLocal().getWorldLocation();
@@ -76,8 +75,8 @@ public class MiningBored extends Task {
             // do something
             sleep(250);
             readytomine = false;
-            sleep(250);
-            armorcheck = true;
+//            sleep(250);
+//            armorcheck = true;
             sleep(250);
             pickaxecheck = true;
             openBank();
@@ -92,7 +91,7 @@ public class MiningBored extends Task {
 
         if (Bank.isOpen() && Inventory.contains(Predicates.nameContains("ore"))
                 || Bank.isOpen() && Inventory.isFull()
-                || dropore && Bank.isOpen() && !Inventory.isFull() && Inventory.contains(Predicates.nameContains("Logs"))
+                || dropore && Bank.isOpen() && !Inventory.isFull() && Inventory.contains(Predicates.nameContains("ore"))
                 || Bank.isOpen() && Inventory.isFull() && !Inventory.contains(Predicates.nameContains("pickaxe")) && !Equipment.contains(Predicates.nameContains("pickaxe"))
                 || Bank.isOpen() && Inventory.isFull() && !Inventory.contains(Predicates.nameContains("pickaxe")) && !Equipment.contains(Predicates.nameContains("pickaxe"))) {
             debug("trying to deposit now?");
@@ -113,74 +112,74 @@ public class MiningBored extends Task {
             debug("Location chosen after banking: " + randomIndex);
             sleep(1500);
             pickaxecheck = true;
-            armorcheck = true;
+//            armorcheck = true;
         }
 
-        if (Bank.isOpen() && Inventory.isEmpty() && !armorcheck && !pickaxecheck) {
-            debug("checking armor now.");
-            GearUpgrade gearUpgrade = new GearUpgrade();
-            gearUpgrade.upgradeGear();
-            sleep(250,1500);
-            armorcheck = false;
-            debug("Armor check complete. Now checking axes");
-            AxeUpgrade axeUpgrade = new AxeUpgrade();
-            axeUpgrade.executeAxeUpgrade();
+        if (Bank.isOpen() && Inventory.isEmpty() /*&& !armorcheck*/ && !pickaxecheck) {
+//            debug("checking armor now.");
+//            GearUpgrade gearUpgrade = new GearUpgrade();
+//            gearUpgrade.upgradeGear();
+//            sleep(250,1500);
+//            armorcheck = false;
+//            debug("Armor check complete. Now checking axes");
+            PickaxeUpgrade PickaxeUpgrade = new PickaxeUpgrade();
+            PickaxeUpgrade.executePickaxeUpgrade();
             sleep(1500);
             pickaxecheck = false;
             debug("Pickaxe check complete!");
             sleep(500);
-            if (armorcheck && pickaxecheck) {
+            if (/*armorcheck &&*/ pickaxecheck) {
                 Bank.close();
                 readytomine = true;
             }
             random.nextInt(5);
             debug("Location after gear checks: " + randomIndex);
         }
-        // woodcutting regular tree start
+        // Copper rocks start
 
         if (!localPlayer.isMoving() && getWoodcuttingLevel() <= 15 && Equipment.contains(Predicates.nameContains("pickaxe")) && !Inventory.isFull() && !localPlayer.isInteracting()) {
 
             // start of copper locations
 
-            if (randomIndex == 0 && !playerPosition.isInArea(Falador_Tree_TreeArea_I_Area.toWorldArea())) {
+            if (randomIndex == 0 && !playerPosition.isInArea(DraynorVillage_MiningArea_I.toWorldArea())) {
                 debug("Walking 1");
-                automateWalk(Falador_Tree_TreeArea_I_Area.toWorldArea());
+                automateWalk(DraynorVillage_MiningArea_I.toWorldArea());
                 sleep(2000);
                 readytomine = true;
             }
 
             // end of copper
 
-            if (randomIndex == 1 && !playerPosition.isInArea(Falador_Tree_TreeArea_II_Area.toWorldArea())) {
+            if (randomIndex == 1 && !playerPosition.isInArea(DraynorVillage_MiningArea_II.toWorldArea())) {
                 debug("Walking 1");
-                automateWalk(Falador_Tree_TreeArea_II_Area.toWorldArea());
+                automateWalk(DraynorVillage_MiningArea_II.toWorldArea());
                 sleep(2000);
                 readytomine = true;
             }
 
             // end of copper
 
-            if (randomIndex == 2 && !playerPosition.isInArea(Falador_Tree_TreeArea_III_Area.toWorldArea())) {
+            if (randomIndex == 2 && !playerPosition.isInArea(DraynorVillage_MiningArea_III.toWorldArea())) {
                 debug("Walking 1");
-                automateWalk(Falador_Tree_TreeArea_III_Area.toWorldArea());
+                automateWalk(DraynorVillage_MiningArea_III.toWorldArea());
                 sleep(2000);
                 readytomine = true;
             }
 
             // end of copper
 
-            if (randomIndex == 3 && !playerPosition.isInArea(Falador_Tree_TreeArea_IV_Area.toWorldArea())) {
+            if (randomIndex == 3 && !playerPosition.isInArea(DraynorVillage_MiningArea_IV.toWorldArea())) {
                 debug("Walking 1");
-                automateWalk(Falador_Tree_TreeArea_IV_Area.toWorldArea());
+                automateWalk(DraynorVillage_MiningArea_IV.toWorldArea());
                 sleep(2000);
                 readytomine = true;
             }
 
             // end of copper
 
-            if (randomIndex == 4 && !playerPosition.isInArea(Falador_Tree_TreeArea_V_Area.toWorldArea())) {
+            if (randomIndex == 4 && !playerPosition.isInArea(DraynorVillage_MiningArea_V.toWorldArea())) {
                 debug("Walking 1");
-                automateWalk(Falador_Tree_TreeArea_V_Area.toWorldArea());
+                automateWalk(DraynorVillage_MiningArea_V.toWorldArea());
                 sleep(2000);
                 readytomine = true;
             }
@@ -198,21 +197,21 @@ public class MiningBored extends Task {
             sleep(1000);
             while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("pickaxe"))) {
                 sleep(1000);
-                var tree = TileObjects
-                        .getSurrounding(localPlayer.getWorldLocation(), 8, 1276, 1278, 2091, 2092)
+                var rock = TileObjects
+                        .getSurrounding(localPlayer.getWorldLocation(), 8, "Copper rocks")
                         .stream()
                         .filter(Reachable::isInteractable)
                         .min(Comparator.comparing(x -> x.distanceTo(localPlayer.getWorldLocation())))
                         .orElse(null);
                 sleep(1000);
 
-                if (!localPlayer.isAnimating() && !localPlayer.isInteracting() && !Inventory.isFull() && !localPlayer.isMoving() && tree != null) {
-                    debug("Chop suey!");
-                    tree.interact("Chop down");
+                if (!localPlayer.isAnimating() && !localPlayer.isInteracting() && !Inventory.isFull() && !localPlayer.isMoving() && rock != null) {
+                    debug("Swing batta batta!");
+                    rock.interact("Mine");
                     sleep(600, 1500);
                 }
-                if (tree == null) {
-                    debug("Cannot find tree, need to reposition");
+                if (rock == null) {
+                    debug("Cannot find rocks, need to reposition");
                     sleep(150, 500);
                     return -1;
 
@@ -221,9 +220,8 @@ public class MiningBored extends Task {
 
         }
 
-        // end of regular tree
+        // end of copper
 
-        // end willow trees
         return 0;
     }
 

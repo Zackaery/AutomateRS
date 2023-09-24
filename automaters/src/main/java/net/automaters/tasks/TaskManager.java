@@ -2,6 +2,7 @@ package net.automaters.tasks;
 
 //import net.automaters.activities.skills.mining.Mining;
 
+import net.automaters.activities.skills.mining.MiningBored;
 import net.automaters.activities.skills.woodcutting.WoodcuttingBored;
 
 import static net.automaters.api.utils.Debug.debug;
@@ -27,7 +28,7 @@ public class TaskManager {
         debug("Executing Task: "+task);
         switch (task) {
             case "Woodcutting":
-                new WoodcuttingBored();
+                new MiningBored();
                 break;
             case "Mining":
 //                new Mining();
