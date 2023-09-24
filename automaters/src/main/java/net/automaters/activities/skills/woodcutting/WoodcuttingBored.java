@@ -4,10 +4,8 @@ import net.runelite.api.*;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.mixins.Inject;
 import net.unethicalite.api.commons.Predicates;
-import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.entities.TileObjects;
-import net.unethicalite.api.game.Skills;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
@@ -90,16 +88,17 @@ public class WoodcuttingBored extends LoopedPlugin {
             debug("Location chosen after banking: " + randomIndex);
         }
 
-        if (Bank.isOpen() && Inventory.contains(Predicates.nameContains("Logs"))
-                || Bank.isOpen() && Inventory.isFull()
-                || Bank.isOpen() && !Inventory.isFull() && Inventory.contains(Predicates.nameContains("Logs"))
-                || !Inventory.isFull() && Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
-                || Inventory.isFull() && Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
+        if (Bank.isOpen() && (
+                (Inventory.contains(Predicates.nameContains("Logs")) && !Inventory.isFull())
+                        || (!Inventory.isFull() && Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe")))
+                        || (Inventory.isFull() && Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe")))
+        )){
             sleep(500);
             debug("trying to deposit");
             Bank.depositInventory();
+            random.nextInt(5);
             debug("Location chosen after banking: " + randomIndex);
-            sleep(500);
+            sleep(1500);
             axecheck = true;
             armorcheck = true;
         }
@@ -121,15 +120,12 @@ public class WoodcuttingBored extends LoopedPlugin {
                 Bank.close();
                 readytochop = true;
             }
+            random.nextInt(5);
+            debug("Locatoin after gear checks: " + randomIndex);
         }
-
         // woodcutting regular tree start
 
-        if (!local.isMoving() && getWoodcuttingLevel() <= 95 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_I_Area.toWorldArea())
-                ||!local.isMoving() && getWoodcuttingLevel() <= 95 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_II_Area.toWorldArea())
-                ||!local.isMoving() && getWoodcuttingLevel() <= 95 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_III_Area.toWorldArea())
-                ||!local.isMoving() && getWoodcuttingLevel() <= 95 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_IV_Area.toWorldArea())
-                ||!local.isMoving() && getWoodcuttingLevel() <= 95 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !playerPosition.isInArea(Falador_Tree_TreeArea_V_Area.toWorldArea())) {
+        if (!local.isMoving() && getWoodcuttingLevel() <= 95 && Equipment.contains(Predicates.nameContains("axe")) && !Inventory.isFull() && !local.isInteracting()) {
 
             // start of tree locations
 
