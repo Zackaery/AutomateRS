@@ -137,7 +137,7 @@ public class MiningBored extends Task {
         }
         // Copper rocks start
 
-        if (!localPlayer.isMoving() && getWoodcuttingLevel() <= 15 && Equipment.contains(Predicates.nameContains("pickaxe")) && !Inventory.isFull() && !localPlayer.isInteracting()) {
+        if (!localPlayer.isMoving() && getWoodcuttingLevel() > 1 && Equipment.contains(Predicates.nameContains("pickaxe")) && !Inventory.isFull() && !localPlayer.isInteracting()) {
 
             // start of copper locations
 

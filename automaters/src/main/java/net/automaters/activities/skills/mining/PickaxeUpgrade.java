@@ -1,5 +1,6 @@
 package net.automaters.activities.skills.mining;
 
+import net.runelite.api.EquipmentInventorySlot;
 import net.runelite.api.Item;
 import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.items.Bank;
@@ -26,7 +27,7 @@ public class PickaxeUpgrade {
 
             if (bestPickaxe != null) {
                 debug("Swapping for the best available pickaxe: " + bestPickaxe);
-                debug("Attack level: " + getAttackLevel() + " Woodcutting level: " + getMiningLevel());
+                debug("Attack level: " + getAttackLevel() + " Mining level: " + getMiningLevel());
                 withdrawAndEquipPickaxe(bestPickaxe);
                 sleep(500);
                 depositLowerTierPickaxes(bestPickaxe);
@@ -43,13 +44,16 @@ public class PickaxeUpgrade {
                 "Mithril pickaxe", "Adamant pickaxe", "Rune pickaxe", "Dragon pickaxe", "Crystal pickaxe"
         };
 
-        String bestPickaxe = null; // Initialize with no best axe
+        String bestPickaxe = null; // Initialize with no best pickaxe
 
-        // Iterate through the axes in reverse order (highest-tier first)
+        // Initialize the currently equipped pickaxe to null
+        String currentlyEquippedPickaxe = Equipment.fromSlot(EquipmentInventorySlot.WEAPON).getName();
+
+        // Iterate through the pickaxes in reverse order (highest-tier first)
         for (int i = pickaxesToHandle.length - 1; i >= 0; i--) {
             String itemName = pickaxesToHandle[i];
 
-            // Check if the axe should be considered based on Woodcutting level
+            // Check if the pickaxe should be considered based on Mining level
             boolean shouldConsiderPickaxe = true;
 
             switch (itemName) {
@@ -83,14 +87,19 @@ public class PickaxeUpgrade {
                     break;
             }
 
-            // If the axe should be considered and it's in the bank, return it as the best axe
-            if (shouldConsiderPickaxe && Bank.isOpen() && !Equipment.contains(itemName) && Bank.contains(itemName) && !Inventory.contains(itemName)) {
-                return itemName; // Return the first suitable axe found
+            // If the pickaxe should be considered and it's in the bank, return it as the best pickaxe
+            if (shouldConsiderPickaxe && Bank.isOpen() && !Inventory.contains(itemName) && Bank.contains(itemName)) {
+                // Check if it's better than the currently equipped pickaxe
+                if (currentlyEquippedPickaxe == null || itemName.compareTo(currentlyEquippedPickaxe) > 0) {
+                    bestPickaxe = itemName;
+                    currentlyEquippedPickaxe = itemName;
+                }
             }
         }
 
-        return bestPickaxe; // Return null if no suitable axe is found
+        return bestPickaxe; // Return the best available pickaxe or null if none found
     }
+
 
 
 

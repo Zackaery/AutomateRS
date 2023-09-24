@@ -1,5 +1,6 @@
 package net.automaters.activities.skills.woodcutting;
 
+import net.runelite.api.EquipmentInventorySlot;
 import net.runelite.api.Item;
 import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.items.Bank;
@@ -47,6 +48,9 @@ public class AxeUpgrade {
 
         String bestAxe = null; // Initialize with no best axe
 
+        // Initialize the currently equipped axe to null
+        String currentlyEquippedAxe = Equipment.fromSlot(EquipmentInventorySlot.WEAPON).getName();
+
         // Iterate through the axes in reverse order (highest-tier first)
         for (int i = axesToHandle.length - 1; i >= 0; i--) {
             String itemName = axesToHandle[i];
@@ -86,13 +90,18 @@ public class AxeUpgrade {
             }
 
             // If the axe should be considered and it's in the bank, return it as the best axe
-            if (shouldConsiderAxe && Bank.isOpen() && !Equipment.contains(itemName) && Bank.contains(itemName) && !Inventory.contains(itemName)) {
-                return itemName; // Return the first suitable axe found
+            if (shouldConsiderAxe && Bank.isOpen() && !Inventory.contains(itemName) && Bank.contains(itemName)) {
+                // Check if it's better than the currently equipped axe
+                if (currentlyEquippedAxe == null || itemName.compareTo(currentlyEquippedAxe) > 0) {
+                    bestAxe = itemName;
+                    currentlyEquippedAxe = itemName;
+                }
             }
         }
 
-        return bestAxe; // Return null if no suitable axe is found
+        return bestAxe; // Return the best available axe or null if none found
     }
+
 
 
 
