@@ -12,6 +12,7 @@ import static net.automaters.api.items.Items.totalCoins;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.utils.GrandExchangePrices.getPrice;
 import static net.automaters.api.utils.GrandExchangePrices.updatePrices;
+import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.automaters.util.file_managers.FileManager.PATH_GE_PRICES;
 import static net.automaters.util.file_managers.FileManager.getLastModified;
 import static net.unethicalite.api.items.GrandExchange.exchange;
@@ -52,7 +53,7 @@ public class GrandExchange {
             int quantity = item.getQuantity();
             int multipliedValue = item.getMultipliedValue();
 
-            while (!failedPurchase && !boughtItem) {
+            while (scriptStarted && !failedPurchase && !boughtItem) {
                 if (totalCoins == -1) {
                     debug("Checking total coins amount");
                     getAmountTotal("Coins", true);
@@ -85,7 +86,7 @@ public class GrandExchange {
             updatePrices();
             debug("Updating GE Prices.");
         }
-        while (!failedPurchase && !boughtItem) {
+        while (scriptStarted && !failedPurchase && !boughtItem) {
             if (totalCoins == -1) {
                 debug("Checking total coins amount");
                 getAmountTotal("Coins", true);

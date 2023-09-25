@@ -85,7 +85,7 @@ public class Woodcutting extends LoopedPlugin {
                             debug("z: " + String.valueOf(z));
 
                             // Loop until the player reaches the destination
-                            while (local.getWorldLocation().getX() != x || local.getWorldLocation().getY() != y) {
+                            while (scriptStarted && local.getWorldLocation().getX() != x || local.getWorldLocation().getY() != y) {
                                 // Call the Movement.walkTo() method repeatedly until the destination is reached
                                 Movement.walkTo(x, y, z);
                                 // delay added so not spam clicking to move.
@@ -132,7 +132,7 @@ public class Woodcutting extends LoopedPlugin {
 
         if (dropalllogs) {
             debug("reading here");
-            while (Inventory.contains("Logs")) {
+            while (scriptStarted && Inventory.contains("Logs")) {
                 Inventory.getFirst("Logs").interact("Drop");
                 debug("Dropping log");
                 sleep(300);

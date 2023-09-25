@@ -5,13 +5,14 @@ import net.unethicalite.api.items.Inventory;
 
 import static net.automaters.api.entities.LocalPlayer.openBank;
 import static net.automaters.api.utils.Debug.debug;
+import static net.automaters.script.AutomateRS.scriptStarted;
 
 public class Items {
 
     public static int totalCoins = -1;
 
     public static int getAmountBank(String name) {
-        while (!Bank.isOpen()) {
+        while (scriptStarted && !Bank.isOpen()) {
             openBank();
         }
         return Bank.getCount(true, name);

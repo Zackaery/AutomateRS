@@ -19,6 +19,7 @@ import static net.automaters.api.entities.LocalPlayer.*;
 import static net.automaters.api.entities.SkillCheck.getWoodcuttingLevel;
 import static net.automaters.api.walking.Walking.automateWalk;
 import static net.automaters.api.utils.Debug.debug;
+import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.automaters.util.locations.Woodcutting.*;
 import static net.unethicalite.api.commons.Time.sleep;
 
@@ -180,7 +181,7 @@ public class WoodcuttingBored extends Task {
                 || randomIndex == 4 && readytochop) {
             debug("inside index");
             sleep(1000);
-            while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
+            while (scriptStarted && !Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
                 sleep(1000);
                 var tree = TileObjects
                         .getSurrounding(local.getWorldLocation(), 8, 1276, 1278, 2091, 2092)
@@ -269,7 +270,7 @@ public class WoodcuttingBored extends Task {
                 || randomIndex == 4 && readytochop) {
             debug("inside index");
             sleep(1000);
-            while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
+            while (scriptStarted && !Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
                 sleep(1000);
                 var tree = TileObjects
                         .getSurrounding(local.getWorldLocation(), 8, "Oak tree")
@@ -360,7 +361,7 @@ public class WoodcuttingBored extends Task {
                 || randomIndex == 4 && readytochop) {
             debug("inside index");
             sleep(1000);
-            while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
+            while (scriptStarted && !Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
                 sleep(1000);
                 var tree = TileObjects
                         .getSurrounding(local.getWorldLocation(), 8, "Willow tree")

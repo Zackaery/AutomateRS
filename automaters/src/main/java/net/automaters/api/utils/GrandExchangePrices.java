@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
+import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.automaters.util.file_managers.FileManager.*;
 
 public class GrandExchangePrices {
@@ -35,7 +36,7 @@ public class GrandExchangePrices {
 
                 ByteBuffer buffer = ByteBuffer.allocate(1024);
 
-                while (rbc.read(buffer) != -1) {
+                while (scriptStarted && rbc.read(buffer) != -1) {
                     buffer.flip();
                     fos.getChannel().write(buffer);
                     buffer.clear();

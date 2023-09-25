@@ -53,7 +53,7 @@ package net.automaters.paint;
 //        path.moveTo(firstPoint.getX(), firstPoint.getY());
 //
 //        Point prev = firstPoint;
-//        while (mousePointIterator.hasNext()) {
+//        while (scriptStarted && mousePointIterator.hasNext()) {
 //            Point current = mousePointIterator.next();
 //            path.quadTo(prev.getX(), prev.getY(), current.getX(), current.getY());
 //            prev = current;

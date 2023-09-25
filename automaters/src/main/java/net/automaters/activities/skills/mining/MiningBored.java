@@ -20,6 +20,7 @@ import static net.automaters.api.entities.LocalPlayer.openBank;
 import static net.automaters.api.entities.SkillCheck.*;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.walking.Walking.automateWalk;
+import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.automaters.util.locations.Mining.*;
 import static net.unethicalite.api.commons.Time.sleep;
 
@@ -181,7 +182,7 @@ public class MiningBored extends Task {
                 || randomIndex == 4 && readytomine) {
             debug("inside index");
             sleep(1000);
-            while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("pickaxe"))) {
+            while (scriptStarted && !Inventory.isFull() && Equipment.contains(Predicates.nameContains("pickaxe"))) {
                 sleep(1000);
                 var rock = TileObjects
                         .getSurrounding(localPlayer.getWorldLocation(), 8, "Copper rocks")

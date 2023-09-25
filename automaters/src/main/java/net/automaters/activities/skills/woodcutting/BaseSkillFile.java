@@ -148,7 +148,7 @@ public class BaseSkillFile extends LoopedPlugin {
                 || randomIndex == 4 && readytochop) {
             debug("inside index");
             sleep(1000);
-            while (!Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
+            while (scriptStarted && !Inventory.isFull() && Equipment.contains(Predicates.nameContains("axe"))) {
                 sleep(1000);
                 var tree = TileObjects
                         .getSurrounding(local.getWorldLocation(), 8, 1276, 1278, 2091, 2092)

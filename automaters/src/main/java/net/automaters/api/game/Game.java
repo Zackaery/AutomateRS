@@ -14,6 +14,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
+import static net.automaters.script.AutomateRS.scriptStarted;
+
 @Slf4j
 @Singleton
 public class Game {
@@ -79,7 +81,7 @@ public class Game {
 
         long start = client().getTickCount();
 
-        while (client.getTickCount() == start) {
+        while (scriptStarted && client.getTickCount() == start) {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {

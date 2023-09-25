@@ -9,6 +9,8 @@ import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
 
+import static net.automaters.script.AutomateRS.scriptStarted;
+
 public class WoodcuttingPoly
 {
     private static final Map<String, Area> areas = new HashMap<>();
@@ -70,7 +72,7 @@ public class WoodcuttingPoly
             {
                 x = Rand.nextInt(r.x, r.x + r.width);
                 y = Rand.nextInt(r.y, r.y + r.height);
-            } while (!polygon.contains(x, y));
+            } while (scriptStarted && !polygon.contains(x, y));
             return new WorldPoint(x, y, plane);
         }
     }

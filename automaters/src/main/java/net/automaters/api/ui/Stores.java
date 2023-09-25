@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.walking.Walking.automateWalk;
+import static net.automaters.script.AutomateRS.scriptStarted;
 
 public class Stores {
 
@@ -39,7 +40,7 @@ public class Stores {
 
     public static void walkToShop(Area store) {
         WorldArea area = store.toWorldArea();
-        while (!area.contains(localPlayer.getWorldLocation())) {
+        while (scriptStarted && !area.contains(localPlayer.getWorldLocation())) {
             automateWalk(area);
         }
     }

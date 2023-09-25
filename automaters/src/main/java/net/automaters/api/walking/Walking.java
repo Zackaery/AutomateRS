@@ -19,6 +19,7 @@ import java.util.function.Supplier;
 
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.utils.Debug.debug;
+import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.unethicalite.api.commons.Time.sleep;
 import static net.unethicalite.api.movement.Movement.toggleRun;
 
@@ -52,7 +53,7 @@ public class Walking {
     public static boolean automateWalk(WorldArea area) {
         debug("Walking to area...");
         var attempts = 0;
-        while (!area.contains(localPlayer) && attempts < 15) {
+        while (scriptStarted && !area.contains(localPlayer) && attempts < 15) {
             if (Players.getLocal().isMoving() || Movement.isWalking()) {
                 attempts = 0;
                /* if (!isRunning() && client.getEnergy() > minEnergy) {
@@ -82,7 +83,7 @@ public class Walking {
         debug("Walking to: "+ area.toString());
         Movement.walkTo(area);
 
-        while (!area.contains(Players.getLocal())) {
+        while (scriptStarted && !area.contains(Players.getLocal())) {
             debug("Walking and sleeping is sleep walking!");
             sleep(1000,5000);
             Movement.walkTo(area);

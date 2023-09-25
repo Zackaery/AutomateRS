@@ -11,6 +11,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import static net.automaters.api.utils.Debug.debug;
+import static net.automaters.script.AutomateRS.scriptStarted;
 
 public class ResourceManager {
 
@@ -143,7 +144,7 @@ public class ResourceManager {
 
             debug("entries = " + entries.toString());
 
-            while (entries.hasMoreElements())
+            while (scriptStarted && entries.hasMoreElements())
             {
                 ZipEntry entry = entries.nextElement();
                 debug("ZipEntry = " + entry.toString());
@@ -162,7 +163,7 @@ public class ResourceManager {
                     BufferedInputStream bis = new BufferedInputStream(is);
                     Files.createFile(filePath);
                     FileOutputStream fileOutput = new FileOutputStream(filePath.toFile());
-                    while (bis.available() > 0)
+                    while (scriptStarted && bis.available() > 0)
                     {
                         fileOutput.write(bis.read());
                     }

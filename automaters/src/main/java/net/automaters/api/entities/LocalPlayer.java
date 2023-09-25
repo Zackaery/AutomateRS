@@ -71,7 +71,7 @@ public class LocalPlayer {
         sleep(1000);
         TileObject bank = TileObjects.getFirstSurrounding(localPlayer.getWorldLocation(), 20, obj -> obj.hasAction("Bank"));
         TileObject bankChest = TileObjects.getFirstSurrounding(localPlayer.getWorldLocation(), 20, obj -> obj.getName().startsWith("Bank chest"));
-        while (!Bank.isOpen() && !isInBank()) {
+        while (scriptStarted && !Bank.isOpen() && !isInBank()) {
             walkToNearestBank();
             sleep(600, 2400);
         }
@@ -86,7 +86,7 @@ public class LocalPlayer {
         }
 
 
-        while (!Bank.isOpen() && localPlayer.isMoving() && isInBank()) {
+        while (scriptStarted && !Bank.isOpen() && localPlayer.isMoving() && isInBank()) {
             debug("Moving around wildly");
             sleep(1250, 1800);
         }
@@ -123,7 +123,7 @@ public class LocalPlayer {
      * Opens the Grand Exchange.
      */
     public static void openGE() {
-        while (!isInGE()) {
+        while (scriptStarted && !isInGE()) {
             debug("Walking to Grand Exchange!");
             walkToGE();
             sleep(600, 2400);
@@ -133,7 +133,7 @@ public class LocalPlayer {
             GrandExchange.open();
             sleep(2200);
         }
-        while (!GrandExchange.isOpen() && localPlayer.isMoving() && isInGE()) {
+        while (scriptStarted && !GrandExchange.isOpen() && localPlayer.isMoving() && isInGE()) {
             debug("Moving around wildly.");
             sleep(350, 600);
         }
