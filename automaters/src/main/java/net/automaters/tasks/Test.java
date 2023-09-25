@@ -8,7 +8,7 @@ import net.unethicalite.api.plugins.LoopedPlugin;
 import java.util.ArrayList;
 
 import static net.automaters.api.entities.LocalPlayer.*;
-import static net.automaters.api.ui.GrandExchange.buy;
+import static net.automaters.api.ui.GrandExchange.automateBuy;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.script.AutomateRS.scriptStarted;
 
@@ -34,12 +34,12 @@ public class Test extends LoopedPlugin{
         itemsToBuy.add(new GrandExchange.PurchaseItem(ItemID.MITHRIL_AXE, 1, 20));
         itemsToBuy.add(new GrandExchange.PurchaseItem(ItemID.ADAMANT_AXE, 1, 20));
         itemsToBuy.add(new GrandExchange.PurchaseItem(ItemID.RUNE_AXE, 1, 20));
-        buy(itemsToBuy);
+        automateBuy(itemsToBuy);
 
 
 
 
-        buy(ItemID.STEEL_AXE, 1, 20);
+        automateBuy(ItemID.STEEL_AXE, 1, 20);
 
 
        return 50;

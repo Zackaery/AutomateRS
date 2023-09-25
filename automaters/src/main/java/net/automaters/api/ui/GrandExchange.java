@@ -41,7 +41,7 @@ public class GrandExchange {
     }
 
     public static boolean failedPurchase;
-    public static void buy(ArrayList<PurchaseItem> itemsToBuy) {
+    public static void automateBuy(ArrayList<PurchaseItem> itemsToBuy) {
         boolean boughtItem = false;
         if (getLastModified(new File(PATH_GE_PRICES), 30)) {
             updatePrices();
@@ -79,7 +79,7 @@ public class GrandExchange {
         }
     }
 
-    public static void buy(int itemID, int quantity, int multipliedValue) {
+    public static void automateBuy(int itemID, int quantity, int multipliedValue) {
         boolean boughtItem = false;
         if (getLastModified(new File(PATH_GE_PRICES), 30)) {
             updatePrices();

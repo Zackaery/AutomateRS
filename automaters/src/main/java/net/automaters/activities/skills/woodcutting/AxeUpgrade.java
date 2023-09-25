@@ -136,7 +136,7 @@ public class AxeUpgrade {
             if (shouldConsiderAxe && Bank.isOpen() && !Inventory.contains(itemName) && !Bank.contains(itemName)) {
                 debug("Need to buy axe, attempting to purchase: " + buyaxe + " Which is: " + itemName);
                 sleep(1500);
-                buy(buyaxe,1,2);
+                automateBuy(buyaxe,1,2);
             } else
             // If the axe should be considered and it's in the bank, return it as the best axe
             if (shouldConsiderAxe && Bank.isOpen() && !Inventory.contains(itemName) && Bank.contains(itemName)) {
