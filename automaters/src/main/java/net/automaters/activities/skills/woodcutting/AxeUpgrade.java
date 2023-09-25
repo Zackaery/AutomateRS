@@ -13,7 +13,7 @@ import static net.automaters.api.entities.SkillCheck.getAttackLevel;
 import static net.automaters.api.entities.SkillCheck.getWoodcuttingLevel;
 import static net.automaters.api.utils.Debug.debug;
 import static net.unethicalite.api.commons.Time.sleep;
-import static net.unethicalite.api.items.GrandExchange.buy;
+import static net.automaters.api.ui.GrandExchange.*;
 
 @SuppressWarnings({"ConstantConditions","unused"})
 public class AxeUpgrade {
@@ -70,6 +70,12 @@ public class AxeUpgrade {
             int buyaxe = 0;
 
             switch (itemName) {
+                case "Iron axe":
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 1 && getWoodcuttingLevel() < 6 && getAttackLevel() >= 1 && getAttackLevel() < 5;
+                    debug("Considering Steel axe.");
+                    buyaxe = ItemID.IRON_AXE;
+
+                    break;
                 case "Steel axe":
                     shouldConsiderAxe = getWoodcuttingLevel() >= 6 && getWoodcuttingLevel() < 11 && getAttackLevel() >= 5 && getAttackLevel() < 10;
                     debug("Considering Steel axe.");
@@ -112,9 +118,9 @@ public class AxeUpgrade {
             if (shouldConsiderAxe && Bank.isOpen() && !Inventory.contains(itemName) && !Bank.contains(itemName)) {
                 debug("Need to buy axe, attempting to purchase: " + buyaxe + " Which is: " + itemName);
                 sleep(1500);
-                Bank.withdrawAll("Coins", Bank.WithdrawMode.ITEM);
-                sleep(500);
-                buy(buyaxe,1,5);
+//                Bank.withdrawAll("Coins", Bank.WithdrawMode.ITEM);
+//                sleep(500);
+                buy(buyaxe,1,2);
             } else
             // If the axe should be considered and it's in the bank, return it as the best axe
             if (shouldConsiderAxe && Bank.isOpen() && !Inventory.contains(itemName) && Bank.contains(itemName)) {
