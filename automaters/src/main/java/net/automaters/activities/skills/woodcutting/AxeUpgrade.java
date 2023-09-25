@@ -67,9 +67,15 @@ public class AxeUpgrade {
 
             // Check if the axe should be considered based on Woodcutting level
             boolean shouldConsiderAxe = true;
-            int buyaxe = 0;
+            int buyaxe = ItemID.BRONZE_AXE;
 
             switch (itemName) {
+                case "Bronze axe":
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 1;
+                    debug("Considering Bronze axe.");
+                    buyaxe = ItemID.BRONZE_AXE;
+
+                    break;
                 case "Iron axe":
                     shouldConsiderAxe = getWoodcuttingLevel() >= 1 && getWoodcuttingLevel() < 6 && getAttackLevel() >= 1 && getAttackLevel() < 5;
                     debug("Considering Steel axe.");

@@ -5,8 +5,7 @@ import net.runelite.api.mixins.Inject;
 import net.unethicalite.api.coords.Area;
 import net.unethicalite.api.plugins.LoopedPlugin;
 
-import static net.automaters.api.entities.LocalPlayer.localCanInteract;
-import static net.automaters.api.entities.LocalPlayer.localInArea;
+import static net.automaters.api.entities.LocalPlayer.canInteract;
 
 @SuppressWarnings({"ConstantConditions","unused"})
 public class Woodcutting_Zach extends LoopedPlugin {
@@ -19,9 +18,9 @@ public class Woodcutting_Zach extends LoopedPlugin {
     @Override
     public int loop() {
 
-        if (!localCanInteract()) { return -1; }
+        if (!canInteract()) { return -1; }
 
-       // if (!localInArea(LUMBRIDGE)) {
+       // if (!inArea(LUMBRIDGE)) {
 
       //  }
 

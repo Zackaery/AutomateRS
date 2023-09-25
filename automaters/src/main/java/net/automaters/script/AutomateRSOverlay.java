@@ -1,46 +1,29 @@
 package net.automaters.script;
 
-import com.google.inject.Singleton;
-import com.openosrs.client.ui.overlay.components.table.TableAlignment;
-import com.openosrs.client.ui.overlay.components.table.TableComponent;
+import lombok.extern.slf4j.Slf4j;
+import net.runelite.client.plugins.unethicaldevtools.InteractionOverlay;
+import net.unethicalite.client.managers.InputManager;
 import net.automaters.util.file_managers.ImageManager;
-import net.runelite.api.Client;
+import net.runelite.api.Point;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
-import net.runelite.client.plugins.reportbutton.TimeFormat;
-import net.runelite.client.ui.overlay.Overlay;
-import net.runelite.client.ui.overlay.OverlayLayer;
-import net.runelite.client.ui.overlay.OverlayPanel;
-import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.components.TitleComponent;
-import net.runelite.client.util.ColorUtil;
+import net.runelite.client.ui.overlay.*;
 import net.unethicalite.api.widgets.Widgets;
 
-import javax.imageio.ImageIO;
 import javax.inject.Inject;
-import javax.swing.*;
+import javax.inject.Singleton;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-
-import static java.awt.Transparency.TRANSLUCENT;
-import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.utils.Debug.displayMessage;
 import static net.automaters.gui.GUI.started;
 import static net.automaters.script.AutomateRS.*;
 
 @Singleton
-class AutomateRSOverlay extends OverlayPanel {
+@Slf4j
+public class AutomateRSOverlay extends OverlayPanel {
 
-	private final Client client;
-	private final AutomateRS automate;
+	@Inject
+	private InputManager inputManager;
 
 	private final Font font = new Font("Arial", Font.BOLD, 12);
 
@@ -48,12 +31,10 @@ class AutomateRSOverlay extends OverlayPanel {
 
 
 	@Inject
-	private AutomateRSOverlay(Client client, AutomateRS automate)
+	private AutomateRSOverlay()
 	{
-		this.client = client;
-		this.automate = automate;
 		setPosition(OverlayPosition.DYNAMIC);
-		setLayer(OverlayLayer.ABOVE_SCENE);
+		setLayer(OverlayLayer.ABOVE_WIDGETS);
 	}
 
 	@Override
@@ -71,6 +52,16 @@ class AutomateRSOverlay extends OverlayPanel {
 		g.setColor(Color.WHITE);
 		g.drawString("Runtime: " + timeFormat(), 10, paintY-20);
 		g.drawString("Status: " + displayMessage, 10, paintY-5);
+
+
+
+//		OverlayUtil.renderTextLocation(g, new Point(inputManager.getLastClickX() - (g.getFont().getSize() / 3),
+//				inputManager.getLastClickY() + (g.getFont().getSize() / 3)), "X", Color.WHITE);
+//
+//		OverlayUtil.renderTextLocation(g,
+//				new Point(inputManager.getLastMoveX() - (g.getFont().getSize() / 3),
+//						inputManager.getLastMoveY() + (g.getFont().getSize() / 3)), "X", Color.ORANGE);
+
 		return super.render(g);
 	}
 

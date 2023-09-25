@@ -32,7 +32,7 @@ public class LocalPlayer {
      *
      * @return if local can interact.
      */
-    public static boolean localCanInteract() {
+    public static boolean canInteract() {
         return ((localPlayer == null) || !scriptStarted || !localPlayer.isAnimating() || !localPlayer.isInteracting());
     }
 
@@ -41,7 +41,7 @@ public class LocalPlayer {
      *
      * @return if local is in area.
      */
-    public static boolean localInArea(RectangularArea area) {
+    public static boolean isInArea(RectangularArea area) {
         return area.contains(localPlayer.getWorldLocation());
     }
 
