@@ -133,7 +133,7 @@ public class AxeUpgrade {
             }
 
 
-            if (shouldConsiderAxe && Bank.isOpen() && !Inventory.contains(itemName) && !Bank.contains(itemName)) {
+            if (shouldConsiderAxe && Bank.isOpen() && !Inventory.contains(itemName) && !Bank.contains(itemName) && !Equipment.contains(itemName)) {
                 debug("Need to buy axe, attempting to purchase: " + buyaxe + " Which is: " + itemName);
                 sleep(1500);
                 automateBuy(buyaxe,1,2);

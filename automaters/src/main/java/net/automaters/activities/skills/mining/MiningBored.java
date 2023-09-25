@@ -66,7 +66,6 @@ public class MiningBored extends Task {
         WorldPoint playerPosition = Players.getLocal().getWorldLocation();
 
         if (!Bank.isOpen() && Inventory.isFull() || !Bank.isOpen() && !Inventory.contains(Predicates.nameContains("pickaxe")) && !Equipment.contains(Predicates.nameContains("pickaxe"))
-                || !Bank.isOpen() && !Inventory.isFull() && !Equipment.contains(Predicates.nameContains("pickaxe")) && Inventory.contains(Predicates.nameContains("pickaxe"))
                 || !Bank.isOpen() && !Inventory.contains(Predicates.nameContains("pickaxe")) && !Equipment.contains(Predicates.nameContains("pickaxe"))) {
             // do something
             sleep(250);
@@ -78,17 +77,9 @@ public class MiningBored extends Task {
             openBank();
         }
 
-        if (Bank.isOpen() && Inventory.contains(Predicates.nameContains("pickaxe")) && Equipment.contains(Predicates.nameContains("pickaxe"))) {
-            Bank.depositInventory();
-            Bank.depositEquipment();
-            random.nextInt(5);
-            debug("Location chosen after banking: " + randomIndex);
-        }
-
         if (Bank.isOpen() && Inventory.contains(Predicates.nameContains("ore"))
                 || Bank.isOpen() && Inventory.isFull()
                 || dropore && Bank.isOpen() && !Inventory.isFull() && Inventory.contains(Predicates.nameContains("ore"))
-                || Bank.isOpen() && Inventory.isFull() && !Inventory.contains(Predicates.nameContains("pickaxe")) && !Equipment.contains(Predicates.nameContains("pickaxe"))
                 || Bank.isOpen() && Inventory.isFull() && !Inventory.contains(Predicates.nameContains("pickaxe")) && !Equipment.contains(Predicates.nameContains("pickaxe"))) {
             debug("trying to deposit now?");
             Bank.depositInventory();
@@ -98,7 +89,6 @@ public class MiningBored extends Task {
 
         if (Bank.isOpen() && (
                 (Inventory.contains(Predicates.nameContains("ore")) && !Inventory.isFull())
-                        || (!Inventory.isFull() && Inventory.contains(Predicates.nameContains("pickaxe")) && !Equipment.contains(Predicates.nameContains("pickaxe")))
                         || (Inventory.isFull() && Inventory.contains(Predicates.nameContains("pickaxe")) && !Equipment.contains(Predicates.nameContains("pickaxe")))
         )){
             sleep(500);
