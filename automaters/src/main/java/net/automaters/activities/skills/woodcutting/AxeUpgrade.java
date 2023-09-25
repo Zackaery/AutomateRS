@@ -2,20 +2,26 @@ package net.automaters.activities.skills.woodcutting;
 
 import net.runelite.api.EquipmentInventorySlot;
 import net.runelite.api.Item;
+import net.runelite.api.ItemID;
 import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 
+import static net.automaters.api.entities.LocalPlayer.openGE;
 import static net.automaters.api.entities.SkillCheck.getAttackLevel;
 import static net.automaters.api.entities.SkillCheck.getWoodcuttingLevel;
 import static net.automaters.api.utils.Debug.debug;
 import static net.unethicalite.api.commons.Time.sleep;
+import static net.unethicalite.api.items.GrandExchange.buy;
 
 @SuppressWarnings({"ConstantConditions","unused"})
 public class AxeUpgrade {
     public AxeUpgrade() {
         // Constructor
+    }
+    public void executeAxeUpgradeBuy() {
+
     }
 
     public void executeAxeUpgrade() {
@@ -61,38 +67,55 @@ public class AxeUpgrade {
 
             // Check if the axe should be considered based on Woodcutting level
             boolean shouldConsiderAxe = true;
+            int buyaxe = 0;
 
             switch (itemName) {
                 case "Steel axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 6 && getAttackLevel() >= 5;
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 6 && getWoodcuttingLevel() < 11 && getAttackLevel() >= 5 && getAttackLevel() < 10;
                     debug("Considering Steel axe.");
+                    buyaxe = ItemID.STEEL_AXE;
+
                     break;
                 case "Black axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 11 && getAttackLevel() >= 10;
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 11 && getWoodcuttingLevel() < 21 && getAttackLevel() >= 10 && getAttackLevel() < 20;
                     debug("Considering Black axe.");
+                    buyaxe = ItemID.BLACK_AXE;
                     break;
                 case "Mithril axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 21 && getAttackLevel() >= 20;
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 21 && getWoodcuttingLevel() < 31 && getAttackLevel() >= 20 && getAttackLevel() < 30;
                     debug("Considering Mithril axe.");
+                    buyaxe = ItemID.MITHRIL_AXE;
                     break;
                 case "Adamant axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 31 && getAttackLevel() >= 30;
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 31 && getWoodcuttingLevel() < 41 && getAttackLevel() >= 30 && getAttackLevel() < 40;
                     debug("Considering Adamant axe.");
+                    buyaxe = ItemID.ADAMANT_AXE;
                     break;
                 case "Rune axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 41 && getAttackLevel() >= 40;
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 41 && getWoodcuttingLevel() < 61 && getAttackLevel() >= 40 && getAttackLevel() < 60;
                     debug("Considering Rune axe.");
+                    buyaxe = ItemID.RUNE_AXE;
                     break;
                 case "Dragon axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 61 && getAttackLevel() >= 60;
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 61 && getWoodcuttingLevel() < 71 && getAttackLevel() >= 60 && getAttackLevel() < 70;
                     debug("Considering Dragon axe.");
+                    buyaxe = ItemID.DRAGON_AXE;
                     break;
                 case "Crystal axe":
                     shouldConsiderAxe = getWoodcuttingLevel() >= 71 && getAttackLevel() >= 70;
                     debug("Considering Crystal axe.");
+                    buyaxe = ItemID.CRYSTAL_AXE;
                     break;
             }
 
+
+            if (shouldConsiderAxe && Bank.isOpen() && !Inventory.contains(itemName) && !Bank.contains(itemName)) {
+                debug("Need to buy axe, attempting to purchase: " + buyaxe + " Which is: " + itemName);
+                sleep(1500);
+                Bank.withdrawAll("Coins", Bank.WithdrawMode.ITEM);
+                sleep(500);
+                buy(buyaxe,1,5);
+            } else
             // If the axe should be considered and it's in the bank, return it as the best axe
             if (shouldConsiderAxe && Bank.isOpen() && !Inventory.contains(itemName) && Bank.contains(itemName)) {
                 // Check if it's better than the currently equipped axe
