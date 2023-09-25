@@ -64,7 +64,6 @@ public class WoodcuttingBored extends Task {
         WorldPoint playerPosition = Players.getLocal().getWorldLocation();
 
         if (!Bank.isOpen() && Inventory.isFull() || !Bank.isOpen() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
-                || !Bank.isOpen() && !Inventory.isFull() && !Equipment.contains(Predicates.nameContains("axe")) && Inventory.contains(Predicates.nameContains("axe"))
                 || !Bank.isOpen() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
             // do something
             sleep(250);
@@ -76,17 +75,9 @@ public class WoodcuttingBored extends Task {
             openBank();
         }
 
-        if (Bank.isOpen() && Inventory.contains(Predicates.nameContains("axe")) && Equipment.contains(Predicates.nameContains("axe"))) {
-            Bank.depositInventory();
-            Bank.depositEquipment();
-            random.nextInt(5);
-            debug("Location chosen after banking: " + randomIndex);
-        }
-
         if (Bank.isOpen() && Inventory.contains(Predicates.nameContains("Logs"))
                 || Bank.isOpen() && Inventory.isFull()
                 || droplogs && Bank.isOpen() && !Inventory.isFull() && Inventory.contains(Predicates.nameContains("Logs"))
-                || Bank.isOpen() && Inventory.isFull() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))
                 || Bank.isOpen() && Inventory.isFull() && !Inventory.contains(Predicates.nameContains("axe")) && !Equipment.contains(Predicates.nameContains("axe"))) {
             debug("trying to deposit now?");
             Bank.depositInventory();

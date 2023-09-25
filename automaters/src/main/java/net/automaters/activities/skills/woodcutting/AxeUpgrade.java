@@ -7,6 +7,7 @@ import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
+import net.unethicalite.api.magic.Rune;
 
 import static net.automaters.api.entities.LocalPlayer.openGE;
 import static net.automaters.api.entities.SkillCheck.getAttackLevel;
@@ -17,6 +18,17 @@ import static net.automaters.api.ui.GrandExchange.*;
 
 @SuppressWarnings({"ConstantConditions","unused"})
 public class AxeUpgrade {
+
+    String Bronzeaxe = "Bronze axe";
+    String Ironaxe = "Iron axe";
+    String Steelaxe = "Steel axe";
+    String Blackaxe = "Black axe";
+    String Mithrilaxe = "Mithril axe";
+    String Adamantaxe = "Adamant axe";
+    String Runeaxe = "Rune axe";
+    String Dragonaxe = "Dragon axe";
+    String Crystalaxe = "Crystal axe";
+
     public AxeUpgrade() {
         // Constructor
     }
@@ -70,40 +82,46 @@ public class AxeUpgrade {
             int buyaxe = 0;
 
             switch (itemName) {
+                case "Bronze axe":
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 1 && getWoodcuttingLevel() < 6;
+                    debug("Considering Bronze axe.");
+                    buyaxe = ItemID.BRONZE_AXE;
+
+                    break;
                 case "Iron axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 1 && getWoodcuttingLevel() < 6 && getAttackLevel() >= 1 && getAttackLevel() < 5;
-                    debug("Considering Steel axe.");
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 1 && getWoodcuttingLevel() < 6;
+                    debug("Considering Iron axe.");
                     buyaxe = ItemID.IRON_AXE;
 
                     break;
                 case "Steel axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 6 && getWoodcuttingLevel() < 11 && getAttackLevel() >= 5 && getAttackLevel() < 10;
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 6 && getWoodcuttingLevel() < 11;
                     debug("Considering Steel axe.");
                     buyaxe = ItemID.STEEL_AXE;
 
                     break;
                 case "Black axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 11 && getWoodcuttingLevel() < 21 && getAttackLevel() >= 10 && getAttackLevel() < 20;
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 11 && getWoodcuttingLevel() < 21;
                     debug("Considering Black axe.");
                     buyaxe = ItemID.BLACK_AXE;
                     break;
                 case "Mithril axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 21 && getWoodcuttingLevel() < 31 && getAttackLevel() >= 20 && getAttackLevel() < 30;
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 21 && getWoodcuttingLevel() < 31;
                     debug("Considering Mithril axe.");
                     buyaxe = ItemID.MITHRIL_AXE;
                     break;
                 case "Adamant axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 31 && getWoodcuttingLevel() < 41 && getAttackLevel() >= 30 && getAttackLevel() < 40;
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 31 && getWoodcuttingLevel() < 41;
                     debug("Considering Adamant axe.");
                     buyaxe = ItemID.ADAMANT_AXE;
                     break;
                 case "Rune axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 41 && getWoodcuttingLevel() < 61 && getAttackLevel() >= 40 && getAttackLevel() < 60;
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 41 && getWoodcuttingLevel() < 61;
                     debug("Considering Rune axe.");
                     buyaxe = ItemID.RUNE_AXE;
                     break;
                 case "Dragon axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 61 && getWoodcuttingLevel() < 71 && getAttackLevel() >= 60 && getAttackLevel() < 70;
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 61 && getWoodcuttingLevel() < 71;
                     debug("Considering Dragon axe.");
                     buyaxe = ItemID.DRAGON_AXE;
                     break;
@@ -118,8 +136,6 @@ public class AxeUpgrade {
             if (shouldConsiderAxe && Bank.isOpen() && !Inventory.contains(itemName) && !Bank.contains(itemName)) {
                 debug("Need to buy axe, attempting to purchase: " + buyaxe + " Which is: " + itemName);
                 sleep(1500);
-//                Bank.withdrawAll("Coins", Bank.WithdrawMode.ITEM);
-//                sleep(500);
                 buy(buyaxe,1,2);
             } else
             // If the axe should be considered and it's in the bank, return it as the best axe
@@ -137,8 +153,8 @@ public class AxeUpgrade {
 
 
 
-
     private void withdrawAndEquipAxe(String axeName) {
+
         // Withdraw item
         if (Bank.isOpen() && !Equipment.contains(axeName) && Bank.contains(axeName) && !Inventory.contains(axeName)) {
             Bank.withdraw(axeName, 1, Bank.WithdrawMode.ITEM);
@@ -151,14 +167,81 @@ public class AxeUpgrade {
                 Item item = Inventory.getFirst(axeName);
                 if (item != null) {
                     debug("Equipping axe!");
-                    item.interact("Wield");
-                    Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+                    if (axeName.equals(Bronzeaxe)) {
+                        item.interact("Wield");
+                        Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+                    } else if (axeName.equals(Ironaxe)) {
+                        item.interact("Wield");
+                        Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+
+                    } else if (axeName.equals(Steelaxe) && getAttackLevel() >= 5) {
+                        item.interact("Wield");
+                        Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+
+                    } else if (axeName.equals(Blackaxe) && getAttackLevel() >= 10) {
+                        item.interact("Wield");
+                        Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+
+                    } else if (axeName.equals(Mithrilaxe) && getAttackLevel() >= 20) {
+                        item.interact("Wield");
+                        Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+
+                    } else if (axeName.equals(Adamantaxe) && getAttackLevel() >= 30) {
+                        item.interact("Wield");
+                        Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+
+                    } else if (axeName.equals(Runeaxe) && getAttackLevel() >= 40) {
+                        item.interact("Wield");
+                        Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+
+                    } else if (axeName.equals(Dragonaxe) && getAttackLevel() >= 60) {
+                        item.interact("Wield");
+                        Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+
+                    } else if (axeName.equals(Crystalaxe) && getAttackLevel() >= 70) {
+                        item.interact("Wield");
+                        Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+
+                    }
                 }
             } else {
-                if (Bank.isOpen()) {
+                if (axeName.equals(Bronzeaxe)) {
                     Bank.Inventory.getFirst(axeName).interact("Wield");
                     Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+                } else if (axeName.equals(Ironaxe)) {
+                    Bank.Inventory.getFirst(axeName).interact("Wield");
+                    Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+
+                } else if (axeName.equals(Steelaxe) && getAttackLevel() >= 5) {
+                    Bank.Inventory.getFirst(axeName).interact("Wield");
+                    Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+
+                } else if (axeName.equals(Blackaxe) && getAttackLevel() >= 10) {
+                    Bank.Inventory.getFirst(axeName).interact("Wield");
+                    Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+
+                } else if (axeName.equals(Mithrilaxe) && getAttackLevel() >= 20) {
+                    Bank.Inventory.getFirst(axeName).interact("Wield");
+                    Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+
+                } else if (axeName.equals(Adamantaxe) && getAttackLevel() >= 30) {
+                    Bank.Inventory.getFirst(axeName).interact("Wield");
+                    Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+
+                } else if (axeName.equals(Runeaxe) && getAttackLevel() >= 40) {
+                    Bank.Inventory.getFirst(axeName).interact("Wield");
+                    Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+
+                } else if (axeName.equals(Dragonaxe) && getAttackLevel() >= 60) {
+                    Bank.Inventory.getFirst(axeName).interact("Wield");
+                    Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+
+                } else if (axeName.equals(Crystalaxe) && getAttackLevel() >= 70) {
+                    Bank.Inventory.getFirst(axeName).interact("Wield");
+                    Time.sleepUntil(() -> Equipment.contains(axeName), 3000);
+
                 }
+
             }
         }
     }
