@@ -42,6 +42,7 @@ public class GrandExchange {
 
     public static boolean failedPurchase;
     public static void buy(ArrayList<PurchaseItem> itemsToBuy) {
+        boolean boughtItem = false;
         if (getLastModified(new File(PATH_GE_PRICES), 30)) {
             updatePrices();
             debug("Updating GE Prices.");
@@ -51,24 +52,30 @@ public class GrandExchange {
             int quantity = item.getQuantity();
             int multipliedValue = item.getMultipliedValue();
 
-            if (totalCoins == -1) {
-                debug("Checking total coins amount");
-                getAmountTotal("Coins", true);
-            } else if (getPrice(itemID).high * multipliedValue > totalCoins) {
-                debug("Price to buy at is > total coins.");
-                if (totalCoins >= getPrice(itemID).high) {
-                    debug("New price to buy is: "+ (totalCoins / getPrice(itemID).high));
-                    multipliedValue = totalCoins / getPrice(itemID).high;
+            while (!failedPurchase && !boughtItem) {
+                if (totalCoins == -1) {
+                    debug("Checking total coins amount");
+                    getAmountTotal("Coins", true);
+                } else if (getPrice(itemID).high * multipliedValue > totalCoins) {
+                    debug("Price to buy at is > total coins.");
+                    if (totalCoins >= getPrice(itemID).high) {
+                        debug("New price to buy is: " + (totalCoins / getPrice(itemID).high));
+                        multipliedValue = totalCoins / getPrice(itemID).high;
+                    } else {
+                        debug("Cannot buy the item: " + itemID);
+                        failedPurchase = true;
+                    }
+                } else if (!isOpen()) {
+                    openGE();
+                    debug("Opened GE");
                 } else {
-                    debug("Cannot buy the item: "+itemID);
-                    failedPurchase = true;
+                    debug("Buying " + quantity + "x " + itemID + " at " + getPrice(itemID).high * multipliedValue);
+                    exchange(true, itemID, quantity, getPrice(itemID).high * multipliedValue);
                 }
-            } else if (!isOpen()) {
-                openGE();
-                debug("Opened GE");
+                if (Inventory.contains(itemID)) {
+                    boughtItem = true;
+                }
             }
-            debug("Buying "+quantity+"x "+itemID + " at "+ getPrice(itemID).high * multipliedValue);
-            exchange(true, itemID, quantity, getPrice(itemID).high * multipliedValue);
         }
     }
 
