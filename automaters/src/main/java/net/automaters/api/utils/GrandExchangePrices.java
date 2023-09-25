@@ -14,6 +14,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
+import static net.automaters.api.items.Items.getAmountTotal;
+import static net.automaters.api.items.Items.totalCoins;
+import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.automaters.util.file_managers.FileManager.*;
 
@@ -61,6 +64,15 @@ public class GrandExchangePrices {
         } else {
             return null;
         }
+    }
+
+    public static boolean canAfford(int ItemID) {
+        if (totalCoins == -1) {
+            debug("Checking total coins amount");
+            getAmountTotal("Coins", true);
+        }
+        debug("Can Afford: "+ItemID+" - "+(totalCoins >= Integer.parseInt(String.valueOf(getPrice(ItemID).high))));
+        return (totalCoins >= Integer.parseInt(String.valueOf(getPrice(ItemID).high)));
     }
 
     private static class AllPricesData {

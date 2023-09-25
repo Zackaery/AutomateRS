@@ -122,7 +122,7 @@ public class BaseSkillFile extends LoopedPlugin {
                 readytochop = true;
             }
             random.nextInt(5);
-            debug("Locatoin after gear checks: " + randomIndex);
+            debug("Location after gear checks: " + randomIndex);
         }
         // woodcutting regular tree start
 

@@ -15,6 +15,7 @@ import static net.automaters.api.utils.GrandExchangePrices.updatePrices;
 import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.automaters.util.file_managers.FileManager.PATH_GE_PRICES;
 import static net.automaters.util.file_managers.FileManager.getLastModified;
+import static net.unethicalite.api.commons.Time.sleep;
 import static net.unethicalite.api.items.GrandExchange.exchange;
 import static net.unethicalite.api.items.GrandExchange.isOpen;
 
@@ -87,6 +88,9 @@ public class GrandExchange {
             debug("Updating GE Prices.");
         }
         while (scriptStarted && !failedPurchase && !boughtItem) {
+            if (Inventory.contains(itemID)) {
+                boughtItem = true;
+            }
             if (totalCoins == -1) {
                 debug("Checking total coins amount");
                 getAmountTotal("Coins", true);
@@ -104,11 +108,11 @@ public class GrandExchange {
                 debug("Opened GE");
             } else {
                 debug("Buying " + quantity + "x " + itemID + " at " + getPrice(itemID).high * multipliedValue);
+                sleep(1000);
                 exchange(true, itemID, quantity, getPrice(itemID).high * multipliedValue);
+                sleep(1000);
             }
-            if (Inventory.contains(itemID)) {
-                boughtItem = true;
-            }
+
         }
     }
 
