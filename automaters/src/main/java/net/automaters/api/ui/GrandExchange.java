@@ -51,9 +51,12 @@ public class GrandExchange {
             int multipliedValue = item.getMultipliedValue();
 
             if (totalCoins == -1) {
+                debug("Checking total coins amount");
                 getAmountTotal("Coins", true);
             } else if (getPrice(itemID).high * multipliedValue > totalCoins) {
+                debug("Price to buy at is > total coins.");
                 if (totalCoins >= getPrice(itemID).high) {
+                    debug("New price to buy is: "+ (totalCoins / getPrice(itemID).high));
                     multipliedValue = totalCoins / getPrice(itemID).high;
                 } else {
                     debug("Cannot buy the item: "+itemID);
@@ -61,8 +64,10 @@ public class GrandExchange {
                 }
             } else if (!isOpen()) {
                 openGE();
+                debug("Opened GE");
             }
-        exchange(true, itemID, quantity, getPrice(itemID).high * multipliedValue);
+            debug("Buying "+quantity+"x "+itemID + " at "+ getPrice(itemID).high * multipliedValue);
+            exchange(true, itemID, quantity, getPrice(itemID).high * multipliedValue);
         }
     }
 
@@ -72,9 +77,12 @@ public class GrandExchange {
             debug("Updating GE Prices.");
         }
         if (totalCoins == -1) {
+            debug("Checking total coins amount");
             getAmountTotal("Coins", true);
         } else if (getPrice(itemID).high * multipliedValue > totalCoins) {
+            debug("Price to buy at is > total coins.");
             if (totalCoins >= getPrice(itemID).high) {
+                debug("New price to buy is: "+ (totalCoins / getPrice(itemID).high));
                 multipliedValue = totalCoins / getPrice(itemID).high;
             } else {
                 debug("Cannot buy the item: "+itemID);
@@ -82,7 +90,9 @@ public class GrandExchange {
             }
         } else if (!isOpen()) {
             openGE();
+            debug("Opened GE");
         }
+        debug("Buying "+quantity+"x "+itemID + " at "+ getPrice(itemID).high * multipliedValue);
         exchange(true, itemID, quantity, getPrice(itemID).high * multipliedValue);
     }
 
