@@ -12,7 +12,6 @@ import java.util.function.Supplier;
 
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.walking.Walking.automateWalk;
-import static net.unethicalite.api.items.Shop.SHOP;
 
 public class Stores {
 
