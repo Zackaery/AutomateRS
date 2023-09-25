@@ -1,9 +1,10 @@
 package net.automaters.api.entities;
 
+import net.automaters.api.walking.Area;
 import net.runelite.api.Player;
 import net.runelite.api.TileObject;
+import net.runelite.api.coords.WorldArea;
 import net.runelite.api.widgets.Widget;
-import net.unethicalite.api.coords.RectangularArea;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.items.Bank;
@@ -41,8 +42,9 @@ public class LocalPlayer {
      *
      * @return if local is in area.
      */
-    public static boolean isInArea(RectangularArea area) {
-        return area.contains(localPlayer.getWorldLocation());
+    public static boolean isInArea(Area area) {
+        WorldArea worldArea = area.toWorldArea();
+        return worldArea.contains(localPlayer.getWorldLocation());
     }
 
     /**
@@ -115,7 +117,7 @@ public class LocalPlayer {
      */
     public static void walkToGE() {
         if (!isInGE()) {
-            automateWalk(GRAND_EXCHANGE.toWorldArea());
+            automateWalk(GRAND_EXCHANGE);
         }
     }
 

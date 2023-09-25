@@ -15,8 +15,7 @@ import net.unethicalite.api.movement.Reachable;
 import java.util.Comparator;
 import java.util.Random;
 
-import static net.automaters.api.entities.LocalPlayer.localPlayer;
-import static net.automaters.api.entities.LocalPlayer.openBank;
+import static net.automaters.api.entities.LocalPlayer.*;
 import static net.automaters.api.entities.SkillCheck.*;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.walking.Walking.automateWalk;
@@ -128,45 +127,45 @@ public class MiningBored extends Task {
 
             // start of copper locations
 
-            if (randomIndex == 0 && !playerPosition.isInArea(DraynorVillage_MiningArea_I.toWorldArea())) {
+            if (randomIndex == 0 && !isInArea(DraynorVillage_MiningArea_I)) {
                 debug("Walking 1");
-                automateWalk(DraynorVillage_MiningArea_I.toWorldArea());
+                automateWalk(DraynorVillage_MiningArea_I);
                 sleep(2000);
                 readytomine = true;
             }
 
             // end of copper
 
-            if (randomIndex == 1 && !playerPosition.isInArea(DraynorVillage_MiningArea_II.toWorldArea())) {
+            if (randomIndex == 1 && !isInArea(DraynorVillage_MiningArea_II)) {
                 debug("Walking 1");
-                automateWalk(DraynorVillage_MiningArea_II.toWorldArea());
+                automateWalk(DraynorVillage_MiningArea_II);
                 sleep(2000);
                 readytomine = true;
             }
 
             // end of copper
 
-            if (randomIndex == 2 && !playerPosition.isInArea(DraynorVillage_MiningArea_III.toWorldArea())) {
+            if (randomIndex == 2 && !isInArea(DraynorVillage_MiningArea_III)) {
                 debug("Walking 1");
-                automateWalk(DraynorVillage_MiningArea_III.toWorldArea());
+                automateWalk(DraynorVillage_MiningArea_III);
                 sleep(2000);
                 readytomine = true;
             }
 
             // end of copper
 
-            if (randomIndex == 3 && !playerPosition.isInArea(DraynorVillage_MiningArea_IV.toWorldArea())) {
+            if (randomIndex == 3 && !isInArea(DraynorVillage_MiningArea_IV)) {
                 debug("Walking 1");
-                automateWalk(DraynorVillage_MiningArea_IV.toWorldArea());
+                automateWalk(DraynorVillage_MiningArea_IV);
                 sleep(2000);
                 readytomine = true;
             }
 
             // end of copper
 
-            if (randomIndex == 4 && !playerPosition.isInArea(DraynorVillage_MiningArea_V.toWorldArea())) {
+            if (randomIndex == 4 && !isInArea(DraynorVillage_MiningArea_V)) {
                 debug("Walking 1");
-                automateWalk(DraynorVillage_MiningArea_V.toWorldArea());
+                automateWalk(DraynorVillage_MiningArea_V);
                 sleep(2000);
                 readytomine = true;
             }

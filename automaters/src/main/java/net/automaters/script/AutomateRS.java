@@ -159,34 +159,23 @@ public class AutomateRS extends TaskPlugin {
 
 
 		configManager.setConfiguration("unethicalite", "avoidWilderness", true);
-		if (hotswapEnabled) {
-			panel = injector.getInstance(AutomateRSPanel.class);
-			try {
-				EventDispatchThreadRunner.runOnDispatchThread(() -> {
-					try {
-						debug("panel.init");
-						panel.init();
-					} catch (IllegalBlockSizeException | NoSuchPaddingException | NoSuchAlgorithmException |
-                             InvalidKeySpecException | BadPaddingException | InvalidKeyException e) {
-						throw new RuntimeException(e);
-					}
-                }, true);
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
-			}
-
-			navButton = NavigationButton.builder()
-					.tooltip("AutomateRS")
-					.icon(ImageManager.getInstance().loadImage("panel/navButton.png"))
-					.priority(0)
-					.panel(panel)
-					.build();
-
-			clientToolbar.addNavigation(navButton);
-			hotswapEnabled = false;
+		panel = injector.getInstance(AutomateRSPanel.class);
+		try {EventDispatchThreadRunner.runOnDispatchThread(() -> {
+			debug("panel.init");
+			panel.refreshPanel();
+			}, true);
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
 		}
+		navButton = NavigationButton.builder()
+				.tooltip("AutomateRS")
+				.icon(ImageManager.getInstance().loadImage("panel/navButton.png"))
+				.priority(0)
+				.panel(panel)
+				.build();
+		clientToolbar.addNavigation(navButton);
 		blockingEventManager.remove(LoginEvent.class);
 
 		overlayManager.add(automateRSOverlay);

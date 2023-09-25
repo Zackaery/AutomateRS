@@ -38,13 +38,6 @@ public class Stores {
 
     public static boolean isOpen() { return Widgets.isVisible(SHOP.get()); }
 
-    public static void walkToShop(Area store) {
-        WorldArea area = store.toWorldArea();
-        while (scriptStarted && !area.contains(localPlayer.getWorldLocation())) {
-            automateWalk(area);
-        }
-    }
-
     public static void open() {
         NPC npc = NPCs.getNearest(x -> x.getName() != null && x.hasAction("Trade"));
         if (!isOpen()) {

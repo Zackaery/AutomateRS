@@ -42,6 +42,26 @@ public interface AutomateRSConfig extends Config
     }
 
     @ConfigItem(
+            keyName = "alwaysShowPanel",
+            name = "Always Show Panel",
+            description = "",
+            position = 3
+    )
+    default boolean alwaysShowPanel() {
+        return false;
+    }
+
+    @ConfigItem(
+            keyName = "hideRestartPopup",
+            name = "",
+            description = "",
+            hidden = true
+    )
+    default boolean hideRestartPopup() {
+        return false;
+    }
+
+    @ConfigItem(
             keyName = "profilesData",
             name = "",
             description = "",

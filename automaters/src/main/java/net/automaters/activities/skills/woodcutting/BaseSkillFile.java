@@ -15,7 +15,7 @@ import net.unethicalite.api.plugins.LoopedPlugin;
 import java.util.Comparator;
 import java.util.Random;
 
-import static net.automaters.api.entities.LocalPlayer.openBank;
+import static net.automaters.api.entities.LocalPlayer.*;
 import static net.automaters.api.entities.SkillCheck.getWoodcuttingLevel;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.walking.Walking.automateWalk;
@@ -130,9 +130,9 @@ public class BaseSkillFile extends LoopedPlugin {
 
             // start of tree locations
 
-            if (randomIndex == 0 && !playerPosition.isInArea(Falador_Tree_TreeArea_I_Area.toWorldArea())) {
+            if (randomIndex == 0 && !isInArea(Falador_Tree_TreeArea_I_Area)) {
                 debug("Walking 1");
-                automateWalk(Falador_Tree_TreeArea_I_Area.toWorldArea());
+                automateWalk(Falador_Tree_TreeArea_I_Area);
                 sleep(2000);
                 readytochop = true;
             }

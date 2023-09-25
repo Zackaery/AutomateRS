@@ -1,4 +1,4 @@
-version = "0.0.1"
+version = "early-access"
 
 project.extra["PluginName"] = "AutomateRS"
 project.extra["PluginDescription"] = "RuneScape - Automated"

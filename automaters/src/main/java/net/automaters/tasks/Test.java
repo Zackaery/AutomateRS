@@ -4,6 +4,7 @@ import net.automaters.api.ui.GrandExchange;
 import net.automaters.api.walking.Area;
 import net.runelite.api.ItemID;
 import net.unethicalite.api.plugins.LoopedPlugin;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ import static net.automaters.api.entities.LocalPlayer.*;
 import static net.automaters.api.ui.GrandExchange.automateBuy;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.script.AutomateRS.scriptStarted;
+import static net.automaters.util.locations.Constants.GRAND_EXCHANGE;
 
 
 public class Test extends LoopedPlugin{
@@ -28,19 +30,12 @@ public class Test extends LoopedPlugin{
             return -1;
         }
 
-
-        ArrayList<GrandExchange.PurchaseItem> itemsToBuy = new ArrayList<>();
-        itemsToBuy.add(new GrandExchange.PurchaseItem(ItemID.STEEL_AXE, 1, 20));
-        itemsToBuy.add(new GrandExchange.PurchaseItem(ItemID.MITHRIL_AXE, 1, 20));
-        itemsToBuy.add(new GrandExchange.PurchaseItem(ItemID.ADAMANT_AXE, 1, 20));
-        itemsToBuy.add(new GrandExchange.PurchaseItem(ItemID.RUNE_AXE, 1, 20));
-        automateBuy(itemsToBuy);
-
-
-
-
-        automateBuy(ItemID.STEEL_AXE, 1, 20);
-
+        Area LUMB = new Area(3200, 3200, 3220, 3220);
+        if (isInArea(LUMB)) {
+            debug("true");
+        } else {
+            debug("false");
+        }
 
        return 50;
     }

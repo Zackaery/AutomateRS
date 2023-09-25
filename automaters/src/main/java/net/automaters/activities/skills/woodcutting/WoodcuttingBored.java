@@ -127,45 +127,45 @@ public class WoodcuttingBored extends Task {
 
             // start of tree locations
 
-            if (randomIndex == 0 && !playerPosition.isInArea(Falador_Tree_TreeArea_I_Area.toWorldArea())) {
+            if (randomIndex == 0 && !isInArea(Falador_Tree_TreeArea_I_Area)) {
                 debug("Walking 1");
-                automateWalk(Falador_Tree_TreeArea_I_Area.toWorldArea());
+                automateWalk(Falador_Tree_TreeArea_I_Area);
                 sleep(2000);
                 readytochop = true;
             }
 
             // end of tree
 
-            if (randomIndex == 1 && !playerPosition.isInArea(Falador_Tree_TreeArea_II_Area.toWorldArea())) {
+            if (randomIndex == 1 && !isInArea(Falador_Tree_TreeArea_II_Area)) {
                 debug("Walking 1");
-                automateWalk(Falador_Tree_TreeArea_II_Area.toWorldArea());
+                automateWalk(Falador_Tree_TreeArea_II_Area);
                 sleep(2000);
                 readytochop = true;
             }
 
             // end of tree
 
-            if (randomIndex == 2 && !playerPosition.isInArea(Falador_Tree_TreeArea_III_Area.toWorldArea())) {
+            if (randomIndex == 2 && !isInArea(Falador_Tree_TreeArea_III_Area)) {
                 debug("Walking 1");
-                automateWalk(Falador_Tree_TreeArea_III_Area.toWorldArea());
+                automateWalk(Falador_Tree_TreeArea_III_Area);
                 sleep(2000);
                 readytochop = true;
             }
 
             // end of tree
 
-            if (randomIndex == 3 && !playerPosition.isInArea(Falador_Tree_TreeArea_IV_Area.toWorldArea())) {
+            if (randomIndex == 3 && !isInArea(Falador_Tree_TreeArea_IV_Area)) {
                 debug("Walking 1");
-                automateWalk(Falador_Tree_TreeArea_IV_Area.toWorldArea());
+                automateWalk(Falador_Tree_TreeArea_IV_Area);
                 sleep(2000);
                 readytochop = true;
             }
 
             // end of tree
 
-            if (randomIndex == 4 && !playerPosition.isInArea(Falador_Tree_TreeArea_V_Area.toWorldArea())) {
+            if (randomIndex == 4 && !isInArea(Falador_Tree_TreeArea_V_Area)) {
                 debug("Walking 1");
-                automateWalk(Falador_Tree_TreeArea_V_Area.toWorldArea());
+                automateWalk(Falador_Tree_TreeArea_V_Area);
                 sleep(2000);
                 readytochop = true;
             }
@@ -216,45 +216,45 @@ public class WoodcuttingBored extends Task {
 
             // start of oak tree locations
 
-            if (randomIndex == 0 && !playerPosition.isInArea(Varrock_TreeArea_I.toWorldArea())) {
+            if (randomIndex == 0 && !isInArea(Varrock_TreeArea_I)) {
                 debug("Walking 1");
-                automateWalk(Varrock_TreeArea_I.toWorldArea());
+                automateWalk(Varrock_TreeArea_I);
                 sleep(2000);
                 readytochop = true;
             }
 
             // end of tree
 
-            if (randomIndex == 1 && !playerPosition.isInArea(Varrock_TreeArea_II.toWorldArea())) {
+            if (randomIndex == 1 && !isInArea(Varrock_TreeArea_II)) {
                 debug("Walking 1");
-                automateWalk(Varrock_TreeArea_II.toWorldArea());
+                automateWalk(Varrock_TreeArea_II);
                 sleep(2000);
                 readytochop = true;
             }
 
             // end of tree
 
-            if (randomIndex == 2 && !playerPosition.isInArea(Varrock_TreeArea_III.toWorldArea())) {
+            if (randomIndex == 2 && !isInArea(Varrock_TreeArea_III)) {
                 debug("Walking 1");
-                automateWalk(Varrock_TreeArea_III.toWorldArea());
+                automateWalk(Varrock_TreeArea_III);
                 sleep(2000);
                 readytochop = true;
             }
 
             // end of tree
 
-            if (randomIndex == 3 && !playerPosition.isInArea(Varrock_TreeArea_IV.toWorldArea())) {
+            if (randomIndex == 3 && !isInArea(Varrock_TreeArea_IV)) {
                 debug("Walking 1");
-                automateWalk(Varrock_TreeArea_IV.toWorldArea());
+                automateWalk(Varrock_TreeArea_IV);
                 sleep(2000);
                 readytochop = true;
             }
 
             // end of tree
 
-            if (randomIndex == 4 && !playerPosition.isInArea(Varrock_TreeArea_V.toWorldArea())) {
+            if (randomIndex == 4 && !isInArea(Varrock_TreeArea_V)) {
                 debug("Walking 1");
-                automateWalk(Varrock_TreeArea_V.toWorldArea());
+                automateWalk(Varrock_TreeArea_V);
                 sleep(2000);
                 readytochop = true;
             }
@@ -307,45 +307,45 @@ public class WoodcuttingBored extends Task {
 
             // start of willow tree locations
 
-            if (randomIndex == 0 && !playerPosition.isInArea(DraynorVillage_Willow_TreeArea_I_Area.toWorldArea())) {
+            if (randomIndex == 0 && !isInArea(DraynorVillage_Willow_TreeArea_I_Area)) {
                 debug("Walking 1");
-                automateWalk(DraynorVillage_Willow_TreeArea_I_Area.toWorldArea());
+                automateWalk(DraynorVillage_Willow_TreeArea_I_Area);
                 sleep(2000);
                 readytochop = true;
             }
 
             // end of tree
 
-            if (randomIndex == 1 && !playerPosition.isInArea(DraynorVillage_Willow_TreeArea_II_Area.toWorldArea())) {
+            if (randomIndex == 1 && !isInArea(DraynorVillage_Willow_TreeArea_II_Area)) {
                 debug("Walking 1");
-                automateWalk(DraynorVillage_Willow_TreeArea_II_Area.toWorldArea());
+                automateWalk(DraynorVillage_Willow_TreeArea_II_Area);
                 sleep(2000);
                 readytochop = true;
             }
 
             // end of tree
 
-            if (randomIndex == 2 && !playerPosition.isInArea(DraynorVillage_Willow_TreeArea_III_Area.toWorldArea())) {
+            if (randomIndex == 2 && !isInArea(DraynorVillage_Willow_TreeArea_III_Area)) {
                 debug("Walking 1");
-                automateWalk(DraynorVillage_Willow_TreeArea_III_Area.toWorldArea());
+                automateWalk(DraynorVillage_Willow_TreeArea_III_Area);
                 sleep(2000);
                 readytochop = true;
             }
 
             // end of tree
 
-            if (randomIndex == 3 && !playerPosition.isInArea(DraynorVillage_Willow_TreeArea_IV_Area.toWorldArea())) {
+            if (randomIndex == 3 && !isInArea(DraynorVillage_Willow_TreeArea_IV_Area)) {
                 debug("Walking 1");
-                automateWalk(DraynorVillage_Willow_TreeArea_IV_Area.toWorldArea());
+                automateWalk(DraynorVillage_Willow_TreeArea_IV_Area);
                 sleep(2000);
                 readytochop = true;
             }
 
             // end of tree
 
-            if (randomIndex == 4 && !playerPosition.isInArea(DraynorVillage_Willow_TreeArea_V_Area.toWorldArea())) {
+            if (randomIndex == 4 && !isInArea(DraynorVillage_Willow_TreeArea_V_Area)) {
                 debug("Walking 1");
-                automateWalk(DraynorVillage_Willow_TreeArea_V_Area.toWorldArea());
+                automateWalk(DraynorVillage_Willow_TreeArea_V_Area);
                 sleep(2000);
                 readytochop = true;
             }

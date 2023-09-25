@@ -1,5 +1,6 @@
 package net.automaters.script.panel;
 
+import com.google.inject.Provides;
 import net.automaters.gui.GUI;
 import net.automaters.gui.utils.EventDispatchThreadRunner;
 import net.automaters.script.AutomateRS;
@@ -8,6 +9,7 @@ import net.automaters.script.panel.auto_login.ProfilePanel;
 import net.automaters.api.client.ui.components.PluginInfoPanel;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
+import net.runelite.client.config.ConfigManager;
 import net.runelite.client.ui.ClientUI;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.DynamicGridLayout;
@@ -31,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,9 +43,13 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,13 +59,15 @@ import static net.automaters.gui.GUI.started;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.script.AutomateRS.elapsedTime;
 import static net.automaters.script.AutomateRS.scriptTimer;
+import static net.automaters.util.file_managers.FileManager.*;
 
 public class AutomateRSPanel extends PluginPanel {
     @Inject
     @Nullable
     private Client client;
 
-//    private final AutomateRS automate;
+    @Inject
+    ConfigManager configManager;
 
     @Inject
     private AutomateRSConfig automateRSConfig;
@@ -78,7 +87,9 @@ public class AutomateRSPanel extends PluginPanel {
     private final PluginInfoPanel loginProfileTitle = new PluginInfoPanel();
     private final PluginInfoPanel noAccountsTitle = new PluginInfoPanel();
     private final PluginInfoPanel updateTitle = new PluginInfoPanel();
-    private final PluginInfoPanel profileTitle = new PluginInfoPanel();
+    private final PluginInfoPanel updatedTitle = new PluginInfoPanel();
+    private final PluginInfoPanel restartTitle = new PluginInfoPanel();
+
 
     private final String PROFILE_NAME = "Profile Name";
 
@@ -108,50 +119,22 @@ public class AutomateRSPanel extends PluginPanel {
     private static final int iterations = 100000;
     private static GUI GUI;
 
+    public void refreshPanel() {
+        removeAll();
+        repaint();
+        revalidate();
+        debug("Removed all on panel.");
+        try {
+            init();
+            debug("Reinstated panel.");
+        } catch (IllegalBlockSizeException | NoSuchPaddingException | NoSuchAlgorithmException |
+                 InvalidKeySpecException | BadPaddingException | InvalidKeyException e) {
+
+            debug("Failed to reinstate panel.");
+            throw new RuntimeException(e);
+        }
+    }
     public void init() throws IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {
-
-// Local file path
-        String usernamee = System.getProperty("user.home");
-        String directoryPathh = usernamee + File.separator + ".openosrs" + File.separator + "plugins";
-        String baseFileNamee = "automaters";
-
-// Find the latest version of the file in the directory
-        File directoryy = new File(directoryPathh);
-        File[] matchingFiless = directoryy.listFiles((dir, name) -> name.startsWith(baseFileNamee));
-        String latestVersionn = "0.0.0"; // Initialize with a low version
-        File latestFile = null; // Initialize the latest file as null
-
-        if (matchingFiless != null) {
-            Pattern versionPattern = Pattern.compile(baseFileNamee + "-(\\d+\\.\\d+\\.\\d+)\\.jar");
-
-            for (File file : matchingFiless) {
-                String fileName = file.getName();
-                Matcher matcher = versionPattern.matcher(fileName);
-                if (matcher.matches()) {
-                    String version = matcher.group(1);
-                    if (version.compareTo(latestVersionn) > 0) {
-                        // Found a newer version, delete the previous latest file
-                        if (latestFile != null) {
-                            latestFile.delete();
-                            System.out.println("Deleted: " + latestFile.getName());
-                        }
-                        // Update latestVersion and latestFile
-                        latestVersionn = version;
-                        latestFile = file;
-                    } else {
-                        // This is an older version, mark it for deletion
-                        file.delete();
-                        System.out.println("Deleted: " + file.getName());
-                    }
-                }
-            }
-        }
-
-// Now, latestFile contains the highest numbered file of "automaters"
-        if (latestFile != null) {
-            System.out.println("Latest File: " + latestFile.getName());
-        }
-
 
         titlePanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         titlePanel.setBorder(new EmptyBorder(10, 5, 10, 0));
@@ -173,8 +156,6 @@ public class AutomateRSPanel extends PluginPanel {
         scriptPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         scriptPanel.setLayout(new DynamicGridLayout(3, 1, 0, 5));
 
-
-
         // --- TITLE IMAGE PANEL ---
         {
             // --- SET COMPONENTS ---
@@ -193,101 +174,63 @@ public class AutomateRSPanel extends PluginPanel {
             {
                 updateTitle.setContent("Update Available",
                         "Please click the button below to download the newest update.");
+                updatedTitle.setContent("Up to Date",
+                        "No updates are available. You already have the latest version.");
+                restartTitle.setContent("Please Restart Devious",
+                        "Please restart the Devious client to use the newest version of AutomateRS.");
+
                 /**
                  *  --- add in logic here to check github for updates
                  */
 
-                // if need to update {
-                addUpdateButton = true;
-                //}
-
+                try {
+                    if (shouldUpdate()) {
+                        debug("Update Available.");
+                        addUpdateButton = true;
+                        repaint();
+                        revalidate();
+                    } else {
+                        debug("You're on the latest update.");
+                        repaint();
+                        revalidate();
+                    }
+                } catch (IOException | ParseException e) {
+                    throw new RuntimeException(e);
+                }
                 updateButton.addActionListener(e -> {
-
-                    // Local file path
-                    String username = System.getProperty("user.home");
-                    String directoryPath = username + File.separator + ".openosrs" + File.separator + "plugins";
-                    String baseFileName = "automaters";
-
-                    // Find the latest version of the file in the directory
-                    File directory = new File(directoryPath);
-                    File[] matchingFiles = directory.listFiles((dir, name) -> name.startsWith(baseFileName));
-                    String latestVersion = "0.0.0"; // Initialize with a low version
-
-                    if (matchingFiles != null) {
-                        Pattern versionPattern = Pattern.compile(baseFileName + "-(\\d+\\.\\d+\\.\\d+)\\.jar");
-                        for (File file : matchingFiles) {
-                            String fileName = file.getName();
-                            Matcher matcher = versionPattern.matcher(fileName);
-                            if (matcher.matches()) {
-                                String version = matcher.group(1);
-                                if (version.compareTo(latestVersion) > 0) {
-                                    latestVersion = version;
-                                }
-                            }
+                    downloadUpdate();
+                    updatePanel.removeAll();
+                    updatePanel.add(restartTitle, BorderLayout.NORTH);
+                    removeAll();
+                    add(titlePanel);
+                    add(updatePanel);
+                    repaint();
+                    revalidate();
+                    if (!automateRSConfig.hideRestartPopup()) {
+                        Object[] options = {"OK", "Don't show again"};
+                        int result = JOptionPane.showOptionDialog(null,
+                                "You've successfully downloaded the newest update. \n \n " +
+                                        "Please relaunch the Devious client.",
+                                "Update successfully downloaded", JOptionPane.PLAIN_MESSAGE, JOptionPane.QUESTION_MESSAGE, null, options,
+                                options[0]);
+                        if (result == 1) {
+                            // User clicked "Don't show again" button
+                            configManager.setConfiguration("automaters", "hideRestartPopup", true);
                         }
                     }
-
-                    // Increment the latest version by 1 here
-                    String[] versionParts = latestVersion.split("\\.");
-                    int major = Integer.parseInt(versionParts[0]);
-                    int minor = Integer.parseInt(versionParts[1]);
-                    int patch = Integer.parseInt(versionParts[2]);
-                    patch++;
-
-                    // Construct the new version string
-                    latestVersion = String.format("%d.%d.%d", major, minor, patch);
-
-                    // Construct the final localFilePath
-                    String localFilePath = directoryPath + File.separator + baseFileName + "-" + latestVersion + ".jar";
-
-                    System.out.println("Latest Version: " + latestVersion);
-                    System.out.println("Local File Path: " + localFilePath);
-                    String githubRawURL = "https://raw.githubusercontent.com/Zackaery/Account-Builder/master/automaters-0.0.1.jar";
-
-                    try {
-                        File localFile = new File(localFilePath);
-                        URL githubURL = new URL(githubRawURL);
-
-                        long githubLastModified = githubURL.openConnection().getDate();
-                        long localLastModified = localFile.lastModified();
-
-                        System.out.println("Local File Last Modified: " + localLastModified);
-                        System.out.println("GitHub File Last Modified: " + githubLastModified);
-
-                        if (githubLastModified > localLastModified) {
-                            // Download the updated file
-                            try (InputStream in = githubURL.openStream()) {
-                                Path tempFile = Files.createTempFile("automaters-0.0.1", ".jar");
-                                Files.copy(in, tempFile, StandardCopyOption.REPLACE_EXISTING);
-
-                                // Replace the old file with the updated file
-                                Files.move(tempFile, localFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-                                System.out.println("File updated to: " + localFile.getName() + " Please restart the client!");
-                                JOptionPane.showMessageDialog(null, "File updated: " + localFile.getName() + " Please restart the client!", "Update Successful", JOptionPane.INFORMATION_MESSAGE);
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                                JOptionPane.showMessageDialog(null, "Failed to update file.", "Update Failed", JOptionPane.ERROR_MESSAGE);
-                            }
-                        } else {
-                            System.out.println("File is up to date.");
-                            JOptionPane.showMessageDialog(null, "File is up to date.", "No Updates", JOptionPane.INFORMATION_MESSAGE);
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        JOptionPane.showMessageDialog(null, "Failed to check for updates.", "Update Check Failed", JOptionPane.ERROR_MESSAGE);
-                    }
-
-
-
                 });
-
             }
+
             // --- ADD COMPONENTS ---
             {
                 if (addUpdateButton) {
                     updatePanel.add(updateTitle, BorderLayout.NORTH);
                     updatePanel.add(updateButton, BorderLayout.CENTER);
+                    removeAll();
+                    add(titlePanel);
+                    add(updatePanel);
+                } else {
+                    updatePanel.add(updatedTitle, BorderLayout.NORTH);
                 }
             }
         }
@@ -522,14 +465,14 @@ public class AutomateRSPanel extends PluginPanel {
 
         // --- ADD COMPONENTS TO MAIN PANEL --
         {
-            add(titlePanel, BorderLayout.NORTH);
-            if (addUpdateButton) {
+            if (!addUpdateButton || automateRSConfig.alwaysShowPanel()) {
+                add(titlePanel, BorderLayout.NORTH);
                 add(updatePanel, BorderLayout.CENTER);
+                add(loginPanel, BorderLayout.CENTER);
+                decryptAccounts();
+                add(accountPanel, BorderLayout.CENTER);
+                add(scriptPanel, BorderLayout.SOUTH);
             }
-            add(loginPanel, BorderLayout.CENTER);
-            decryptAccounts();
-            add(accountPanel, BorderLayout.CENTER);
-            add(scriptPanel, BorderLayout.SOUTH);
         }
 
         repaint();
