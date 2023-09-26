@@ -1,6 +1,5 @@
 package net.automaters.script.panel;
 
-import com.google.inject.Provides;
 import net.automaters.gui.GUI;
 import net.automaters.gui.utils.EventDispatchThreadRunner;
 import net.automaters.script.AutomateRS;
@@ -29,30 +28,18 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.Date;
-import java.util.TimeZone;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import static net.automaters.api.client.ui.components.InfoPanel.buildLinkPanel;
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.gui.GUI.*;
 import static net.automaters.gui.GUI.started;
@@ -60,6 +47,8 @@ import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.script.AutomateRS.elapsedTime;
 import static net.automaters.script.AutomateRS.scriptTimer;
 import static net.automaters.util.file_managers.FileManager.*;
+import static net.automaters.util.file_managers.IconManager.AUTOMATERS_ICON;
+import static net.automaters.util.file_managers.IconManager.AUTOMATERS_TITLE;
 
 public class AutomateRSPanel extends PluginPanel {
     @Inject
@@ -77,7 +66,7 @@ public class AutomateRSPanel extends PluginPanel {
     private final JPanel titlePanel = new JPanel();
     private final JPanel scriptPanel = new JPanel();
 
-    private final JLabel titleLabel = new JLabel();
+    private final JLabel titleLabel = new JLabel(AUTOMATERS_TITLE);
 
     private final JButton startButton = new JButton("Start");
     private final JButton stopButton = new JButton("Stop");
@@ -95,6 +84,7 @@ public class AutomateRSPanel extends PluginPanel {
 
     private final SpinnerModel model = new SpinnerNumberModel(301, 301, 578, 1);
     private final JPanel updatePanel = new JPanel();
+    private final JPanel updateActionsContainer = new JPanel();
     private final JPanel loginPanel = new JPanel();
     private final JPanel accountPanel = new JPanel();
     private final JTextField profileLabel = new JTextField(PROFILE_NAME);
@@ -144,6 +134,9 @@ public class AutomateRSPanel extends PluginPanel {
         updatePanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         updatePanel.setLayout(new DynamicGridLayout(0, 1, 0, 5));
 
+        updateActionsContainer.setBorder(new EmptyBorder(10, 0, 0, 0));
+        updateActionsContainer.setLayout(new GridLayout(0, 1, 0, 10));
+
         loginPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         loginPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         loginPanel.setLayout(new DynamicGridLayout(11, 1, 0, 5));
@@ -159,9 +152,7 @@ public class AutomateRSPanel extends PluginPanel {
         // --- TITLE IMAGE PANEL ---
         {
             // --- SET COMPONENTS ---
-            {
-                GUI.setImage("panel/AutomateRS.png", titleLabel);
-            }
+
             // --- ADD COMPONENTS ---
             {
                 titlePanel.add(titleLabel, BorderLayout.CENTER);
@@ -172,12 +163,13 @@ public class AutomateRSPanel extends PluginPanel {
         {
             // --- SET COMPONENTS ---
             {
+                updateActionsContainer.add(buildLinkPanel(AUTOMATERS_ICON, "Download the newest update on our", "Discord server", URL_DISCORD_DOWNLOAD));
                 updateTitle.setContent("Update Available",
-                        "Please click the button below to download the newest update.");
+                        "Please click the panel below to download the newest update.");
                 updatedTitle.setContent("Up to Date",
                         "No updates are available. You already have the latest version.");
-                restartTitle.setContent("Please Restart Devious",
-                        "Please restart the Devious client to use the newest version of AutomateRS.");
+                restartTitle.setContent("Please Import & Restart Devious",
+                        "Please import your newest download to: \n" + PATH_PLUGINS_FOLDER + "\n Restart Devious Client once completed.");
 
                 /**
                  *  --- add in logic here to check github for updates
@@ -225,10 +217,10 @@ public class AutomateRSPanel extends PluginPanel {
             {
                 if (addUpdateButton) {
                     updatePanel.add(updateTitle, BorderLayout.NORTH);
-                    updatePanel.add(updateButton, BorderLayout.CENTER);
                     removeAll();
                     add(titlePanel);
                     add(updatePanel);
+                    add(updateActionsContainer);
                 } else {
                     updatePanel.add(updatedTitle, BorderLayout.NORTH);
                 }
@@ -468,6 +460,9 @@ public class AutomateRSPanel extends PluginPanel {
             if (!addUpdateButton || automateRSConfig.alwaysShowPanel()) {
                 add(titlePanel, BorderLayout.NORTH);
                 add(updatePanel, BorderLayout.CENTER);
+                if (addUpdateButton) {
+                    add(updateActionsContainer);
+                }
                 add(loginPanel, BorderLayout.CENTER);
                 decryptAccounts();
                 add(accountPanel, BorderLayout.CENTER);

@@ -26,6 +26,7 @@ import java.security.spec.InvalidKeySpecException;
 
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.script.panel.AutomateRSPanel.*;
+import static net.automaters.util.file_managers.IconManager.set;
 
 public class ProfilePanel extends JPanel {
 
@@ -35,16 +36,16 @@ public class ProfilePanel extends JPanel {
     private static final ImageIcon DELETE_HOVER_ICON;
     private static final ImageIcon START_ICON;
     private static final ImageIcon START_HOVER_ICON;
+    private static final ImageIcon STARTED_ICON;
 
     static
     {
-        final BufferedImage deleteImg = ImageManager.getInstance().loadImage("panel/delete_icon.png");
-        DELETE_ICON = new ImageIcon(deleteImg);
-        DELETE_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(deleteImg, -100));
+        DELETE_ICON = set("util\\delete.png");
+        DELETE_HOVER_ICON = set("util\\delete_hovered.png");
 
-        final BufferedImage startImg = ImageManager.getInstance().loadImage("panel/start_icon.png");
-        START_ICON = new ImageIcon(startImg);
-        START_HOVER_ICON = new ImageIcon(ImageUtil.alphaOffset(startImg, -100));
+        START_ICON = set("util\\start.png");
+        START_HOVER_ICON = set("util\\start_hovered.png");
+        STARTED_ICON = set("util\\started.png");
     }
 
     AutomateRSConfig config;
@@ -91,7 +92,7 @@ public class ProfilePanel extends JPanel {
 
         JLabel delete = new JLabel();
         accountsAdded = true;
-        delete.setIcon(DELETE_ICON);
+        delete.setIcon(set("util\\delete.png"));
         delete.setToolTipText("Delete account profile");
         delete.addMouseListener(new MouseAdapter()
         {
@@ -128,14 +129,17 @@ public class ProfilePanel extends JPanel {
         start.setToolTipText("Start account profile");
         start.addMouseListener(new MouseAdapter()
         {
+            boolean started;
             @Override
-            public void mousePressed(MouseEvent e)
-            {
+            public void mousePressed(MouseEvent e) {
+                start.setIcon(STARTED_ICON);
+                started = true;
                 if (useWorld && client.getWorld() != world) {
                     prepareLogin();
                 } else {
                     login(client);
                 }
+
             }
 
             @Override
@@ -147,7 +151,11 @@ public class ProfilePanel extends JPanel {
             @Override
             public void mouseExited(MouseEvent e)
             {
-                start.setIcon(START_ICON);
+                if (started) {
+                    start.setIcon(STARTED_ICON);
+                } else {
+                    start.setIcon(START_ICON);
+                }
             }
         });
 

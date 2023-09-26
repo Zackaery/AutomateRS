@@ -22,6 +22,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import static net.automaters.util.file_managers.IconManager.AUTOMATERS_TITLE;
+import static net.automaters.util.file_managers.IconManager.set;
 
 public class GUI implements ActionListener {
 
@@ -144,11 +146,10 @@ public class GUI implements ActionListener {
         frame.setTitle("Zackaery's Account Builder - Setup GUI " + versionNumber);
 
         // --- labelTitle ---
-        labelTitle = new JLabel();
+        labelTitle = new JLabel(AUTOMATERS_TITLE);
         labelTitle.setBounds(449, 10, 957, 160);
         labelTitle.setHorizontalAlignment(SwingConstants.CENTER);
         labelTitle.setFont(labelTitle.getFont().deriveFont(labelTitle.getFont().getSize() + 4f));
-        setImage("labelTitle.png", labelTitle);
 
         // --- tabbedPanel ---
         tabbedPanel = new JTabbedPane();
@@ -327,8 +328,7 @@ public class GUI implements ActionListener {
     }
 
     public static void setImage(String loadImage, JLabel label) {
-        Image image = ImageManager.getInstance().loadImage(loadImage);
-        ImageIcon icon = new ImageIcon(image);
+        ImageIcon icon = set(loadImage);
         label.setIcon(icon);
     }
 

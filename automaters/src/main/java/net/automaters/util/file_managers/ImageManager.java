@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static net.automaters.api.utils.Debug.debug;
+import static net.automaters.util.file_managers.FileManager.PATH_RESOURCES;
 
 public class ImageManager extends ResourceManager {
 
@@ -25,17 +26,24 @@ public class ImageManager extends ResourceManager {
         return instance;
     }
 
-    public BufferedImage loadImage(final String relativeImagePath) {
-        String image = "resources/net.automaters.script/" + relativeImagePath;
+    public BufferedImage loadImage(final String imagePath) {
+        String image = PATH_RESOURCES + imagePath;
+        debug("Image: "+ image);
         if (imageCache.containsKey(image)) {
+
+            debug("Image Cache: "+ imageCache.get(image));
             return imageCache.get(image);
         }
 
+        debug("Image: "+ image);
         try (InputStream imageInputStream = loadFile(image)) {
             if (imageInputStream == null) {
                 return null;
             }
+            debug("Image Input Stream: "+ imageInputStream);
             BufferedImage bufferedImage =  ImageIO.read(imageInputStream);
+
+            debug("Buffered Image: "+ bufferedImage);
             imageCache.put(image, bufferedImage);
             return bufferedImage;
         } catch (IOException e) {

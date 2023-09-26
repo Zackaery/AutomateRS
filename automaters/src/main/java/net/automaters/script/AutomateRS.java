@@ -20,9 +20,11 @@ import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.account.AccountPlugin;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.runelite.client.util.ImageUtil;
 import net.unethicalite.api.events.LobbyWorldSelectToggled;
 import net.unethicalite.api.game.Worlds;
 import net.unethicalite.api.plugins.Task;
@@ -38,6 +40,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.inject.Inject;
 import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -52,6 +55,9 @@ import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.gui.GUI.*;
 import static net.automaters.script.panel.AutomateRSPanel.*;
 import static net.automaters.script.panel.auto_login.ProfilePanel.init;
+import static net.automaters.util.file_managers.FileManager.PATH_RESOURCES;
+import static net.automaters.util.file_managers.IconManager.AUTOMATERS_ICON;
+import static net.automaters.util.file_managers.IconManager.convert;
 
 @SuppressWarnings("ALL")
 @PluginDescriptor(name = "AutomateRS", description = "RuneScape - Automated")
@@ -105,6 +111,13 @@ public class AutomateRS extends TaskPlugin {
 	private boolean hotswapEnabled = true;
 	private ExecutorService executorService = Executors.newFixedThreadPool(1);
 
+	private static final BufferedImage LOGIN_IMAGE, LOGOUT_IMAGE;
+
+	static
+	{
+		LOGIN_IMAGE = ImageUtil.loadImageResource(AccountPlugin.class, "login_icon.png");
+		LOGOUT_IMAGE = ImageUtil.loadImageResource(AccountPlugin.class, "logout_icon.png");
+	}
 	@Subscribe
 	private void onExternalPluginChanged(OPRSPluginChanged e)
 	{
@@ -171,7 +184,7 @@ public class AutomateRS extends TaskPlugin {
 		}
 		navButton = NavigationButton.builder()
 				.tooltip("AutomateRS")
-				.icon(ImageManager.getInstance().loadImage("panel/navButton.png"))
+				.icon(ImageManager.getInstance().loadImage("script\\icon.png"))
 				.priority(0)
 				.panel(panel)
 				.build();

@@ -17,6 +17,8 @@ import java.time.Duration;
 import static net.automaters.api.utils.Debug.displayMessage;
 import static net.automaters.gui.GUI.started;
 import static net.automaters.script.AutomateRS.*;
+import static net.automaters.util.file_managers.IconManager.AUTOMATERS_TITLE;
+import static net.automaters.util.file_managers.IconManager.convert;
 
 @Singleton
 @Slf4j
@@ -27,7 +29,7 @@ public class AutomateRSOverlay extends OverlayPanel {
 
 	private final Font font = new Font("Arial", Font.BOLD, 12);
 
-	final Image title = ImageManager.getInstance().loadImage("panel/AutomateRS.png");
+	final Image title = ImageManager.getInstance().loadImage("script\\title.png");
 
 
 	@Inject

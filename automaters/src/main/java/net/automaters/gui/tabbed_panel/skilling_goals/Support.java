@@ -46,9 +46,9 @@ public class Support {
             spinnerGoalSlayer = new JSpinner();
             spinnerGoalSlayer.setBounds(150, 68, 50, 20);
 
-            setImage("skillIcons/Agility.png", labelGoalAgility);
-            setImage("skillIcons/Thieving.png", labelGoalThieving);
-            setImage("skillIcons/Slayer.png", labelGoalSlayer);
+            setImage("gui\\skill_icons\\Agility.png", labelGoalAgility);
+            setImage("gui\\skill_icons\\Thieving.png", labelGoalThieving);
+            setImage("gui\\skill_icons\\Slayer.png", labelGoalSlayer);
         }
 
         // ======== panelSkillingGoalsSupport ========

@@ -55,7 +55,7 @@ public class GrandExchangePrices {
     }
 
     public static ItemPrice getPrice(int ItemID) {
-        String filePath = PATH_GE_PRICES;
+        String filePath = FILE_GE_PRICES;
         String jsonData = readJsonFromFile(filePath);
 
         if (jsonData != null) {

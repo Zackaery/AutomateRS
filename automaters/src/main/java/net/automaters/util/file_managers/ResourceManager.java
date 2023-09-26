@@ -12,6 +12,7 @@ import java.util.zip.ZipFile;
 
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.script.AutomateRS.scriptStarted;
+import static net.automaters.util.file_managers.FileManager.URL_GITHUB;
 
 public class ResourceManager {
 
@@ -21,8 +22,6 @@ public class ResourceManager {
             "data",
             "AutomateRS"
     ).toString();
-
-    private static final String GITHUB_URL = "https://github.com/Zackaery/Account-Builder";
 
     public static InputStream loadFile(final String relativeFilePath) {
 
@@ -76,7 +75,7 @@ public class ResourceManager {
 
     private static void downloadResourcesFromGitHubToDataDirectory() {
         try {
-            URL url = new URL(GITHUB_URL + "/raw/main/resources.zip");
+            URL url = new URL(URL_GITHUB + "/raw/main/resources.zip");
             debug("Downloading file from url: " + url.toString() + ", to: " + DIRECTORY);
 
             ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());

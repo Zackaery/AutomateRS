@@ -13,7 +13,7 @@ import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.utils.GrandExchangePrices.getPrice;
 import static net.automaters.api.utils.GrandExchangePrices.updatePrices;
 import static net.automaters.script.AutomateRS.scriptStarted;
-import static net.automaters.util.file_managers.FileManager.PATH_GE_PRICES;
+import static net.automaters.util.file_managers.FileManager.FILE_GE_PRICES;
 import static net.automaters.util.file_managers.FileManager.getLastModified;
 import static net.unethicalite.api.commons.Time.sleep;
 import static net.unethicalite.api.items.GrandExchange.exchange;
@@ -45,7 +45,7 @@ public class GrandExchange {
     public static boolean failedPurchase;
     public static void automateBuy(ArrayList<PurchaseItem> itemsToBuy) {
         boolean boughtItem = false;
-        if (getLastModified(new File(PATH_GE_PRICES), 30)) {
+        if (getLastModified(new File(FILE_GE_PRICES), 30)) {
             updatePrices();
             debug("Updating GE Prices.");
         }
@@ -83,7 +83,7 @@ public class GrandExchange {
 
     public static void automateBuy(int itemID, int quantity, int multipliedValue) {
         boolean boughtItem = false;
-        if (getLastModified(new File(PATH_GE_PRICES), 30)) {
+        if (getLastModified(new File(FILE_GE_PRICES), 30)) {
             updatePrices();
             debug("Updating GE Prices.");
         }

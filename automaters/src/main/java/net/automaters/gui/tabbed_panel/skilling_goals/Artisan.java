@@ -80,14 +80,14 @@ public class Artisan {
             spinnerGoalConstruction = new JSpinner();
             spinnerGoalConstruction.setBounds(165, 174, 50, 20);
 
-            setImage("skillIcons/Herblore.png", labelGoalHerblore);
-            setImage("skillIcons/Crafting.png", labelGoalCrafting);
-            setImage("skillIcons/Fletching.png", labelGoalFletching);
-            setImage("skillIcons/Smithing.png", labelGoalSmithing);
-            setImage("skillIcons/Cooking.png", labelGoalCooking);
-            setImage("skillIcons/Firemaking.png", labelGoalFiremaking);
-            setImage("skillIcons/Runecrafting.png", labelGoalRunecrafting);
-            setImage("skillIcons/Construction.png", labelGoalConstruction);
+            setImage("gui\\skill_icons\\Herblore.png", labelGoalHerblore);
+            setImage("gui\\skill_icons\\Crafting.png", labelGoalCrafting);
+            setImage("gui\\skill_icons\\Fletching.png", labelGoalFletching);
+            setImage("gui\\skill_icons\\Smithing.png", labelGoalSmithing);
+            setImage("gui\\skill_icons\\Cooking.png", labelGoalCooking);
+            setImage("gui\\skill_icons\\Firemaking.png", labelGoalFiremaking);
+            setImage("gui\\skill_icons\\Runecrafting.png", labelGoalRunecrafting);
+            setImage("gui\\skill_icons\\Construction.png", labelGoalConstruction);
 
         }
 
