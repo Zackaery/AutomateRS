@@ -1,5 +1,6 @@
 package net.automaters.activities.skills.woodcutting;
 
+import net.automaters.api.ui.GrandExchange;
 import net.runelite.api.EquipmentInventorySlot;
 import net.runelite.api.Item;
 import net.runelite.api.ItemID;
@@ -13,6 +14,7 @@ import net.unethicalite.api.magic.Rune;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static net.automaters.api.entities.LocalPlayer.openBank;
 import static net.automaters.api.entities.LocalPlayer.openGE;
 import static net.automaters.api.entities.SkillCheck.getAttackLevel;
 import static net.automaters.api.entities.SkillCheck.getWoodcuttingLevel;
@@ -93,37 +95,37 @@ public class AxeUpgrade {
                     buyaxe = ItemID.DRAGON_AXE;
                     break;
                 case "Rune axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 41 && canAfford(ItemID.RUNE_AXE);
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 41 && getAttackLevel() < 61&& canAfford(ItemID.RUNE_AXE);
                     debug("Considering Rune axe.");
                     buyaxe = ItemID.RUNE_AXE;
                     break;
                 case "Adamant axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 31 && canAfford(ItemID.ADAMANT_AXE);
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 31 && getAttackLevel() < 41 && canAfford(ItemID.ADAMANT_AXE);
                     debug("Considering Adamant axe.");
                     buyaxe = ItemID.ADAMANT_AXE;
                     break;
                 case "Mithril axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 21 && canAfford(ItemID.MITHRIL_AXE);
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 21 && getAttackLevel() < 31 && canAfford(ItemID.MITHRIL_AXE);
                     debug("Considering Mithril axe.");
                     buyaxe = ItemID.MITHRIL_AXE;
                     break;
                 case "Black axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 11 && canAfford(ItemID.BLACK_AXE);
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 11 && getAttackLevel() < 21 && canAfford(ItemID.BLACK_AXE);
                     debug("Considering Black axe.");
                     buyaxe = ItemID.BLACK_AXE;
                     break;
                 case "Steel axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 6 && canAfford(ItemID.STEEL_AXE);
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 6 && getAttackLevel() < 11 && canAfford(ItemID.STEEL_AXE);
                     debug("Considering Steel axe.");
                     buyaxe = ItemID.STEEL_AXE;
                     break;
                 case "Iron axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 1 && canAfford(ItemID.IRON_AXE);
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 1 && getAttackLevel() < 6 && canAfford(ItemID.IRON_AXE);
                     debug("Considering Iron axe.");
                     buyaxe = ItemID.IRON_AXE;
                     break;
                 case "Bronze axe":
-                    shouldConsiderAxe = getWoodcuttingLevel() >= 1 && canAfford(ItemID.BRONZE_AXE);
+                    shouldConsiderAxe = getWoodcuttingLevel() >= 1 && getAttackLevel() < 6 && canAfford(ItemID.BRONZE_AXE);
                     debug("Considering Bronze axe.");
                     buyaxe = ItemID.BRONZE_AXE;
                     break;
@@ -134,6 +136,19 @@ public class AxeUpgrade {
                 debug("Need to buy axe, attempting to purchase: " + buyaxe + " Which is: " + itemName);
                 sleep(1500);
                 automateBuy(buyaxe,1,2);
+                if (net.unethicalite.api.items.GrandExchange.isOpen() && !failedPurchase) {
+                    debug("Purchased finished, closing GE.");
+                    net.unethicalite.api.items.GrandExchange.close();
+
+                    while (!Bank.isOpen() && scriptStarted) {
+                        debug("Returning to bank to deposit all.");
+                        openBank();
+                    }
+                    if (Bank.isOpen()) {
+                        debug("Depositing inventory.");
+                        Bank.depositInventory();
+                    }
+                }
                 axesToHandleList.remove(i);
                 shouldConsiderAxe = false;
             }
