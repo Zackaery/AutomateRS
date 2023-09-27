@@ -27,23 +27,17 @@ public class ImageManager extends ResourceManager {
     }
 
     public BufferedImage loadImage(final String imagePath) {
+        debug("Loading Image: " + imagePath);
         String image = PATH_RESOURCES + imagePath;
-        debug("Image: "+ image);
         if (imageCache.containsKey(image)) {
-
-            debug("Image Cache: "+ imageCache.get(image));
             return imageCache.get(image);
         }
 
-        debug("Image: "+ image);
         try (InputStream imageInputStream = loadFile(image)) {
             if (imageInputStream == null) {
                 return null;
             }
-            debug("Image Input Stream: "+ imageInputStream);
             BufferedImage bufferedImage =  ImageIO.read(imageInputStream);
-
-            debug("Buffered Image: "+ bufferedImage);
             imageCache.put(image, bufferedImage);
             return bufferedImage;
         } catch (IOException e) {

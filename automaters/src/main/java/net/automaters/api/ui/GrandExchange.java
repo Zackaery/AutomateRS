@@ -88,9 +88,6 @@ public class GrandExchange {
             debug("Updating GE Prices.");
         }
         while (scriptStarted && !failedPurchase && !boughtItem) {
-            if (Inventory.contains(itemID)) {
-                boughtItem = true;
-            }
             if (totalCoins == -1) {
                 debug("Checking total coins amount");
                 getAmountTotal("Coins", true);
@@ -107,12 +104,17 @@ public class GrandExchange {
                 openGE();
                 debug("Opened GE");
             } else {
-                debug("Buying " + quantity + "x " + itemID + " at " + getPrice(itemID).high * multipliedValue);
-                sleep(1000);
-                exchange(true, itemID, quantity, getPrice(itemID).high * multipliedValue);
-                sleep(1000);
+                while (scriptStarted && !Inventory.contains(itemID)) {
+                    debug("Buying " + quantity + "x " + itemID + " at " + getPrice(itemID).high * multipliedValue);
+                    sleep(1800);
+                    exchange(true, itemID, quantity, getPrice(itemID).high * multipliedValue, true, false);
+                    sleep(1200);
+                }
             }
-
+            if (Inventory.contains(itemID)) {
+                net.unethicalite.api.items.GrandExchange.close();
+                boughtItem = true;
+            }
         }
     }
 

@@ -3,11 +3,9 @@ package net.automaters.script.panel.auto_login;
 import net.automaters.script.AutomateRS;
 import net.automaters.script.AutomateRSConfig;
 import net.automaters.script.panel.AutomateRSPanel;
-import net.automaters.util.file_managers.ImageManager;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.client.ui.ColorScheme;
-import net.runelite.client.util.ImageUtil;
 import net.unethicalite.api.input.Keyboard;
 
 import javax.crypto.BadPaddingException;
@@ -19,34 +17,23 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.script.panel.AutomateRSPanel.*;
-import static net.automaters.util.file_managers.IconManager.set;
+import static net.automaters.util.file_managers.IconManager.*;
+import static net.unethicalite.api.commons.Time.sleep;
+import static net.unethicalite.api.game.Game.logout;
+import static net.automaters.script.AutomateRS.scriptStarted;
+import static net.automaters.gui.GUI.started;
 
 public class ProfilePanel extends JPanel {
 
     private AutomateRS plugin;
 
-    private static final ImageIcon DELETE_ICON;
-    private static final ImageIcon DELETE_HOVER_ICON;
-    private static final ImageIcon START_ICON;
-    private static final ImageIcon START_HOVER_ICON;
-    private static final ImageIcon STARTED_ICON;
 
-    static
-    {
-        DELETE_ICON = set("util\\delete.png");
-        DELETE_HOVER_ICON = set("util\\delete_hovered.png");
-
-        START_ICON = set("util\\start.png");
-        START_HOVER_ICON = set("util\\start_hovered.png");
-        STARTED_ICON = set("util\\started.png");
-    }
 
     AutomateRSConfig config;
     public static String profileName = null;
@@ -54,6 +41,7 @@ public class ProfilePanel extends JPanel {
     private static String password = null;
     private static Boolean useWorld = null;
     private static Integer world = null;
+    public static JLabel start = new JLabel();
     Client thisClient;
 
     public ProfilePanel(final Client client, final String data, final AutomateRSConfig automateRSConfig, final AutomateRSPanel parent)
@@ -86,14 +74,14 @@ public class ProfilePanel extends JPanel {
                 BorderFactory.createLineBorder(ColorScheme.DARKER_GRAY_COLOR)
         ));
 
-        JPanel panelActions = new JPanel(new BorderLayout(3, 0));
+        JPanel panelActions = new JPanel(new BorderLayout(8, 0));
         panelActions.setBorder(new EmptyBorder(0, 0, 0, 8));
         panelActions.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 
         JLabel delete = new JLabel();
         accountsAdded = true;
         delete.setIcon(set("util\\delete.png"));
-        delete.setToolTipText("Delete account profile");
+        delete.setToolTipText("Delete - "+profileName);
         delete.addMouseListener(new MouseAdapter()
         {
             @Override
@@ -124,38 +112,43 @@ public class ProfilePanel extends JPanel {
             }
         });
 
-        JLabel start = new JLabel();
         start.setIcon(START_ICON);
-        start.setToolTipText("Start account profile");
         start.addMouseListener(new MouseAdapter()
         {
-            boolean started;
             @Override
             public void mousePressed(MouseEvent e) {
-                start.setIcon(STARTED_ICON);
-                started = true;
-                if (useWorld && client.getWorld() != world) {
-                    prepareLogin();
-                } else {
-                    login(client);
+                if (start.getIcon() == START_ICON || start.getIcon() == START_HOVER_ICON) {
+                    if (useWorld && client.getWorld() != world) {
+                        prepareLogin();
+                    } else {
+                        login(client);
+                    }
                 }
-
+                if (start.getIcon() == STOP_HOVER_ICON) {
+                    scriptStarted = false;
+                    started = false;
+                    logout();
+                }
             }
 
             @Override
             public void mouseEntered(MouseEvent e)
             {
-                start.setIcon(START_HOVER_ICON);
+                if (start.getIcon() == START_ICON) {
+                    start.setIcon(START_HOVER_ICON);
+                    start.setToolTipText("Login - "+profileName);
+                }
+                if (start.getIcon() == STOP_ICON) {
+                    start.setIcon(STOP_HOVER_ICON);
+                    start.setToolTipText("Logout - "+profileName);
+
+                }
             }
 
             @Override
             public void mouseExited(MouseEvent e)
             {
-                if (started) {
-                    start.setIcon(STARTED_ICON);
-                } else {
-                    start.setIcon(START_ICON);
-                }
+                displayProfileStatus(client);
             }
         });
 
@@ -203,6 +196,25 @@ public class ProfilePanel extends JPanel {
 
     }
 
+    public ProfilePanel() {
+
+    }
+
+    public void displayProfileStatus(Client client) {
+        if (client != null) {
+
+            if (client.getGameState() == GameState.LOGIN_SCREEN || client.getGameState() == GameState.LOGIN_SCREEN_AUTHENTICATOR) {
+                start.setIcon(START_ICON);
+            } else if (client.getGameState() == GameState.LOGGING_IN || client.getGameState() == GameState.LOADING) {
+                repaint();
+                revalidate();
+                start.setIcon(LOADING_ICON);
+                sleep(2000,4000);
+            } else {
+                start.setIcon(STOP_ICON);
+            }
+        }
+    }
 
 
     private void prepareLogin() {

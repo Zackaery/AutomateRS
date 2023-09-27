@@ -11,7 +11,7 @@ public class SkillCheck {
     private static Client client;
 
     private static int getBoostedSkillLevel(Skill skill) {
-        return Skills.getBoostedLevel(skill);
+        return Skills.getLevel(skill);
     }
 
     public static int getWoodcuttingLevel() {

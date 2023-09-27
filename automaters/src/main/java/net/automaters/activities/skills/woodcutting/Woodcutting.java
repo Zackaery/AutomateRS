@@ -85,7 +85,7 @@ public class Woodcutting extends LoopedPlugin {
                             debug("z: " + String.valueOf(z));
 
                             // Loop until the player reaches the destination
-                            while (scriptStarted && local.getWorldLocation().getX() != x || local.getWorldLocation().getY() != y) {
+                            while (scriptStarted && local.getWorldLocation().getX() != x || scriptStarted && local.getWorldLocation().getY() != y) {
                                 // Call the Movement.walkTo() method repeatedly until the destination is reached
                                 Movement.walkTo(x, y, z);
                                 // delay added so not spam clicking to move.

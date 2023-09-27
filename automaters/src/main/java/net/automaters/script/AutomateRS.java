@@ -9,11 +9,13 @@ import net.automaters.account_builds.build_executor.BuildExecutor;
 import net.automaters.gui.GUI;
 import net.automaters.gui.utils.EventDispatchThreadRunner;
 import net.automaters.script.panel.AutomateRSPanel;
+import net.automaters.script.panel.auto_login.ProfilePanel;
 import net.automaters.util.file_managers.ImageManager;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.World;
 import net.runelite.api.events.ConfigButtonClicked;
+import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.WidgetLoaded;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.callback.ClientThread;
@@ -58,6 +60,7 @@ import static net.automaters.script.panel.auto_login.ProfilePanel.init;
 import static net.automaters.util.file_managers.FileManager.PATH_RESOURCES;
 import static net.automaters.util.file_managers.IconManager.AUTOMATERS_ICON;
 import static net.automaters.util.file_managers.IconManager.convert;
+import static net.runelite.api.GameState.LOGGED_IN;
 
 @SuppressWarnings("ALL")
 @PluginDescriptor(name = "AutomateRS", description = "RuneScape - Automated")
@@ -96,6 +99,7 @@ public class AutomateRS extends TaskPlugin {
 
 	private AutomateRSPanel panel;
 	private NavigationButton navButton;
+	private ProfilePanel profilePanel = new ProfilePanel();
 
 	@Provides
 	AutomateRSConfig getConfig(ConfigManager configManager)
@@ -118,6 +122,11 @@ public class AutomateRS extends TaskPlugin {
 		LOGIN_IMAGE = ImageUtil.loadImageResource(AccountPlugin.class, "login_icon.png");
 		LOGOUT_IMAGE = ImageUtil.loadImageResource(AccountPlugin.class, "logout_icon.png");
 	}
+	@Subscribe
+	private void onGameStateChanged(GameStateChanged e) {
+		profilePanel.displayProfileStatus(client);
+	}
+
 	@Subscribe
 	private void onExternalPluginChanged(OPRSPluginChanged e)
 	{
@@ -170,7 +179,6 @@ public class AutomateRS extends TaskPlugin {
 	@Override
 	protected void startUp() throws IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {
 
-
 		configManager.setConfiguration("unethicalite", "avoidWilderness", true);
 		panel = injector.getInstance(AutomateRSPanel.class);
 		try {EventDispatchThreadRunner.runOnDispatchThread(() -> {
@@ -208,7 +216,7 @@ public class AutomateRS extends TaskPlugin {
 	public void onConfigButtonPressed(ConfigButtonClicked event) throws InterruptedException {
 			if (event.getGroup().contains("automaters")) {
 				if (event.getKey().toLowerCase().contains("start")) {
-					if (client != null && client.getGameState() == GameState.LOGGED_IN) {
+					if (client != null && client.getGameState() == LOGGED_IN) {
 						if (localPlayer == null) {
 							debug("Local Player not located");
 							return;
@@ -251,7 +259,6 @@ public class AutomateRS extends TaskPlugin {
 				debug("--- Initiating loop sequence ---\n\n");
 				return 600;
 			}
-			return 600;
 		}
 		return 600;
 	}

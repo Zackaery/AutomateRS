@@ -74,6 +74,8 @@ public class ResourceManager {
     }
 
     private static void downloadResourcesFromGitHubToDataDirectory() {
+
+        debug("Downloading Resources From Github");
         try {
             URL url = new URL(URL_GITHUB + "/raw/main/resources.zip");
             debug("Downloading file from url: " + url.toString() + ", to: " + DIRECTORY);
@@ -127,52 +129,38 @@ public class ResourceManager {
     }
 
     private static synchronized void unzipArchive(final File archive, final File destinationDir) {
-        try(ZipFile zipFile = new ZipFile(archive))
-        {
-
-            debug("zipFile = " + archive.toString());
-            FileSystem fileSystem = FileSystems.getDefault();
-
-            debug("fileSystem = " + fileSystem.toString());
-
+        try (ZipFile zipFile = new ZipFile(archive)) {
             destinationDir.mkdirs();
-
-            debug("destinationDir = " + destinationDir.toString());
-
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
-            debug("entries = " + entries.toString());
-
-            while (scriptStarted && entries.hasMoreElements())
-            {
+            while (entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
                 debug("ZipEntry = " + entry.toString());
 
-                Path filePath = fileSystem.getPath(destinationDir.getAbsolutePath(), entry.getName());
-
+                Path filePath = Paths.get(destinationDir.getAbsolutePath(), entry.getName());
                 debug("Unzipping file to: " + filePath.toString());
 
-                if (entry.isDirectory())
-                {
+                if (entry.isDirectory()) {
                     Files.createDirectories(filePath);
-                }
-                else
-                {
-                    InputStream is = zipFile.getInputStream(entry);
-                    BufferedInputStream bis = new BufferedInputStream(is);
-                    Files.createFile(filePath);
-                    FileOutputStream fileOutput = new FileOutputStream(filePath.toFile());
-                    while (scriptStarted && bis.available() > 0)
-                    {
-                        fileOutput.write(bis.read());
+                } else {
+                    try (InputStream is = zipFile.getInputStream(entry);
+                         BufferedInputStream bis = new BufferedInputStream(is)) {
+                        Files.createFile(filePath);
+                        try (FileOutputStream fileOutput = new FileOutputStream(filePath.toFile());
+                             BufferedOutputStream bos = new BufferedOutputStream(fileOutput)) {
+                            byte[] buffer = new byte[1024];
+                            int bytesRead;
+                            while ((bytesRead = bis.read(buffer)) != -1) {
+                                bos.write(buffer, 0, bytesRead);
+                            }
+                        }
+                        debug("Extracted file: " + filePath.toString());
                     }
-                    fileOutput.close();
                 }
             }
-        }
-        catch(IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 }

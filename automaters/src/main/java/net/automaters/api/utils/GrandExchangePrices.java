@@ -59,11 +59,15 @@ public class GrandExchangePrices {
         String jsonData = readJsonFromFile(filePath);
 
         if (jsonData != null) {
-            data = new Gson().fromJson(jsonData, AllPricesData.class);
-            return data.data.get(ItemID);
-        } else {
-            return null;
+            if (jsonData.contains("null")) {
+                updatePrices();
+            } else {
+                data = new Gson().fromJson(jsonData, AllPricesData.class);
+                return data.data.get(ItemID);
+            }
         }
+        updatePrices();
+        return null;
     }
 
     public static boolean canAfford(int ItemID) {
@@ -72,7 +76,7 @@ public class GrandExchangePrices {
             getAmountTotal("Coins", true);
         }
         debug("Can Afford: "+ItemID+" - "+(totalCoins >= Integer.parseInt(String.valueOf(getPrice(ItemID).high))));
-        return (totalCoins >= Integer.parseInt(String.valueOf(getPrice(ItemID).high)));
+        return (totalCoins >= (getPrice(ItemID).high));
     }
 
     private static class AllPricesData {
