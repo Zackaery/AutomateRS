@@ -29,6 +29,7 @@ import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.ImageUtil;
 import net.unethicalite.api.events.LobbyWorldSelectToggled;
 import net.unethicalite.api.game.Worlds;
+import net.unethicalite.api.plugins.Script;
 import net.unethicalite.api.plugins.Task;
 import net.unethicalite.api.plugins.TaskPlugin;
 import net.unethicalite.api.script.blocking_events.BlockingEventManager;
@@ -66,7 +67,7 @@ import static net.runelite.api.GameState.LOGGED_IN;
 @PluginDescriptor(name = "AutomateRS", description = "RuneScape - Automated")
 @Extension
 @Slf4j
-public class AutomateRS extends TaskPlugin {
+public class AutomateRS extends Script {
 
 	@Inject
 	private Client client;
@@ -221,10 +222,10 @@ public class AutomateRS extends TaskPlugin {
 							debug("Local Player not located");
 							return;
 						} else if (!started) {
-//							selectedBuild = loadBuildFromGUI();
+							selectedBuild = loadBuildFromGUI();
 							selectedBuild = "ALPHA_TESTER";
 							started = true;
-							this.scriptStarted = true;
+//							this.scriptStarted = true;
 							scriptTimer = (System.currentTimeMillis() - elapsedTime);
 							debug("Started - AutomateRS");
 						} else {
@@ -261,6 +262,11 @@ public class AutomateRS extends TaskPlugin {
 			}
 		}
 		return 600;
+	}
+
+	@Override
+	public void onStart(String... args) {
+
 	}
 
 
