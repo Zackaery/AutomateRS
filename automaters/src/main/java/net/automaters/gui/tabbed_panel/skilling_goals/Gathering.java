@@ -21,11 +21,11 @@ public class Gathering {
     public static JLabel labelGoalFarming;
     public static JLabel labelGoalHunter;
 
-    public static JSpinner spinnerGoalMining;
-    public static JSpinner spinnerGoalFishing;
-    public static JSpinner spinnerGoalWoodcutting;
-    public static JSpinner spinnerGoalFarming;
-    public static JSpinner spinnerGoalHunter;
+    public static JSpinner goalMining;
+    public static JSpinner goalFishing;
+    public static JSpinner goalWoodcutting;
+    public static JSpinner goalFarming;
+    public static JSpinner goalHunter;
 
     public static void create() throws IOException {
 
@@ -49,16 +49,16 @@ public class Gathering {
             labelGoalHunter = new JLabel();
             labelGoalHunter.setHorizontalAlignment(SwingConstants.TRAILING);
             labelGoalHunter.setBounds(34, 107, 112, 23);
-            spinnerGoalMining = new JSpinner();
-            spinnerGoalMining.setBounds(164, 17, 50, 20);
-            spinnerGoalFishing = new JSpinner();
-            spinnerGoalFishing.setBounds(164, 40, 50, 20);
-            spinnerGoalWoodcutting = new JSpinner();
-            spinnerGoalWoodcutting.setBounds(164, 63, 50, 20);
-            spinnerGoalFarming = new JSpinner();
-            spinnerGoalFarming.setBounds(164, 85, 50, 20);
-            spinnerGoalHunter = new JSpinner();
-            spinnerGoalHunter.setBounds(164, 108, 50, 20);
+            goalMining = new JSpinner();
+            goalMining.setBounds(164, 17, 50, 20);
+            goalFishing = new JSpinner();
+            goalFishing.setBounds(164, 40, 50, 20);
+            goalWoodcutting = new JSpinner();
+            goalWoodcutting.setBounds(164, 63, 50, 20);
+            goalFarming = new JSpinner();
+            goalFarming.setBounds(164, 85, 50, 20);
+            goalHunter = new JSpinner();
+            goalHunter.setBounds(164, 108, 50, 20);
 
             setImage("gui\\skill_icons\\Mining.png", labelGoalMining);
             setImage("gui\\skill_icons\\Fishing.png", labelGoalFishing);
@@ -76,52 +76,52 @@ public class Gathering {
             // ---- labelGoalMining ----
             labelGoalMining.setText("Mining Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalMining.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalMining.setModel(new SpinnerNumberModel(1, 1, 99, 1));
             // ---- labelGoalFishing ----
             labelGoalFishing.setText("Fishing Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalFishing.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalFishing.setModel(new SpinnerNumberModel(1, 1, 99, 1));
             // ---- labelGoalWoodcutting ----
             labelGoalWoodcutting.setText("Woodcutting Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalWoodcutting.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalWoodcutting.setModel(new SpinnerNumberModel(99, 1, 99, 1));
             // ---- labelGoalFarming ----
             labelGoalFarming.setText("Farming Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalFarming.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalFarming.setModel(new SpinnerNumberModel(1, 1, 99, 1));
             // ---- labelGoalHunter ----
             labelGoalHunter.setText("Hunter Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalHunter.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalHunter.setModel(new SpinnerNumberModel(1, 1, 99, 1));
         }
 
         // ======== vars ========
         {
             panelSkillingGoalsGathering.add(labelGoalMining);
-            panelSkillingGoalsGathering.add(spinnerGoalMining);
+//            panelSkillingGoalsGathering.add(goalMining);
             panelSkillingGoalsGathering.add(labelGoalFishing);
-            panelSkillingGoalsGathering.add(spinnerGoalFishing);
+//            panelSkillingGoalsGathering.add(goalFishing);
             panelSkillingGoalsGathering.add(labelGoalWoodcutting);
-            panelSkillingGoalsGathering.add(spinnerGoalWoodcutting);
+            panelSkillingGoalsGathering.add(goalWoodcutting);
             panelSkillingGoalsGathering.add(labelGoalFarming);
-            panelSkillingGoalsGathering.add(spinnerGoalFarming);
+//            panelSkillingGoalsGathering.add(goalFarming);
             panelSkillingGoalsGathering.add(labelGoalHunter);
-            panelSkillingGoalsGathering.add(spinnerGoalHunter);
+//            panelSkillingGoalsGathering.add(goalHunter);
         }
         TabSkillingGoals.gathering = true;
         TabSkillingGoals.create();
     }
 
     public static void setAccount_Gathering(Boolean b) {
-        spinnerGoalMining.setEnabled(b);
-        spinnerGoalMining.setValue(1);
-        spinnerGoalFishing.setEnabled(b);
-        spinnerGoalFishing.setValue(1);
-        spinnerGoalWoodcutting.setEnabled(b);
-        spinnerGoalWoodcutting.setValue(1);
-        spinnerGoalFarming.setEnabled(b);
-        spinnerGoalFarming.setValue(1);
-        spinnerGoalHunter.setEnabled(b);
-        spinnerGoalHunter.setValue(1);
+        goalMining.setEnabled(b);
+        goalMining.setValue(1);
+        goalFishing.setEnabled(b);
+        goalFishing.setValue(1);
+        goalWoodcutting.setEnabled(b);
+        goalWoodcutting.setValue(1);
+        goalFarming.setEnabled(b);
+        goalFarming.setValue(1);
+        goalHunter.setEnabled(b);
+        goalHunter.setValue(1);
     }
 }

@@ -105,7 +105,7 @@ public class TabSkillingGoals
         buttonToggleSupport.setBounds(52, 91, 120, 20);
         buttonToggleSupport.setText("Disable");
         buttonToggleSupport.addActionListener(e -> {
-            if ((F2P == false) && spinnerGoalAgility.isEnabled() && spinnerGoalAgility != null ) {
+            if ((F2P == false) && goalAgility.isEnabled() && goalAgility != null ) {
                 setAccount_Support(false);
                 buttonToggleSupport.setText("Enable");
             } else {
@@ -122,7 +122,7 @@ public class TabSkillingGoals
         buttonToggleCombat.setBounds(52, 151, 120, 20);
         buttonToggleCombat.setText("Disable");
         buttonToggleCombat.addActionListener(e -> {
-            if (spinnerGoalAttack.isEnabled() && spinnerGoalAttack != null) {
+            if (goalAttack.isEnabled() && goalAttack != null) {
                 setAccount_Combat(false);
                 buttonToggleCombat.setText("Enable");
             } else {
@@ -139,7 +139,7 @@ public class TabSkillingGoals
         buttonToggleArtisan.setBounds(52, 198, 120, 20);
         buttonToggleArtisan.setText("Disable");
         buttonToggleArtisan.addActionListener(e -> {
-            if (spinnerGoalCrafting.isEnabled() && spinnerGoalCrafting != null ) {
+            if (goalCrafting.isEnabled() && goalCrafting != null ) {
                 setAccount_Artisan(false);
                 buttonToggleArtisan.setText("Enable");
             } else {
@@ -156,7 +156,7 @@ public class TabSkillingGoals
         buttonToggleGathering.setBounds(52, 131, 120, 20);
         buttonToggleGathering.setText("Disable");
         buttonToggleGathering.addActionListener(e -> {
-            if (spinnerGoalMining.isEnabled() && spinnerGoalMining != null ) {
+            if (goalMining.isEnabled() && goalMining != null ) {
                 setAccount_Gathering(false);
                 buttonToggleGathering.setText("Enable");
             } else {
@@ -210,124 +210,124 @@ public class TabSkillingGoals
     }
 
     public static void setAccount_F2P() {
-        spinnerGoalFarming.setEnabled(false);
-        spinnerGoalFarming.setValue(1);
-        spinnerGoalHunter.setEnabled(false);
-        spinnerGoalHunter.setValue(1);
+        goalFarming.setEnabled(false);
+        goalFarming.setValue(1);
+        goalHunter.setEnabled(false);
+        goalHunter.setValue(1);
 
-        spinnerGoalHerblore.setEnabled(false);
-        spinnerGoalHerblore.setValue(1);
-        spinnerGoalFletching.setEnabled(false);
-        spinnerGoalFletching.setValue(1);
-        spinnerGoalConstruction.setEnabled(false);
-        spinnerGoalConstruction.setValue(1);
+        goalHerblore.setEnabled(false);
+        goalHerblore.setValue(1);
+        goalFletching.setEnabled(false);
+        goalFletching.setValue(1);
+        goalConstruction.setEnabled(false);
+        goalConstruction.setValue(1);
 
-        spinnerGoalAgility.setEnabled(false);
-        spinnerGoalAgility.setValue(1);
-        spinnerGoalThieving.setEnabled(false);
-        spinnerGoalThieving.setValue(1);
-        spinnerGoalSlayer.setEnabled(false);
-        spinnerGoalSlayer.setValue(1);
+        goalAgility.setEnabled(false);
+        goalAgility.setValue(1);
+        goalThieving.setEnabled(false);
+        goalThieving.setValue(1);
+        goalSlayer.setEnabled(false);
+        goalSlayer.setValue(1);
     }
 
     public static void setAccount_MAXED() {
-        spinnerGoalAttack.setEnabled(true);
-        spinnerGoalAttack.setValue(99);
-        spinnerGoalStrength.setEnabled(true);
-        spinnerGoalStrength.setValue(99);
-        spinnerGoalDefence.setEnabled(true);
-        spinnerGoalDefence.setValue(99);
-        spinnerGoalRanged.setEnabled(true);
-        spinnerGoalRanged.setValue(99);
-        spinnerGoalMagic.setEnabled(true);
-        spinnerGoalMagic.setValue(99);
-        spinnerGoalPrayer.setEnabled(true);
-        spinnerGoalPrayer.setValue(99);
+        goalAttack.setEnabled(true);
+        goalAttack.setValue(99);
+        goalStrength.setEnabled(true);
+        goalStrength.setValue(99);
+        goalDefence.setEnabled(true);
+        goalDefence.setValue(99);
+        goalRanged.setEnabled(true);
+        goalRanged.setValue(99);
+        goalMagic.setEnabled(true);
+        goalMagic.setValue(99);
+        goalPrayer.setEnabled(true);
+        goalPrayer.setValue(99);
 
-        spinnerGoalMining.setEnabled(true);
-        spinnerGoalMining.setValue(99);
-        spinnerGoalFishing.setEnabled(true);
-        spinnerGoalFishing.setValue(99);
-        spinnerGoalWoodcutting.setEnabled(true);
-        spinnerGoalWoodcutting.setValue(99);
-        spinnerGoalFarming.setEnabled(true);
-        spinnerGoalFarming.setValue(99);
-        spinnerGoalHunter.setEnabled(true);
-        spinnerGoalHunter.setValue(99);
+        goalMining.setEnabled(true);
+        goalMining.setValue(99);
+        goalFishing.setEnabled(true);
+        goalFishing.setValue(99);
+        goalWoodcutting.setEnabled(true);
+        goalWoodcutting.setValue(99);
+        goalFarming.setEnabled(true);
+        goalFarming.setValue(99);
+        goalHunter.setEnabled(true);
+        goalHunter.setValue(99);
 
-        spinnerGoalHerblore.setEnabled(true);
-        spinnerGoalHerblore.setValue(99);
-        spinnerGoalCrafting.setEnabled(true);
-        spinnerGoalCrafting.setValue(99);
-        spinnerGoalFletching.setEnabled(true);
-        spinnerGoalFletching.setValue(99);
-        spinnerGoalSmithing.setEnabled(true);
-        spinnerGoalSmithing.setValue(99);
-        spinnerGoalCooking.setEnabled(true);
-        spinnerGoalCooking.setValue(99);
-        spinnerGoalFiremaking.setEnabled(true);
-        spinnerGoalFiremaking.setValue(99);
-        spinnerGoalRunecrafting.setEnabled(true);
-        spinnerGoalRunecrafting.setValue(99);
-        spinnerGoalConstruction.setEnabled(true);
-        spinnerGoalConstruction.setValue(99);
+        goalHerblore.setEnabled(true);
+        goalHerblore.setValue(99);
+        goalCrafting.setEnabled(true);
+        goalCrafting.setValue(99);
+        goalFletching.setEnabled(true);
+        goalFletching.setValue(99);
+        goalSmithing.setEnabled(true);
+        goalSmithing.setValue(99);
+        goalCooking.setEnabled(true);
+        goalCooking.setValue(99);
+        goalFiremaking.setEnabled(true);
+        goalFiremaking.setValue(99);
+        goalRunecrafting.setEnabled(true);
+        goalRunecrafting.setValue(99);
+        goalConstruction.setEnabled(true);
+        goalConstruction.setValue(99);
 
-        spinnerGoalAgility.setEnabled(true);
-        spinnerGoalAgility.setValue(99);
-        spinnerGoalThieving.setEnabled(true);
-        spinnerGoalThieving.setValue(99);
-        spinnerGoalSlayer.setEnabled(true);
-        spinnerGoalSlayer.setValue(99);
+        goalAgility.setEnabled(true);
+        goalAgility.setValue(99);
+        goalThieving.setEnabled(true);
+        goalThieving.setValue(99);
+        goalSlayer.setEnabled(true);
+        goalSlayer.setValue(99);
     }
 
     public static void setAccount_ALL_UNLOCKED() {
-        spinnerGoalAttack.setEnabled(true);
-        spinnerGoalAttack.setValue(1);
-        spinnerGoalStrength.setEnabled(true);
-        spinnerGoalStrength.setValue(1);
-        spinnerGoalDefence.setEnabled(true);
-        spinnerGoalDefence.setValue(1);
-        spinnerGoalRanged.setEnabled(true);
-        spinnerGoalRanged.setValue(1);
-        spinnerGoalMagic.setEnabled(true);
-        spinnerGoalMagic.setValue(1);
-        spinnerGoalPrayer.setEnabled(true);
-        spinnerGoalPrayer.setValue(1);
+        goalAttack.setEnabled(true);
+        goalAttack.setValue(1);
+        goalStrength.setEnabled(true);
+        goalStrength.setValue(1);
+        goalDefence.setEnabled(true);
+        goalDefence.setValue(1);
+        goalRanged.setEnabled(true);
+        goalRanged.setValue(1);
+        goalMagic.setEnabled(true);
+        goalMagic.setValue(1);
+        goalPrayer.setEnabled(true);
+        goalPrayer.setValue(1);
 
-        spinnerGoalMining.setEnabled(true);
-        spinnerGoalMining.setValue(1);
-        spinnerGoalFishing.setEnabled(true);
-        spinnerGoalFishing.setValue(1);
-        spinnerGoalWoodcutting.setEnabled(true);
-        spinnerGoalWoodcutting.setValue(1);
-        spinnerGoalFarming.setEnabled(true);
-        spinnerGoalFarming.setValue(1);
-        spinnerGoalHunter.setEnabled(true);
-        spinnerGoalHunter.setValue(1);
+        goalMining.setEnabled(true);
+        goalMining.setValue(1);
+        goalFishing.setEnabled(true);
+        goalFishing.setValue(1);
+        goalWoodcutting.setEnabled(true);
+        goalWoodcutting.setValue(1);
+        goalFarming.setEnabled(true);
+        goalFarming.setValue(1);
+        goalHunter.setEnabled(true);
+        goalHunter.setValue(1);
 
-        spinnerGoalHerblore.setEnabled(true);
-        spinnerGoalHerblore.setValue(1);
-        spinnerGoalCrafting.setEnabled(true);
-        spinnerGoalCrafting.setValue(1);
-        spinnerGoalFletching.setEnabled(true);
-        spinnerGoalFletching.setValue(1);
-        spinnerGoalSmithing.setEnabled(true);
-        spinnerGoalSmithing.setValue(1);
-        spinnerGoalCooking.setEnabled(true);
-        spinnerGoalCooking.setValue(1);
-        spinnerGoalFiremaking.setEnabled(true);
-        spinnerGoalFiremaking.setValue(1);
-        spinnerGoalRunecrafting.setEnabled(true);
-        spinnerGoalRunecrafting.setValue(1);
-        spinnerGoalConstruction.setEnabled(true);
-        spinnerGoalConstruction.setValue(1);
+        goalHerblore.setEnabled(true);
+        goalHerblore.setValue(1);
+        goalCrafting.setEnabled(true);
+        goalCrafting.setValue(1);
+        goalFletching.setEnabled(true);
+        goalFletching.setValue(1);
+        goalSmithing.setEnabled(true);
+        goalSmithing.setValue(1);
+        goalCooking.setEnabled(true);
+        goalCooking.setValue(1);
+        goalFiremaking.setEnabled(true);
+        goalFiremaking.setValue(1);
+        goalRunecrafting.setEnabled(true);
+        goalRunecrafting.setValue(1);
+        goalConstruction.setEnabled(true);
+        goalConstruction.setValue(1);
 
-        spinnerGoalAgility.setEnabled(true);
-        spinnerGoalAgility.setValue(1);
-        spinnerGoalThieving.setEnabled(true);
-        spinnerGoalThieving.setValue(1);
-        spinnerGoalSlayer.setEnabled(true);
-        spinnerGoalSlayer.setValue(1);
+        goalAgility.setEnabled(true);
+        goalAgility.setValue(1);
+        goalThieving.setEnabled(true);
+        goalThieving.setValue(1);
+        goalSlayer.setEnabled(true);
+        goalSlayer.setValue(1);
     }
 
 }

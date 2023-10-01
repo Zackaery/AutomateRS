@@ -1,4 +1,4 @@
-package net.automaters.util.items;
+package net.automaters.api.items;
 
 import lombok.Getter;
 import net.runelite.api.Item;
@@ -10,12 +10,9 @@ import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import static net.automaters.activities.skills.woodcutting.WoodcuttingZach.primaryTool;
-import static net.automaters.activities.skills.woodcutting.WoodcuttingZach.primaryToolID;
+import static net.automaters.activities.skills.woodcutting.Woodcutting.primaryTool;
+import static net.automaters.activities.skills.woodcutting.Woodcutting.primaryToolID;
 import static net.automaters.api.entities.LocalPlayer.openBank;
 import static net.automaters.api.ui.GrandExchange.automateBuy;
 import static net.automaters.api.utils.GrandExchangePrices.canAfford;
@@ -37,12 +34,10 @@ public class PrimaryTools {
                         Field buyableField = skillEnumClass.getDeclaredField("buyable");
                         Field skillField = skillEnumClass.getDeclaredField("skill");
 
-
                         idField.setAccessible(true);
                         skillLevelField.setAccessible(true);
                         attackLevelField.setAccessible(true);
                         buyableField.setAccessible(true);
-
 
                         int toolName = (int) idField.get(tool);
                         int skillLevel = (int) skillLevelField.get(tool);
@@ -63,7 +58,7 @@ public class PrimaryTools {
         }
     }
 
-    public static void processTool(int toolID, int skillLevel, int attackLevel, Skill skill, Boolean buyable, String toolName) {
+    private static void processTool(int toolID, int skillLevel, int attackLevel, Skill skill, Boolean buyable, String toolName) {
         while (scriptStarted && hasToolReq(skill, skillLevel)) {
             if (hasTool(toolID, toolName)) {
                 if (canWield(attackLevel)) {

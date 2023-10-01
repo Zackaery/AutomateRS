@@ -17,15 +17,15 @@ public class Woodcutting {
     public static final Area Falador_Tree_TreeArea_V_Area = new Area(2977, 3497, 2981, 3491, 0);
 
     // Oak tree areas
-    public static final Area Falador_Oak_TreeArea_I_Area = new Area(3086, 3295, 3079, 3290, 0);
+    public static final Area Falador_Oak_TreeArea_I_Area =   new Area(3086, 3295, 3079, 3290, 0);
 
-    public static final Area Falador_Oak_TreeArea_II_Area = new Area(3005, 3309, 2999, 3316, 0);
+    public static final Area Falador_Oak_TreeArea_II_Area =  new Area(3005, 3309, 2999, 3316, 0);
 
     public static final Area Falador_Oak_TreeArea_III_Area = new Area(2957, 3397, 2950, 3400, 0);
 
-    public static final Area Falador_Oak_TreeArea_IV_Area = new Area(3012, 3408, 3008, 3412, 0);
+    public static final Area Falador_Oak_TreeArea_IV_Area =  new Area(3012, 3408, 3008, 3412, 0);
 
-    public static final Area Falador_Oak_TreeArea_V_Area = new Area(2930, 3365, 2926, 3368, 0);
+    public static final Area Falador_Oak_TreeArea_V_Area =   new Area(2930, 3365, 2926, 3368, 0);
 
 
     public static final Area Varrock_TreeArea_I = new Area(3172, 3424, 3163, 3415, 0);

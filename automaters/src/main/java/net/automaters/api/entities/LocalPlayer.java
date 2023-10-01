@@ -4,6 +4,7 @@ import net.automaters.api.walking.Area;
 import net.runelite.api.Player;
 import net.runelite.api.TileObject;
 import net.runelite.api.coords.WorldArea;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.widgets.Widget;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.entities.TileObjects;
@@ -27,6 +28,40 @@ public class LocalPlayer {
 
     public static Player localPlayer = Players.getLocal();
 
+    public static WorldPoint getPosition() { return localPlayer.getWorldLocation(); }
+
+    public static Area getClosestArea(Area... areas) {
+        WorldPoint playerPosition = getPosition();
+
+        if (playerPosition == null || areas == null || areas.length == 0) {
+            return null;
+        }
+
+        double closestDistance = Double.MAX_VALUE;
+        Area closestArea = null;
+
+        for (Area area : areas) {
+            if (area == null) {
+                continue;
+            }
+
+            int centerX = (area.minX + area.maxX) / 2;
+            int centerY = (area.minY + area.maxY) / 2;
+            int plane = area.toWorldArea().getPlane();
+
+            double distance = playerPosition.distanceTo(new WorldPoint(centerX, centerY, plane));
+
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestArea = area;
+            }
+        }
+
+        debug("Player Position: "+playerPosition);
+        debug("Closest Area: "+ closestArea.maxX +", "+closestArea.minY +", "+closestArea.minX +", "+closestArea.maxY +", "+closestArea.thisZ);
+        return closestArea;
+    }
+
 
     /**
      * Gets the local characters interaction status.
@@ -34,7 +69,8 @@ public class LocalPlayer {
      * @return if local can interact.
      */
     public static boolean canInteract() {
-        return ((localPlayer == null) || !scriptStarted || !localPlayer.isAnimating() || !localPlayer.isInteracting());
+        debug("Can Interact: "+(localPlayer != null && scriptStarted && !localPlayer.isAnimating() && !localPlayer.isInteracting()));
+        return (localPlayer != null && scriptStarted && !localPlayer.isAnimating() && !localPlayer.isInteracting());
     }
 
     /**

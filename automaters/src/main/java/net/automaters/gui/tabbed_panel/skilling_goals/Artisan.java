@@ -23,14 +23,14 @@ public class Artisan {
     public static JLabel labelGoalRunecrafting;
     public static JLabel labelGoalConstruction;
 
-    public static JSpinner spinnerGoalHerblore;
-    public static JSpinner spinnerGoalCrafting;
-    public static JSpinner spinnerGoalFletching;
-    public static JSpinner spinnerGoalSmithing;
-    public static JSpinner spinnerGoalCooking;
-    public static JSpinner spinnerGoalFiremaking;
-    public static JSpinner spinnerGoalRunecrafting;
-    public static JSpinner spinnerGoalConstruction;
+    public static JSpinner goalHerblore;
+    public static JSpinner goalCrafting;
+    public static JSpinner goalFletching;
+    public static JSpinner goalSmithing;
+    public static JSpinner goalCooking;
+    public static JSpinner goalFiremaking;
+    public static JSpinner goalRunecrafting;
+    public static JSpinner goalConstruction;
 
     public static void create() throws IOException {
 
@@ -63,22 +63,22 @@ public class Artisan {
             labelGoalConstruction = new JLabel();
             labelGoalConstruction.setHorizontalAlignment(SwingConstants.TRAILING);
             labelGoalConstruction.setBounds(11, 172, 143, 25);
-            spinnerGoalHerblore = new JSpinner();
-            spinnerGoalHerblore.setBounds(165, 16, 50, 20);
-            spinnerGoalCrafting = new JSpinner();
-            spinnerGoalCrafting.setBounds(165, 37, 50, 20);
-            spinnerGoalFletching = new JSpinner();
-            spinnerGoalFletching.setBounds(165, 60, 50, 20);
-            spinnerGoalSmithing = new JSpinner();
-            spinnerGoalSmithing.setBounds(165, 83, 50, 20);
-            spinnerGoalCooking = new JSpinner();
-            spinnerGoalCooking.setBounds(165, 103, 50, 20);
-            spinnerGoalFiremaking = new JSpinner();
-            spinnerGoalFiremaking.setBounds(165, 125, 50, 20);
-            spinnerGoalRunecrafting = new JSpinner();
-            spinnerGoalRunecrafting.setBounds(165, 149, 50, 20);
-            spinnerGoalConstruction = new JSpinner();
-            spinnerGoalConstruction.setBounds(165, 174, 50, 20);
+            goalHerblore = new JSpinner();
+            goalHerblore.setBounds(165, 16, 50, 20);
+            goalCrafting = new JSpinner();
+            goalCrafting.setBounds(165, 37, 50, 20);
+            goalFletching = new JSpinner();
+            goalFletching.setBounds(165, 60, 50, 20);
+            goalSmithing = new JSpinner();
+            goalSmithing.setBounds(165, 83, 50, 20);
+            goalCooking = new JSpinner();
+            goalCooking.setBounds(165, 103, 50, 20);
+            goalFiremaking = new JSpinner();
+            goalFiremaking.setBounds(165, 125, 50, 20);
+            goalRunecrafting = new JSpinner();
+            goalRunecrafting.setBounds(165, 149, 50, 20);
+            goalConstruction = new JSpinner();
+            goalConstruction.setBounds(165, 174, 50, 20);
 
             setImage("gui\\skill_icons\\Herblore.png", labelGoalHerblore);
             setImage("gui\\skill_icons\\Crafting.png", labelGoalCrafting);
@@ -99,76 +99,76 @@ public class Artisan {
             // ---- labelGoalHerblore ----
             labelGoalHerblore.setText("Herblore Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalHerblore.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalHerblore.setModel(new SpinnerNumberModel(1, 1, 99, 1));
             // ---- labelGoalCrafting ----
             labelGoalCrafting.setText("Crafting Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalCrafting.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalCrafting.setModel(new SpinnerNumberModel(1, 1, 99, 1));
             // ---- labelGoalFletching ----
             labelGoalFletching.setText("Fletching Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalFletching.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalFletching.setModel(new SpinnerNumberModel(1, 1, 99, 1));
             // ---- labelGoalSmithing ----
             labelGoalSmithing.setText("Smithing Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalSmithing.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalSmithing.setModel(new SpinnerNumberModel(1, 1, 99, 1));
             // ---- labelGoalCooking ----
             labelGoalCooking.setText("Cooking Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalCooking.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalCooking.setModel(new SpinnerNumberModel(1, 1, 99, 1));
             // ---- labelGoalFiremaking ----
             labelGoalFiremaking.setText("Firemaking Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalFiremaking.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalFiremaking.setModel(new SpinnerNumberModel(99, 1, 99, 1));
             // ---- labelGoalRunecrafting ----
             labelGoalRunecrafting.setText("Runecrafting Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalRunecrafting.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalRunecrafting.setModel(new SpinnerNumberModel(1, 1, 99, 1));
             // ---- labelGoalConstruction ----
             labelGoalConstruction.setText("Construction Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalConstruction.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalConstruction.setModel(new SpinnerNumberModel(1, 1, 99, 1));
         }
 
         // ======== vars ========
         {
             panelSkillingGoalsArtisan.add(labelGoalHerblore);
-            panelSkillingGoalsArtisan.add(spinnerGoalHerblore);
+//            panelSkillingGoalsArtisan.add(goalHerblore);
             panelSkillingGoalsArtisan.add(labelGoalCrafting);
-            panelSkillingGoalsArtisan.add(spinnerGoalCrafting);
+//            panelSkillingGoalsArtisan.add(goalCrafting);
             panelSkillingGoalsArtisan.add(labelGoalFletching);
-            panelSkillingGoalsArtisan.add(spinnerGoalFletching);
+            panelSkillingGoalsArtisan.add(goalFletching);
             panelSkillingGoalsArtisan.add(labelGoalSmithing);
-            panelSkillingGoalsArtisan.add(spinnerGoalSmithing);
+//            panelSkillingGoalsArtisan.add(goalSmithing);
             panelSkillingGoalsArtisan.add(labelGoalCooking);
-            panelSkillingGoalsArtisan.add(spinnerGoalCooking);
+//            panelSkillingGoalsArtisan.add(goalCooking);
             panelSkillingGoalsArtisan.add(labelGoalFiremaking);
-            panelSkillingGoalsArtisan.add(spinnerGoalFiremaking);
+            panelSkillingGoalsArtisan.add(goalFiremaking);
             panelSkillingGoalsArtisan.add(labelGoalRunecrafting);
-            panelSkillingGoalsArtisan.add(spinnerGoalRunecrafting);
+//            panelSkillingGoalsArtisan.add(goalRunecrafting);
             panelSkillingGoalsArtisan.add(labelGoalConstruction);
-            panelSkillingGoalsArtisan.add(spinnerGoalConstruction);
+//            panelSkillingGoalsArtisan.add(goalConstruction);
         }
         TabSkillingGoals.artisan = true;
         TabSkillingGoals.create();
     }
 
     public static void setAccount_Artisan(Boolean b) {
-        spinnerGoalHerblore.setEnabled(b);
-        spinnerGoalHerblore.setValue(1);
-        spinnerGoalCrafting.setEnabled(b);
-        spinnerGoalCrafting.setValue(1);
-        spinnerGoalFletching.setEnabled(b);
-        spinnerGoalFletching.setValue(1);
-        spinnerGoalSmithing.setEnabled(b);
-        spinnerGoalSmithing.setValue(1);
-        spinnerGoalCooking.setEnabled(b);
-        spinnerGoalCooking.setValue(1);
-        spinnerGoalFiremaking.setEnabled(b);
-        spinnerGoalFiremaking.setValue(1);
-        spinnerGoalRunecrafting.setEnabled(b);
-        spinnerGoalRunecrafting.setValue(1);
-        spinnerGoalConstruction.setEnabled(b);
-        spinnerGoalConstruction.setValue(1);
+        goalHerblore.setEnabled(b);
+        goalHerblore.setValue(1);
+        goalCrafting.setEnabled(b);
+        goalCrafting.setValue(1);
+        goalFletching.setEnabled(b);
+        goalFletching.setValue(1);
+        goalSmithing.setEnabled(b);
+        goalSmithing.setValue(1);
+        goalCooking.setEnabled(b);
+        goalCooking.setValue(1);
+        goalFiremaking.setEnabled(b);
+        goalFiremaking.setValue(1);
+        goalRunecrafting.setEnabled(b);
+        goalRunecrafting.setValue(1);
+        goalConstruction.setEnabled(b);
+        goalConstruction.setValue(1);
     }
 }

@@ -1,10 +1,14 @@
 package net.automaters.script;
 
 import lombok.extern.slf4j.Slf4j;
+import net.automaters.activities.skills.firemaking.DynamicFiremaking;
 import net.automaters.util.file_managers.ImageManager;
+import net.runelite.api.Client;
+import net.runelite.api.Tile;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.ui.overlay.*;
+import net.unethicalite.api.scene.Tiles;
 import net.unethicalite.api.widgets.Widgets;
 
 import javax.inject.Inject;
@@ -13,6 +17,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.time.Duration;
+import java.util.List;
+
 import static net.automaters.api.utils.Debug.displayMessage;
 import static net.automaters.gui.GUI.started;
 import static net.automaters.script.AutomateRS.*;
@@ -21,20 +27,43 @@ import static net.automaters.script.AutomateRS.*;
 @Slf4j
 public class AutomateRSOverlay extends OverlayPanel {
 
+	private final Client client;
+
 	private final Font font = new Font("Arial", Font.BOLD, 12);
 
 	final Image title = ImageManager.getInstance().loadImage("script\\title.png");
 
 
 	@Inject
-	private AutomateRSOverlay()
+	private AutomateRSOverlay(Client client)
 	{
+		this.client = client;
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
 	}
 
 	@Override
 	public Dimension render(Graphics2D g) {
+
+		List<Tile> fireArea = DynamicFiremaking.getFireArea();
+		Color lowOpacityGreen = new Color(0, 255, 0, 128);
+
+		if (fireArea == null || fireArea.isEmpty())
+		{
+			return null;
+		}
+
+		for (Tile t : DynamicFiremaking.getFireArea())
+		{
+			Tile tile = Tiles.getAt(t.getWorldLocation());
+			if (DynamicFiremaking.isEmptyTile(tile))
+			{
+				tile.getWorldLocation().outline(client, g, lowOpacityGreen);
+			}
+		}
+
+
+
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				@Override

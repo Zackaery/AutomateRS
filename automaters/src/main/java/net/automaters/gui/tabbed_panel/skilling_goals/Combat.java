@@ -22,12 +22,12 @@ public class Combat {
     public static JLabel labelGoalMagic;
     public static JLabel labelGoalPrayer;
 
-    public static JSpinner spinnerGoalAttack;
-    public static JSpinner spinnerGoalStrength;
-    public static JSpinner spinnerGoalDefence;
-    public static JSpinner spinnerGoalRanged;
-    public static JSpinner spinnerGoalMagic;
-    public static JSpinner spinnerGoalPrayer;
+    public static JSpinner goalAttack;
+    public static JSpinner goalStrength;
+    public static JSpinner goalDefence;
+    public static JSpinner goalRanged;
+    public static JSpinner goalMagic;
+    public static JSpinner goalPrayer;
 
 //    public static final Image attackImage = ImageManager.getInstance().loadImage("images/skillIcons/Attack.png");
 
@@ -56,18 +56,18 @@ public class Combat {
             labelGoalPrayer = new JLabel();
             labelGoalPrayer.setHorizontalAlignment(SwingConstants.TRAILING);
             labelGoalPrayer.setBounds(10, 127, 117, 23);
-            spinnerGoalAttack = new JSpinner();
-            spinnerGoalAttack.setBounds(145, 18, 50, 20);
-            spinnerGoalStrength = new JSpinner();
-            spinnerGoalStrength.setBounds(145, 41, 50, 20);
-            spinnerGoalDefence = new JSpinner();
-            spinnerGoalDefence.setBounds(145, 61, 50, 20);
-            spinnerGoalRanged = new JSpinner();
-            spinnerGoalRanged.setBounds(145, 82, 50, 20);
-            spinnerGoalMagic = new JSpinner();
-            spinnerGoalMagic.setBounds(145, 105, 50, 20);
-            spinnerGoalPrayer = new JSpinner();
-            spinnerGoalPrayer.setBounds(145, 128, 50, 20);
+            goalAttack = new JSpinner();
+            goalAttack.setBounds(145, 18, 50, 20);
+            goalStrength = new JSpinner();
+            goalStrength.setBounds(145, 41, 50, 20);
+            goalDefence = new JSpinner();
+            goalDefence.setBounds(145, 61, 50, 20);
+            goalRanged = new JSpinner();
+            goalRanged.setBounds(145, 82, 50, 20);
+            goalMagic = new JSpinner();
+            goalMagic.setBounds(145, 105, 50, 20);
+            goalPrayer = new JSpinner();
+            goalPrayer.setBounds(145, 128, 50, 20);
 
             setImage("gui\\skill_icons\\Attack.png", labelGoalAttack);
             setImage("gui\\skill_icons\\Strength.png", labelGoalStrength);
@@ -84,61 +84,61 @@ public class Combat {
             // ---- labelGoalAttack ----
             labelGoalAttack.setText("Attack Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalAttack.setModel(new SpinnerNumberModel(10, 1, 99, 1));
+            goalAttack.setModel(new SpinnerNumberModel(1, 1, 99, 1));
             // ---- labelGoalStrength ----
             labelGoalStrength.setText("Strength Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalStrength.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalStrength.setModel(new SpinnerNumberModel(1, 1, 99, 1));
             // ---- labelGoalDefence ----
             labelGoalDefence.setText("Defence Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalDefence.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalDefence.setModel(new SpinnerNumberModel(1, 1, 99, 1));
             // ---- labelGoalRanged ----
             labelGoalRanged.setText("Ranged Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalRanged.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalRanged.setModel(new SpinnerNumberModel(1, 1, 99, 1));
             // ---- labelGoalMagic ----
             labelGoalMagic.setText("Magic Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalMagic.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalMagic.setModel(new SpinnerNumberModel(1, 1, 99, 1));
             // ---- labelGoalPrayer ----
             labelGoalPrayer.setText("Prayer Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalPrayer.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalPrayer.setModel(new SpinnerNumberModel(1, 1, 99, 1));
         }
 
         // ======== vars ========
         {
             panelSkillingGoalsCombat.add(labelGoalAttack);
-            panelSkillingGoalsCombat.add(spinnerGoalAttack);
+//            panelSkillingGoalsCombat.add(goalAttack);
             panelSkillingGoalsCombat.add(labelGoalStrength);
-            panelSkillingGoalsCombat.add(spinnerGoalStrength);
+//            panelSkillingGoalsCombat.add(goalStrength);
             panelSkillingGoalsCombat.add(labelGoalDefence);
-            panelSkillingGoalsCombat.add(spinnerGoalDefence);
+//            panelSkillingGoalsCombat.add(goalDefence);
             panelSkillingGoalsCombat.add(labelGoalRanged);
-            panelSkillingGoalsCombat.add(spinnerGoalRanged);
+//            panelSkillingGoalsCombat.add(goalRanged);
             panelSkillingGoalsCombat.add(labelGoalMagic);
-            panelSkillingGoalsCombat.add(spinnerGoalMagic);
+//            panelSkillingGoalsCombat.add(goalMagic);
             panelSkillingGoalsCombat.add(labelGoalPrayer);
-            panelSkillingGoalsCombat.add(spinnerGoalPrayer);
+//            panelSkillingGoalsCombat.add(goalPrayer);
         }
         TabSkillingGoals.combat = true;
         TabSkillingGoals.create();
     }
 
     public static void setAccount_Combat(Boolean b) {
-        spinnerGoalAttack.setEnabled(b);
-        spinnerGoalAttack.setValue(1);
-        spinnerGoalStrength.setEnabled(b);
-        spinnerGoalStrength.setValue(1);
-        spinnerGoalDefence.setEnabled(b);
-        spinnerGoalDefence.setValue(1);
-        spinnerGoalRanged.setEnabled(b);
-        spinnerGoalRanged.setValue(1);
-        spinnerGoalMagic.setEnabled(b);
-        spinnerGoalMagic.setValue(1);
-        spinnerGoalPrayer.setEnabled(b);
-        spinnerGoalPrayer.setValue(1);
+        goalAttack.setEnabled(b);
+        goalAttack.setValue(1);
+        goalStrength.setEnabled(b);
+        goalStrength.setValue(1);
+        goalDefence.setEnabled(b);
+        goalDefence.setValue(1);
+        goalRanged.setEnabled(b);
+        goalRanged.setValue(1);
+        goalMagic.setEnabled(b);
+        goalMagic.setValue(1);
+        goalPrayer.setEnabled(b);
+        goalPrayer.setValue(1);
     }
 
 

@@ -1,4 +1,4 @@
-package net.automaters.activities.skills.woodcutting;
+package net.automaters.unused_files;
 
 import net.runelite.api.Client;
 import net.runelite.api.coords.WorldPoint;

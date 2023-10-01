@@ -44,7 +44,7 @@ public class PotOfFlour extends Task {
     }
 
     @Override
-    public int onLoop() {
+    protected int onLoop() {
         debug("Task Duration: "+ taskDuration);
         var local = Players.getLocal();
 
@@ -81,6 +81,7 @@ public class PotOfFlour extends Task {
                             }
                         } else {
                             openBank();
+                            return -1;
                         }
                     }
                 }
@@ -95,6 +96,11 @@ public class PotOfFlour extends Task {
     @Override
     public boolean taskFinished() {
         return false;
+    }
+
+    @Override
+    public void generateSecondaryTask() {
+        secondaryTask = "None";
     }
 
     private int getPots() {

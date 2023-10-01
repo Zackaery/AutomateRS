@@ -40,7 +40,7 @@ public class MiningBored extends Task {
     }
 
     @Override
-    public int onLoop() {
+    protected int onLoop() {
         debug("Holy shit this is in the loop");
 
         // Choosing tree location
@@ -207,12 +207,16 @@ public class MiningBored extends Task {
         }
 
         // end of copper
-
-        return 0;
+        return -1;
     }
 
     @Override
     public boolean taskFinished() {
         return false;
+    }
+
+    @Override
+    public void generateSecondaryTask() {
+        secondaryTask = "None";
     }
 }

@@ -1,4 +1,4 @@
-package net.automaters.activities.skills.woodcutting;
+package net.automaters.unused_files;
 
 import net.automaters.tasks.Task;
 import net.runelite.api.*;
@@ -42,7 +42,7 @@ public class WoodcuttingBored extends Task {
     }
 
     @Override
-    public int onLoop() {
+    protected int onLoop() {
         debug("Holy shit this is in the loop");
 
         var local = Players.getLocal();
@@ -387,12 +387,17 @@ public class WoodcuttingBored extends Task {
         }
 
         // end willow trees
-        return 0;
+        return -1;
     }
 
     @Override
     public boolean taskFinished() {
         return false;
+    }
+
+    @Override
+    public void generateSecondaryTask() {
+
     }
 }
 

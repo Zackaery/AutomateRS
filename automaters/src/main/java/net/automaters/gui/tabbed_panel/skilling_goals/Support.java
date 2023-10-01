@@ -18,9 +18,9 @@ public class Support {
     public static JLabel labelGoalThieving;
     public static JLabel labelGoalSlayer;
 
-    public static JSpinner spinnerGoalAgility;
-    public static JSpinner spinnerGoalThieving;
-    public static JSpinner spinnerGoalSlayer;
+    public static JSpinner goalAgility;
+    public static JSpinner goalThieving;
+    public static JSpinner goalSlayer;
 
     public static void create() throws IOException {
 
@@ -39,12 +39,12 @@ public class Support {
             labelGoalSlayer = new JLabel();
             labelGoalSlayer.setHorizontalAlignment(SwingConstants.TRAILING);
             labelGoalSlayer.setBounds(10, 66, 122, 24);
-            spinnerGoalAgility = new JSpinner();
-            spinnerGoalAgility.setBounds(150, 18, 50, 20);
-            spinnerGoalThieving = new JSpinner();
-            spinnerGoalThieving.setBounds(150, 43, 50, 20);
-            spinnerGoalSlayer = new JSpinner();
-            spinnerGoalSlayer.setBounds(150, 68, 50, 20);
+            goalAgility = new JSpinner();
+            goalAgility.setBounds(150, 18, 50, 20);
+            goalThieving = new JSpinner();
+            goalThieving.setBounds(150, 43, 50, 20);
+            goalSlayer = new JSpinner();
+            goalSlayer.setBounds(150, 68, 50, 20);
 
             setImage("gui\\skill_icons\\Agility.png", labelGoalAgility);
             setImage("gui\\skill_icons\\Thieving.png", labelGoalThieving);
@@ -59,36 +59,36 @@ public class Support {
             // ---- labelGoalAgility ----
             labelGoalAgility.setText("Agility Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalAgility.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalAgility.setModel(new SpinnerNumberModel(1, 1, 99, 1));
             // ---- labelGoalFishing ----
             labelGoalThieving.setText("Thieving Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalThieving.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalThieving.setModel(new SpinnerNumberModel(1, 1, 99, 1));
             // ---- labelGoalWoodcutting ----
             labelGoalSlayer.setText("Slayer Level:");
             // ---- spinnerTaskStop ----
-            spinnerGoalSlayer.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalSlayer.setModel(new SpinnerNumberModel(1, 1, 99, 1));
         }
 
         // ======== vars ========
         {
             panelSkillingGoalsSupport.add(labelGoalAgility);
-            panelSkillingGoalsSupport.add(spinnerGoalAgility);
+//            panelSkillingGoalsSupport.add(goalAgility);
             panelSkillingGoalsSupport.add(labelGoalThieving);
-            panelSkillingGoalsSupport.add(spinnerGoalThieving);
+//            panelSkillingGoalsSupport.add(goalThieving);
             panelSkillingGoalsSupport.add(labelGoalSlayer);
-            panelSkillingGoalsSupport.add(spinnerGoalSlayer);
+//            panelSkillingGoalsSupport.add(goalSlayer);
         }
         TabSkillingGoals.support = true;
         TabSkillingGoals.create();
     }
 
     public static void setAccount_Support(Boolean b) {
-        spinnerGoalAgility.setEnabled(b);
-        spinnerGoalAgility.setValue(1);
-        spinnerGoalThieving.setEnabled(b);
-        spinnerGoalThieving.setValue(1);
-        spinnerGoalSlayer.setEnabled(b);
-        spinnerGoalSlayer.setValue(1);
+        goalAgility.setEnabled(b);
+        goalAgility.setValue(1);
+        goalThieving.setEnabled(b);
+        goalThieving.setValue(1);
+        goalSlayer.setEnabled(b);
+        goalSlayer.setValue(1);
     }
 }

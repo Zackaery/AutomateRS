@@ -27,7 +27,7 @@ public class TaskManager {
         debug("Executing Task: "+task);
         switch (task) {
             case "Woodcutting":
-                new WoodcuttingZach();
+                new Woodcutting();
                 break;
             case "Mining":
 //                new Mining();

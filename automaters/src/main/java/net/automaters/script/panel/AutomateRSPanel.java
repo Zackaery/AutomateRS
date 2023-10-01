@@ -346,10 +346,10 @@ public class AutomateRSPanel extends PluginPanel {
                             if (localPlayer == null) {
                                 debug("Local Player not located");
                             } else if (!started) {
-//                            GUI.selectedBuild = loadBuildFromGUI();
+                            GUI.selectedBuild = loadBuildFromGUI();
                                 selectedBuild = "ALPHA_TESTER";
                                 started = true;
-                                AutomateRS.scriptStarted = true;
+//                                AutomateRS.scriptStarted = true;
                                 scriptPanel.remove(startButton);
                                 scriptPanel.add(pauseButton);
                                 scriptPanel.add(stopButton);

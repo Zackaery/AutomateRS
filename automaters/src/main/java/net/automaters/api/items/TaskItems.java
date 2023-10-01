@@ -1,4 +1,4 @@
-package net.automaters.util.items;
+package net.automaters.api.items;
 
 import lombok.Getter;
 

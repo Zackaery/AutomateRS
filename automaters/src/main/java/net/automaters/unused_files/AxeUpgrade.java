@@ -1,4 +1,4 @@
-package net.automaters.activities.skills.woodcutting;
+package net.automaters.unused_files;
 
 import net.automaters.api.ui.GrandExchange;
 import net.runelite.api.EquipmentInventorySlot;

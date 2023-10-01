@@ -292,31 +292,31 @@ public class GUI implements ActionListener {
     }
 
     public static void configStats() {
-        ATTACK_GOAL = Integer.parseInt(String.valueOf(Combat.spinnerGoalAttack.getValue()));
-        STRENGTH_GOAL = Integer.parseInt(String.valueOf(Combat.spinnerGoalStrength.getValue()));
-        DEFENCE_GOAL = Integer.parseInt(String.valueOf(Combat.spinnerGoalDefence.getValue()));
-        RANGED_GOAL = Integer.parseInt(String.valueOf(Combat.spinnerGoalRanged.getValue()));
-        MAGIC_GOAL = Integer.parseInt(String.valueOf(Combat.spinnerGoalMagic.getValue()));
-        PRAYER_GOAL = Integer.parseInt(String.valueOf(Combat.spinnerGoalPrayer.getValue()));
+        ATTACK_GOAL = Integer.parseInt(String.valueOf(Combat.goalAttack.getValue()));
+        STRENGTH_GOAL = Integer.parseInt(String.valueOf(Combat.goalStrength.getValue()));
+        DEFENCE_GOAL = Integer.parseInt(String.valueOf(Combat.goalDefence.getValue()));
+        RANGED_GOAL = Integer.parseInt(String.valueOf(Combat.goalRanged.getValue()));
+        MAGIC_GOAL = Integer.parseInt(String.valueOf(Combat.goalMagic.getValue()));
+        PRAYER_GOAL = Integer.parseInt(String.valueOf(Combat.goalPrayer.getValue()));
 
-        HERBLORE_GOAL = Integer.parseInt(String.valueOf(Artisan.spinnerGoalHerblore.getValue()));
-        CRAFTING_GOAL = Integer.parseInt(String.valueOf(Artisan.spinnerGoalCrafting.getValue()));
-        FLETCHING_GOAL = Integer.parseInt(String.valueOf(Artisan.spinnerGoalFletching.getValue()));
-        SMITHING_GOAL = Integer.parseInt(String.valueOf(Artisan.spinnerGoalSmithing.getValue()));
-        COOKING_GOAL = Integer.parseInt(String.valueOf(Artisan.spinnerGoalCooking.getValue()));
-        FIREMAKING_GOAL = Integer.parseInt(String.valueOf(Artisan.spinnerGoalFiremaking.getValue()));
-        RUNECRAFTING_GOAL = Integer.parseInt(String.valueOf(Artisan.spinnerGoalRunecrafting.getValue()));
-        CONSTRUCTION_GOAL = Integer.parseInt(String.valueOf(Artisan.spinnerGoalConstruction.getValue()));
+        HERBLORE_GOAL = Integer.parseInt(String.valueOf(Artisan.goalHerblore.getValue()));
+        CRAFTING_GOAL = Integer.parseInt(String.valueOf(Artisan.goalCrafting.getValue()));
+        FLETCHING_GOAL = Integer.parseInt(String.valueOf(Artisan.goalFletching.getValue()));
+        SMITHING_GOAL = Integer.parseInt(String.valueOf(Artisan.goalSmithing.getValue()));
+        COOKING_GOAL = Integer.parseInt(String.valueOf(Artisan.goalCooking.getValue()));
+        FIREMAKING_GOAL = Integer.parseInt(String.valueOf(Artisan.goalFiremaking.getValue()));
+        RUNECRAFTING_GOAL = Integer.parseInt(String.valueOf(Artisan.goalRunecrafting.getValue()));
+        CONSTRUCTION_GOAL = Integer.parseInt(String.valueOf(Artisan.goalConstruction.getValue()));
 
-        MINING_GOAL = Integer.parseInt(String.valueOf(Gathering.spinnerGoalMining.getValue()));
-        FISHING_GOAL = Integer.parseInt(String.valueOf(Gathering.spinnerGoalFishing.getValue()));
-        WOODCUTTING_GOAL = Integer.parseInt(String.valueOf(Gathering.spinnerGoalWoodcutting.getValue()));
-        FARMING_GOAL = Integer.parseInt(String.valueOf(Gathering.spinnerGoalFarming.getValue()));
-        HUNTER_GOAL = Integer.parseInt(String.valueOf(Gathering.spinnerGoalHunter.getValue()));
+        MINING_GOAL = Integer.parseInt(String.valueOf(Gathering.goalMining.getValue()));
+        FISHING_GOAL = Integer.parseInt(String.valueOf(Gathering.goalFishing.getValue()));
+        WOODCUTTING_GOAL = Integer.parseInt(String.valueOf(Gathering.goalWoodcutting.getValue()));
+        FARMING_GOAL = Integer.parseInt(String.valueOf(Gathering.goalFarming.getValue()));
+        HUNTER_GOAL = Integer.parseInt(String.valueOf(Gathering.goalHunter.getValue()));
 
-        AGILITY_GOAL = Integer.parseInt(String.valueOf(Support.spinnerGoalAgility.getValue()));
-        THIEVING_GOAL = Integer.parseInt(String.valueOf(Support.spinnerGoalThieving.getValue()));
-        SLAYER_GOAL = Integer.parseInt(String.valueOf(Support.spinnerGoalSlayer.getValue()));
+        AGILITY_GOAL = Integer.parseInt(String.valueOf(Support.goalAgility.getValue()));
+        THIEVING_GOAL = Integer.parseInt(String.valueOf(Support.goalThieving.getValue()));
+        SLAYER_GOAL = Integer.parseInt(String.valueOf(Support.goalSlayer.getValue()));
 
     }
 

@@ -1,4 +1,4 @@
-package net.automaters.util.items;
+package net.automaters.api.items;
 
 import java.util.ArrayList;
 import java.util.HashMap;
