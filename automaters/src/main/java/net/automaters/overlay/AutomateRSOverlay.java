@@ -20,6 +20,7 @@ import static net.automaters.api.utils.Debug.displayMessage;
 import static net.automaters.gui.GUI.started;
 import static net.automaters.script.AutomateRS.*;
 import static net.automaters.overlay.OverlayUtil.MATERIAL_DARK;
+import static net.automaters.util.file_managers.ImageResizer.resizeImage;
 import static net.runelite.api.MenuAction.RUNELITE_OVERLAY_CONFIG;
 import static net.runelite.client.ui.overlay.OverlayManager.OPTION_CONFIGURE;
 
@@ -29,8 +30,8 @@ public class AutomateRSOverlay extends OverlayPanel {
 
 	private static boolean hideOverlay;
 
-	final Image title = ImageManager.getInstance().loadImage("script\\title_small.png");
-
+	final Image title = ImageManager.getInstance().loadImage("script\\title.png");
+	final Image smallTitle = resizeImage(title, 150, 43);
 	@Inject
 	private AutomateRSOverlay() {
 		setPosition(OverlayPosition.BOTTOM_LEFT);
@@ -60,7 +61,7 @@ public class AutomateRSOverlay extends OverlayPanel {
 					}
 					int paintY = panelComponent.getBounds().y;
 					int paintX = panelComponent.getBounds().width;
-					g.drawImage(title, (paintX / 2) - (title.getWidth(null) / 2), paintY - title.getHeight(null)+10, null);
+					g.drawImage(smallTitle, (paintX / 2) - (smallTitle.getWidth(null) / 2), paintY - smallTitle.getHeight(null)+10, null);
 					setPosition(OverlayPosition.ABOVE_CHATBOX_RIGHT);
 				}
 			});
