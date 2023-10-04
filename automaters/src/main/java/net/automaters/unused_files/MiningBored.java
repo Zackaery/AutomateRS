@@ -1,4 +1,4 @@
-package net.automaters.activities.skills.mining;
+package net.automaters.unused_files;
 
 import net.automaters.tasks.Task;
 import net.runelite.api.Client;
@@ -40,7 +40,7 @@ public class MiningBored extends Task {
     }
 
     @Override
-    protected int onLoop() {
+    protected void onLoop() {
         debug("Holy shit this is in the loop");
 
         // Choosing tree location
@@ -199,7 +199,7 @@ public class MiningBored extends Task {
                 if (rock == null) {
                     debug("Cannot find rocks, need to reposition");
                     sleep(150, 500);
-                    return -1;
+                    return;
 
                 }
             }
@@ -207,7 +207,11 @@ public class MiningBored extends Task {
         }
 
         // end of copper
-        return -1;
+    }
+
+    @Override
+    public boolean hasNonTaskItems() {
+        return false;
     }
 
     @Override

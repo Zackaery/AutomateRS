@@ -15,6 +15,7 @@ import static net.automaters.activities.skills.woodcutting.Woodcutting.primaryTo
 import static net.automaters.activities.skills.woodcutting.Woodcutting.primaryToolID;
 import static net.automaters.api.entities.LocalPlayer.openBank;
 import static net.automaters.api.ui.GrandExchange.automateBuy;
+import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.utils.GrandExchangePrices.canAfford;
 import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.unethicalite.api.commons.Time.sleep;
@@ -59,8 +60,11 @@ public class PrimaryTools {
     }
 
     private static void processTool(int toolID, int skillLevel, int attackLevel, Skill skill, Boolean buyable, String toolName) {
+        debug("Processing Tool: "+toolName);
         while (scriptStarted && hasToolReq(skill, skillLevel)) {
+            debug("Has Tool Requirements: "+skillLevel+" Woodcutting");
             if (hasTool(toolID, toolName)) {
+                debug("Has Tool: "+toolName);
                 if (canWield(attackLevel)) {
                     wieldTool(toolID, attackLevel, toolName);
                     break;
@@ -75,6 +79,7 @@ public class PrimaryTools {
                 if (Bank.isOpen()) {
                     if (!Bank.contains(toolID)) {
                         if (buyable && canAfford(toolID)) {
+                            debug("Attempting to buy tool: "+toolName);
                             automateBuy(toolID, 1, 5);
                             sleep(600, 1200);
                         } else {
@@ -125,7 +130,7 @@ public class PrimaryTools {
         MITHRIL_AXE(ItemID.MITHRIL_AXE, 21, 20, true),
         BLACK_AXE(ItemID.BLACK_AXE, 11, 10, true),
         STEEL_AXE(ItemID.STEEL_AXE, 6, 5, true),
-        IRON_AXE(ItemID.IRON_AXE, 1, 1, true),
+        IRON_AXE(ItemID.IRON_AXE, 1, 1, false),
         BRONZE_AXE(ItemID.BRONZE_AXE, 1, 1, true)
         ;
 

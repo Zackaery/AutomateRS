@@ -42,7 +42,7 @@ public class WoodcuttingBored extends Task {
     }
 
     @Override
-    protected int onLoop() {
+    protected void onLoop() {
         debug("Holy shit this is in the loop");
 
         var local = Players.getLocal();
@@ -199,7 +199,7 @@ public class WoodcuttingBored extends Task {
                 if (tree == null) {
                     debug("Cannot find tree, need to reposition");
                     sleep(150, 500);
-                    return -1;
+                    return;
 
                 }
             }
@@ -288,7 +288,7 @@ public class WoodcuttingBored extends Task {
                 if (tree == null) {
                     debug("Cannot find tree, need to reposition");
                     sleep(150, 500);
-                    return -1;
+                    return;
 
                 }
             }
@@ -379,7 +379,7 @@ public class WoodcuttingBored extends Task {
                 if (tree == null) {
                     debug("Cannot find tree, need to reposition");
                     sleep(150, 500);
-                    return -1;
+                    return;
 
                 }
             }
@@ -387,7 +387,11 @@ public class WoodcuttingBored extends Task {
         }
 
         // end willow trees
-        return -1;
+    }
+
+    @Override
+    public boolean hasNonTaskItems() {
+        return false;
     }
 
     @Override

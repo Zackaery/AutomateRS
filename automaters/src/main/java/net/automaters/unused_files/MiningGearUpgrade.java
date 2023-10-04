@@ -1,4 +1,4 @@
-package net.automaters.activities.skills.mining;
+package net.automaters.unused_files;
 
 import net.runelite.api.Item;
 import net.unethicalite.api.commons.Time;

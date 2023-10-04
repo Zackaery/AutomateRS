@@ -18,6 +18,8 @@ import static net.automaters.tasks.Task.secondaryTask;
 
 public class Trees {
 
+    public static List<String> resourceNames;
+
     @Getter
     public enum TreeType {
         TREE(Arrays.asList("Tree", "Dead tree", "Evergreen tree"),  1, 15, false, Locations.Tree.class),
@@ -47,26 +49,43 @@ public class Trees {
         int woodcutting = Skills.getLevel(Skill.WOODCUTTING);
         int firemaking = Skills.getLevel(Skill.FIREMAKING);
         int fletching = Skills.getLevel(Skill.FLETCHING);
-        for (TreeType treeType : TreeType.values()) {
-            if ((secondaryTask.equals("None") && woodcutting < treeType.maxSkillLevel)
-                    || (secondaryTask.equals("Fletching") && fletching < treeType.maxSkillLevel && woodcutting >= treeType.reqWoodcuttingLevel)
-                    || (secondaryTask.equals("Firemaking") && firemaking < treeType.maxSkillLevel && woodcutting >= treeType.reqWoodcuttingLevel)) {
-                return treeType;
+
+        boolean taskFletching = secondaryTask.equals("Fletching");
+        boolean taskFiremaking = secondaryTask.equals("Firemaking");
+
+        TreeType[] treeTypes = TreeType.values();
+
+        for (int i = 0; i < treeTypes.length; i++) {
+            TreeType currentTree = treeTypes[i];
+            int nextWoodcuttingLevel = (i < treeTypes.length - 1) ? treeTypes[i + 1].reqWoodcuttingLevel : Integer.MAX_VALUE;
+
+            if (woodcutting >= currentTree.reqWoodcuttingLevel) {
+                if (taskFletching) {
+                    if (fletching >= currentTree.reqWoodcuttingLevel && fletching < currentTree.maxSkillLevel) {
+                        return currentTree;
+                    }
+                } else if (taskFiremaking) {
+                    if (firemaking >= currentTree.reqWoodcuttingLevel && firemaking < currentTree.maxSkillLevel) {
+                        return currentTree;
+                    }
+                }
+
+                if (woodcutting < nextWoodcuttingLevel) {
+                    return currentTree;
+                }
             }
         }
         return null;
     }
 
     public static TileObject getTree() {
-        TreeType chosenTreeType = chooseTreeType();
         TileObject tree = null;
+        TreeType chosenTreeType = chooseTreeType();
         if (chosenTreeType != null) {
             List<String> treeNames = chosenTreeType.getTreeName();
-            debug("Selected Tree Names: " + treeNames);
-
+            resourceNames = treeNames;
             for (String treeName : treeNames) {
                 TileObject treeObject = TileObjects.getNearest(LocalPlayer.getPosition(), treeName);
-
                 if (treeObject != null) {
                     if (tree == null || treeObject.distanceTo(localPlayer) < tree.distanceTo(localPlayer)) {
                         tree = treeObject;
@@ -81,13 +100,10 @@ public class Trees {
         }
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static Area getTreeLocation() {
         TreeType location = chooseTreeType();
-        if (location != null) {
-            Class<? extends Enum> locationClass = location.getTreeLocationClass();
-            return getClosestTreeArea(locationClass);
-        } else {
-            return null;
-        }
+        Class<? extends Enum> locationClass = location != null ? location.getTreeLocationClass() : null;
+        return getClosestTreeArea(locationClass);
     }
 }

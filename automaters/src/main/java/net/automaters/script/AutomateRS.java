@@ -8,11 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 import net.automaters.account_builds.build_executor.BuildExecutor;
 import net.automaters.gui.GUI;
 import net.automaters.gui.utils.EventDispatchThreadRunner;
-import net.automaters.script.panel.AutomateRSPanel;
-import net.automaters.script.panel.auto_login.ProfilePanel;
+import net.automaters.overlay.AutomateRSOverlay;
+import net.automaters.overlay.OverlayUtil;
+import net.automaters.overlay.panel.AutomateRSPanel;
+import net.automaters.overlay.panel.auto_login.ProfilePanel;
 import net.automaters.util.file_managers.ImageManager;
 import net.runelite.api.Client;
-import net.runelite.api.GameState;
 import net.runelite.api.World;
 import net.runelite.api.events.ConfigButtonClicked;
 import net.runelite.api.events.GameStateChanged;
@@ -26,12 +27,12 @@ import net.runelite.client.plugins.account.AccountPlugin;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.runelite.client.ui.overlay.OverlayMenuEntry;
 import net.runelite.client.util.ImageUtil;
 import net.unethicalite.api.events.LobbyWorldSelectToggled;
 import net.unethicalite.api.game.Worlds;
-import net.unethicalite.api.plugins.Script;
+import net.unethicalite.api.plugins.LoopedPlugin;
 import net.unethicalite.api.plugins.Task;
-import net.unethicalite.api.plugins.TaskPlugin;
 import net.unethicalite.api.script.blocking_events.BlockingEventManager;
 import net.unethicalite.api.script.blocking_events.LoginEvent;
 import net.unethicalite.api.script.blocking_events.WelcomeScreenEvent;
@@ -48,26 +49,24 @@ import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.time.Duration;
-import java.time.Instant;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.gui.GUI.*;
-import static net.automaters.script.panel.AutomateRSPanel.*;
-import static net.automaters.script.panel.auto_login.ProfilePanel.init;
-import static net.automaters.util.file_managers.FileManager.PATH_RESOURCES;
-import static net.automaters.util.file_managers.IconManager.AUTOMATERS_ICON;
-import static net.automaters.util.file_managers.IconManager.convert;
+import static net.automaters.overlay.panel.AutomateRSPanel.*;
+import static net.automaters.overlay.panel.auto_login.ProfilePanel.init;
 import static net.runelite.api.GameState.LOGGED_IN;
+import static net.runelite.api.MenuAction.RUNELITE_OVERLAY_CONFIG;
+import static net.runelite.client.ui.overlay.OverlayManager.OPTION_CONFIGURE;
 
 @SuppressWarnings("ALL")
 @PluginDescriptor(name = "AutomateRS", description = "RuneScape - Automated")
 @Extension
 @Slf4j
-public class AutomateRS extends Script {
+public class AutomateRS extends LoopedPlugin {
 
 	@Inject
 	private Client client;
@@ -77,6 +76,9 @@ public class AutomateRS extends Script {
 
 	@Inject
 	private AutomateRSOverlay automateRSOverlay;
+
+	@Inject
+	private OverlayUtil overlayUtil;
 
 	@Inject
 	private ClientToolbar clientToolbar;
@@ -107,6 +109,8 @@ public class AutomateRS extends Script {
 	{
 		return configManager.getConfig(AutomateRSConfig.class);
 	}
+
+	Date currentDate = new Date();
 
 	public static long scriptTimer;
 	public static long elapsedTime;
@@ -180,6 +184,7 @@ public class AutomateRS extends Script {
 	@Override
 	protected void startUp() throws IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {
 
+		OverlayMenuEntry menuEntry = new OverlayMenuEntry(RUNELITE_OVERLAY_CONFIG, OPTION_CONFIGURE, "AutomateRS overlay");
 		configManager.setConfiguration("unethicalite", "avoidWilderness", true);
 		panel = injector.getInstance(AutomateRSPanel.class);
 		try {EventDispatchThreadRunner.runOnDispatchThread(() -> {
@@ -201,6 +206,7 @@ public class AutomateRS extends Script {
 		blockingEventManager.remove(LoginEvent.class);
 
 		overlayManager.add(automateRSOverlay);
+		overlayManager.add(overlayUtil);
 	}
 
 	public Task[] getTasks() { return new Task[0]; }
@@ -211,6 +217,7 @@ public class AutomateRS extends Script {
 		debug("AutomateRS has stopped.");
 		if (GUI != null && GUI.isOpen()) { GUI.close();	}
 		overlayManager.remove(automateRSOverlay);
+		overlayManager.remove(overlayUtil);
 	}
 
 	@Subscribe
@@ -257,17 +264,18 @@ public class AutomateRS extends Script {
 		if (scriptStarted) {
 			if (started) {
 				new BuildExecutor();
-				debug("--- Initiating loop sequence ---\n\n");
+				debug("--- Initiating loop sequence ---\n");
+
 				return 600;
 			}
 		}
 		return 600;
 	}
 
-	@Override
-	public void onStart(String... args) {
-
-	}
+//	@Override
+//	public void onStart(String... args) {
+//
+//	}
 
 
 }

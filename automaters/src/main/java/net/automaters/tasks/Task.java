@@ -2,8 +2,12 @@ package net.automaters.tasks;
 
 import net.automaters.api.entities.LocalPlayer;
 import net.automaters.api.walking.Area;
+import net.runelite.api.NPC;
+import net.runelite.api.Player;
 import net.runelite.api.Skill;
 import net.runelite.api.TileObject;
+import net.unethicalite.api.commons.Predicates;
+import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.game.Skills;
 import net.unethicalite.api.movement.Movement;
@@ -11,17 +15,29 @@ import net.unethicalite.api.movement.Reachable;
 
 import javax.swing.*;
 
+import java.util.ArrayList;
+
+import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.utils.Debug.debug;
+import static net.automaters.api.walking.Walking.automateWalk;
+import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.automaters.tasks.TaskManager.*;
 import static net.unethicalite.api.commons.Time.sleep;
 
 public abstract class Task {
 
+
+    public static ArrayList<String> taskItems = new ArrayList<>();
+
     private static boolean started;
+    public static boolean secondaryTaskActive;
 
     public static long startTime;
     public static long taskDuration;
     public static int skillTask;
+
+    public static boolean renderObjects;
+    public static TileObject objectToRender;
 
 
     public static String task;
@@ -39,73 +55,120 @@ public abstract class Task {
     }
 
     public Task() {
-        debug("Task - Status");
         if (!taskFinished()) {
-            debug("Task - Not Finished");
             if (!taskStarted()) {
-                debug("Task - Not Started");
+                debug(currentTask+" - Not Started");
                 onStart();
+                sleep(600);
             } else {
-                debug("Task - Started");
                 onLoop();
+                sleep(600);
             }
         } else {
-            debug("Task - Finished");
+            debug(currentTask+" - Finished");
             onEnd();
+            sleep(600);
         }
     }
 
     public abstract void onStart();
-    protected abstract int onLoop();
+    protected abstract void onLoop();
+    public abstract boolean hasNonTaskItems();
     public abstract boolean taskFinished();
     public abstract void generateSecondaryTask();
     protected void onEnd() {
         debug("Completed Task: "+currentTask+"\n\n");
+        started = false;
+        secondaryTaskActive = false;
         currentTask = null;
+
+        startTime = 0;
+        taskDuration = 0;
+        skillTask = 0;
+
+        task = null;
+        secondaryTask = "null";
+
+        primaryToolID = -1;
+        primaryTool = null;
+        secondaryTool = -1;
+        outfit = null;
+
         taskSelected = false;
         taskStarted = false;
-        skillTask = 0;
-        secondaryTask = "null";
+        taskItems.clear();
     }
 
     public static int getGoal(JSpinner goalSkill) {
         if (goalSkill == null || goalSkill.getValue() == null) {
-            return 1;
+            return -1;
         }
         try {
             return (int) goalSkill.getValue();
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            return 1;
+            return -1;
         }
     }
     public static boolean skillBetween(Skill skill, int low, int high) {
         return Skills.getLevel(skill) >= low && Skills.getLevel(skill) < high;
     }
 
-    protected int interactableWalk(TileObject tileObject, String action, Area worldArea) {
-        if (Movement.isWalking() && tileObject != null && Reachable.isInteractable(tileObject)) {
+    protected void interactableWalk(TileObject tileObject, String action, Area worldArea) {
+        if (worldArea == null) {
+            return;
+        }
+
+        NPC attacking = NPCs.getNearest(x -> x.getName() != null);
+        if (attacking != null && attacking.getInteracting() != null && attacking.getInteracting() == localPlayer && localPlayer.getHealthScale() != -1) {
+            debug("NPC Attacking player: "+attacking);
+            automateWalk(worldArea);
+        }
+
+        if (!LocalPlayer.canInteract()) {
+            return;
+        }
+
+        if (Movement.isWalking() && tileObject != null && Reachable.isInteractable(tileObject) && tileObject.distanceTo(Players.getLocal()) < 8) {
+            renderObjects = true;
+            objectToRender = tileObject;
+            String location = String.format("%d, %d, %d, %d",
+                    tileObject.getX(),
+                    tileObject.getY(),
+                    tileObject.getZ(),
+                    tileObject.getPlane());
             Movement.setDestination(0, 0);
-            debug("Found a "+tileObject.getName());
+            debug("Found a " + tileObject.getName());
+            debug(tileObject.getName() + " Location = "+location);
+            debug("Interacting with: "+tileObject.getName()+" - "+action);
             tileObject.interact(action);
-            return -1;
+            while (scriptStarted && localPlayer.isMoving()) {
+                sleep(333);
+            }
+            return;
         }
 
-        if (Players.getLocal().isMoving() || Players.getLocal().isAnimating()) {
-            return -1;
-        }
-
-        if (tileObject == null || tileObject.distanceTo(Players.getLocal()) > 20 || !Reachable.isInteractable(tileObject)) {
-            debug("Walking to area.");
+        if (tileObject == null || tileObject.distanceTo(Players.getLocal()) > 8 || !Reachable.isInteractable(tileObject)) {
+            String location = String.format("%d, %d, %d, %d, %d",
+                    worldArea.minX,
+                    worldArea.minY,
+                    worldArea.maxX,
+                    worldArea.maxY,
+                    worldArea.thisZ);
+            debug("Walking to area: " +location);
             Movement.walkTo(worldArea.toWorldArea());
-            return -2;
+            return;
         } else {
+            renderObjects = true;
+            objectToRender = tileObject;
             if (LocalPlayer.canInteract()) {
+                debug("Interacting with: "+tileObject.getName()+" - "+action);
                 tileObject.interact(action);
-                return -1;
+                return;
             }
         }
-        return -1;
+        debug("renderObjects = false");
+        renderObjects = false;
     }
 
 }

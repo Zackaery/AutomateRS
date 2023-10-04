@@ -4,7 +4,7 @@ import lombok.SneakyThrows;
 
 import java.io.*;
 
-import static net.automaters.script.panel.auto_login.ProfilePanel.profileName;
+import static net.automaters.overlay.panel.auto_login.ProfilePanel.profileName;
 import static net.automaters.util.formats.DateFormat.*;
 import static net.automaters.util.formats.TimeFormat.formatTime;
 
@@ -36,7 +36,9 @@ public class Debug {
                     consecutiveCount = 0;
                 }
                 out.println(logMessage);
-                displayMessage = message;
+                if (!message.contains("--- Initiating loop sequence ---")) {
+                    displayMessage = message;
+                }
                 lastMessage = message;
                 consecutiveCount = 0;
                 System.out.println("[AutomateRS] - " + message);

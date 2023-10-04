@@ -44,7 +44,7 @@ public class PotOfFlour extends Task {
     }
 
     @Override
-    protected int onLoop() {
+    protected void onLoop() {
         debug("Task Duration: "+ taskDuration);
         var local = Players.getLocal();
 
@@ -81,7 +81,7 @@ public class PotOfFlour extends Task {
                             }
                         } else {
                             openBank();
-                            return -1;
+                            return;
                         }
                     }
                 }
@@ -90,7 +90,11 @@ public class PotOfFlour extends Task {
                 debug("Making flour");
                 break;
         }
-        return -1;
+    }
+
+    @Override
+    public boolean hasNonTaskItems() {
+        return false;
     }
 
     @Override

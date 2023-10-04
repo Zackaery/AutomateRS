@@ -57,8 +57,8 @@ public class LocalPlayer {
             }
         }
 
-        debug("Player Position: "+playerPosition);
-        debug("Closest Area: "+ closestArea.maxX +", "+closestArea.minY +", "+closestArea.minX +", "+closestArea.maxY +", "+closestArea.thisZ);
+//        debug("Player Position: "+playerPosition);
+//        debug("Closest Area: "+ closestArea.maxX +", "+closestArea.minY +", "+closestArea.minX +", "+closestArea.maxY +", "+closestArea.thisZ);
         return closestArea;
     }
 
@@ -69,7 +69,7 @@ public class LocalPlayer {
      * @return if local can interact.
      */
     public static boolean canInteract() {
-        debug("Can Interact: "+(localPlayer != null && scriptStarted && !localPlayer.isAnimating() && !localPlayer.isInteracting()));
+//        debug("Can Interact: "+(localPlayer != null && scriptStarted && !localPlayer.isAnimating() && !localPlayer.isInteracting()));
         return (localPlayer != null && scriptStarted && !localPlayer.isAnimating() && !localPlayer.isInteracting());
     }
 
@@ -114,27 +114,27 @@ public class LocalPlayer {
             sleep(600, 2400);
         }
         if (bank != null && isInBank()) {
-            debug("i can see the bank");
+//            debug("i can see the bank");
             bank.interact("Bank");
             sleep(2200);
         } else if (bankChest != null && isInBank()) {
-            debug("i can see a bank booth");
+//            debug("i can see a bank booth");
             bankChest.interact("Use");
             sleep(2200);
         }
 
 
         while (scriptStarted && !Bank.isOpen() && localPlayer.isMoving() && isInBank()) {
-            debug("Moving around wildly");
+//            debug("Moving around wildly");
             sleep(1250, 1800);
         }
 
         if (Bank.isOpen()) {
-            debug("The bank is open!");
+//            debug("The bank is open!");
             Widget widget = Widgets.get(664, 29, 0);
             if (widget != null) {
                 widget.interact("Close");
-                debug("Closed bank tutorial widget.");
+//                debug("Closed bank tutorial widget.");
             }
         }
     }
@@ -167,16 +167,16 @@ public class LocalPlayer {
             sleep(600, 2400);
         }
         if (!GrandExchange.isOpen() && isInGE()) {
-            debug("I can see the Grand Exchange.");
+//            debug("I can see the Grand Exchange.");
             GrandExchange.open();
             sleep(2200);
         }
         while (scriptStarted && !GrandExchange.isOpen() && localPlayer.isMoving() && isInGE()) {
-            debug("Moving around wildly.");
+//            debug("Moving around wildly.");
             sleep(350, 600);
         }
         if (GrandExchange.isOpen()) {
-            debug("The Grand Exchange is open!");
+//            debug("The Grand Exchange is open!");
         }
     }
 

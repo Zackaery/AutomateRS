@@ -1,8 +1,8 @@
-package net.automaters.script.panel.auto_login;
+package net.automaters.overlay.panel.auto_login;
 
 import net.automaters.script.AutomateRS;
 import net.automaters.script.AutomateRSConfig;
-import net.automaters.script.panel.AutomateRSPanel;
+import net.automaters.overlay.panel.AutomateRSPanel;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.client.ui.ColorScheme;
@@ -22,7 +22,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.script.panel.AutomateRSPanel.*;
+import static net.automaters.overlay.panel.AutomateRSPanel.*;
 import static net.automaters.util.file_managers.IconManager.*;
 import static net.unethicalite.api.commons.Time.sleep;
 import static net.unethicalite.api.game.Game.logout;

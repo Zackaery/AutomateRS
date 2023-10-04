@@ -1,10 +1,10 @@
-package net.automaters.script.panel;
+package net.automaters.overlay.panel;
 
 import net.automaters.gui.GUI;
 import net.automaters.gui.utils.EventDispatchThreadRunner;
+import net.automaters.overlay.panel.auto_login.ProfilePanel;
 import net.automaters.script.AutomateRS;
 import net.automaters.script.AutomateRSConfig;
-import net.automaters.script.panel.auto_login.ProfilePanel;
 import net.automaters.api.client.ui.components.PluginInfoPanel;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
