@@ -42,37 +42,29 @@ public class TabSkillingGoals
     {
         if (!combat)
         {
-            debug("Combat.create()");
             Combat.create();
         }
         else if (!artisan)
         {
-            debug("Artisan.create()");
             Artisan.create();
         }
         else if (!gathering)
         {
-            debug("Gathering.create()");
             Gathering.create();
         }
         else if (!support)
         {
-            debug("Support.create()");
             Support.create();
         }
         else
         {
-            debug("randomSkilling()");
             randomSkilling();
-            debug("buttonHandler()");
             buttonHandler();
             tabSkillingGoalsInitialized = true;
-            debug("tabSkillingGoalsInitialized = TRUE");
         }
     }
 
     public static void randomSkilling() {
-        debug("randomSkilling() INSIDE");
         checkBoxEnableRandomSkilling = new JCheckBox();
         checkBoxEnableRandomSkilling.setBounds(10, 20, 165, 23);
 
@@ -100,7 +92,6 @@ public class TabSkillingGoals
     }
 
     public static void buttonHandler() {
-        debug("buttonHandler() INSIDE");
         buttonToggleSupport = new JButton();
         buttonToggleSupport.setBounds(52, 91, 120, 20);
         buttonToggleSupport.setText("Disable");

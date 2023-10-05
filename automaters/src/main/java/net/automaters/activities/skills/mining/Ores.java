@@ -23,7 +23,7 @@ public class Ores {
         COPPER(Arrays.asList("Copper rocks"), 1, false, Locations.Bronze.class),
         TIN(Arrays.asList("Tin rocks"), 1, false, Locations.Bronze.class),
         IRON(Arrays.asList("Iron rocks"), 15, false, Locations.Iron.class),
-        COAL(Arrays.asList("Coal rocks"), 30, false, Locations.Coal.class),
+        COAL(Arrays.asList("Coal rocks"), 99, false, Locations.Coal.class),
         ;
 
         private final List<String> oreName;

@@ -12,13 +12,10 @@ public class BetaTester {
         me();
     }
     public void run() {
-        debug("BETA_TESTER(RUN)");
     }
     public void to() {
-        debug("BETA_TESTER(TO)");
         selectedBuild = "ALPHA_TESTER";
     }
     public void me() {
-        debug("BETA_TESTER(ME)");
     }
 }

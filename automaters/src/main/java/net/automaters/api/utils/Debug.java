@@ -35,9 +35,9 @@ public class Debug {
                     out.println("[" + consecutiveCount + " times consecutively] " + lastMessage);
                     consecutiveCount = 0;
                 }
-                out.println(logMessage);
                 if (!message.contains("--- Initiating loop sequence ---")) {
                     displayMessage = message;
+                    out.println(logMessage);
                 }
                 lastMessage = message;
                 consecutiveCount = 0;

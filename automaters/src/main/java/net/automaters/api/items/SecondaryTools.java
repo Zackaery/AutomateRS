@@ -1,18 +1,13 @@
 package net.automaters.api.items;
 
 import net.runelite.api.ItemID;
-import net.runelite.api.Skill;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import static net.automaters.api.entities.LocalPlayer.openBank;
 import static net.automaters.api.ui.GrandExchange.automateBuy;
-import static net.automaters.api.utils.GrandExchangePrices.canAfford;
+import static net.automaters.api.unobfuscated.GrandExchangePrices.canAfford;
 import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.automaters.tasks.Task.*;
 import static net.unethicalite.api.commons.Time.sleep;

@@ -1,14 +1,12 @@
-package net.automaters.api.utils;
+package net.automaters.api.unobfuscated;
 
 import com.google.gson.*;
-import net.runelite.api.Item;
 
 import java.io.*;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;

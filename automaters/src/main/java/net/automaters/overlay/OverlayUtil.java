@@ -16,7 +16,6 @@ import java.util.List;
 import static net.automaters.activities.skills.firemaking.DynamicFiremaking.firemaking;
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.tasks.Task.objectToRender;
-import static net.automaters.tasks.Task.renderObjects;
 public class OverlayUtil extends OverlayPanel {
 
     private final Client client;
@@ -44,15 +43,12 @@ public class OverlayUtil extends OverlayPanel {
         Tile localTile = Tiles.getAt(localPlayer.getWorldLocation());
         localTile.getWorldLocation().outline(client, g, ORANGE_COLOR);
 
-        if (renderObjects) {
-            if (firemaking || objectToRender == null) {
-                renderObjects = false;
-                return null;
-            }
+        if (objectToRender != null) {
             modelOutlineRenderer.drawOutline(objectToRender, 12, OPACITY_ORANGE, 4);
         }
 
         if (firemaking) {
+            objectToRender = null;
 			List<Tile> fireArea = DynamicFiremaking.getFireArea();
 			if (fireArea == null || fireArea.isEmpty()) {
 				return null;

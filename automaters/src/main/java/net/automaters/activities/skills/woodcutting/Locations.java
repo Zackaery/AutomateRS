@@ -271,18 +271,18 @@ public class Locations {
         FALADOR_TREE_AREA_V  (3, true, new Area(2923, 3405, 2924, 3403, 0)),
 
         // Varrock Tree Areas
-        VARROCK_TREE_AREA_I  (3, false, new Area(3168, 3422, 3170, 3420, 0)),
-        VARROCK_TREE_AREA_II (3, false, new Area(3192, 3463, 3196, 3458, 0)),
-        VARROCK_TREE_AREA_III(3, false, new Area(3278, 3432, 3283, 3424, 0)),
-        VARROCK_TREE_AREA_IV (3, false, new Area(3199, 3372, 3209, 3364, 0)),
-        VARROCK_TREE_AREA_V  (3, false, new Area(3307, 3462, 3311, 3458, 0)),
+        VARROCK_TREE_AREA_I  (3, false, new Area(3202, 3358, 3213, 3355, 0)),
+        VARROCK_TREE_AREA_II (3, false, new Area(3222, 3308, 3223, 3301, 0)),
+        VARROCK_TREE_AREA_III(3, true, new Area(2923, 3407, 2927, 3407, 0)),
+        VARROCK_TREE_AREA_IV (3, true, new Area(2901, 3402, 2901, 3399, 0)),
+        VARROCK_TREE_AREA_V  (3, false, new Area(3164, 3273, 3162, 3272, 0)),
 
         // Edgeville Tree Areas
-        EDGEVILLE_TREE_AREA_I  (3, false, new Area(3168, 3422, 3170, 3420, 0)),
-        EDGEVILLE_TREE_AREA_II (3, false, new Area(3192, 3463, 3196, 3458, 0)),
-        EDGEVILLE_TREE_AREA_III(3, false, new Area(3278, 3432, 3283, 3424, 0)),
-        EDGEVILLE_TREE_AREA_IV (3, false, new Area(3199, 3372, 3209, 3364, 0)),
-        EDGEVILLE_TREE_AREA_V  (3, false, new Area(3307, 3462, 3311, 3458, 0)),
+        EDGEVILLE_TREE_AREA_I  (3, false, new Area(3202, 3358, 3213, 3355, 0)),
+        EDGEVILLE_TREE_AREA_II (3, false, new Area(3222, 3308, 3223, 3301, 0)),
+        EDGEVILLE_TREE_AREA_III(3, true, new Area(2923, 3407, 2927, 3407, 0)),
+        EDGEVILLE_TREE_AREA_IV (3, true, new Area(2901, 3402, 2901, 3399, 0)),
+        EDGEVILLE_TREE_AREA_V  (3, false, new Area(3164, 3273, 3162, 3272, 0)),
 
         // Camelot Tree Areas
         CAMELOT_TREE_AREA_I  (3, false, new Area(2767, 3472, 2766, 3464, 0)),

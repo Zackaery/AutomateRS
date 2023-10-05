@@ -1,22 +1,26 @@
 package net.automaters.api.entities;
 
 import net.automaters.api.walking.Area;
+import net.runelite.api.GameObject;
 import net.runelite.api.Player;
 import net.runelite.api.TileObject;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.queries.GameObjectQuery;
 import net.runelite.api.widgets.Widget;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.GrandExchange;
 import net.unethicalite.api.movement.Movement;
+import net.unethicalite.api.movement.Reachable;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Widgets;
 
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.walking.Walking.automateWalk;
 import static net.automaters.script.AutomateRS.scriptStarted;
+import static net.automaters.tasks.Task.objectToRender;
 import static net.automaters.util.locations.Constants.GRAND_EXCHANGE;
 import static net.unethicalite.api.commons.Time.sleep;
 
@@ -92,6 +96,16 @@ public class LocalPlayer {
         return BankLocation.getNearest().getArea().contains(localPlayer.getWorldLocation());
     }
 
+    public static TileObject getClosestBank() {
+        TileObject bank = TileObjects.getNearest(getPosition(), x -> x.hasAction("Bank"));
+        if (bank == null || bank.distanceTo(localPlayer) > 10 || !Reachable.isInteractable(bank)) {
+            return null;
+        } else {
+            objectToRender = bank;
+            return bank;
+        }
+    }
+
     /**
      * Walks your player to the closest bank.
      */
@@ -105,36 +119,29 @@ public class LocalPlayer {
      * Opens the closest bank to your player.
      */
     public static void openBank() {
-        debug("Walking to nearest bank!");
-        sleep(1000);
-        TileObject bank = TileObjects.getFirstSurrounding(localPlayer.getWorldLocation(), 20, obj -> obj.hasAction("Bank"));
-        TileObject bankChest = TileObjects.getFirstSurrounding(localPlayer.getWorldLocation(), 20, obj -> obj.getName().startsWith("Bank chest"));
-        while (scriptStarted && !Bank.isOpen() && !isInBank()) {
-            walkToNearestBank();
-            sleep(600, 2400);
-        }
-        if (bank != null && isInBank()) {
-//            debug("i can see the bank");
-            bank.interact("Bank");
-            sleep(2200);
-        } else if (bankChest != null && isInBank()) {
-//            debug("i can see a bank booth");
-            bankChest.interact("Use");
-            sleep(2200);
-        }
-
-
-        while (scriptStarted && !Bank.isOpen() && localPlayer.isMoving() && isInBank()) {
-//            debug("Moving around wildly");
-            sleep(1250, 1800);
+        TileObject bank = getClosestBank();
+        if (!Bank.isOpen()) {
+            if (bank == null || !Reachable.isInteractable(bank)) {
+                debug("Walking to closest bank!");
+                walkToNearestBank();
+                return;
+            } else if (Reachable.isInteractable(bank)) {
+                if (bank.distanceTo(Players.getLocal()) > 5) {
+                    debug("Walking to "+bank.getName());
+                    Movement.walkNextTo(bank);
+                    return;
+                } else {
+                    debug("Opening "+bank.getName());
+                    bank.interact("Bank");
+                    sleep(600);
+                }
+            }
         }
 
         if (Bank.isOpen()) {
-//            debug("The bank is open!");
             Widget widget = Widgets.get(664, 29, 0);
             if (widget != null) {
                 widget.interact("Close");
-//                debug("Closed bank tutorial widget.");
             }
         }
     }

@@ -1,6 +1,5 @@
 package net.automaters.unused_files;
 
-import net.automaters.api.ui.GrandExchange;
 import net.runelite.api.EquipmentInventorySlot;
 import net.runelite.api.Item;
 import net.runelite.api.ItemID;
@@ -9,17 +8,15 @@ import net.unethicalite.api.game.Worlds;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
-import net.unethicalite.api.magic.Rune;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static net.automaters.api.entities.LocalPlayer.openBank;
-import static net.automaters.api.entities.LocalPlayer.openGE;
 import static net.automaters.api.entities.SkillCheck.getAttackLevel;
 import static net.automaters.api.entities.SkillCheck.getWoodcuttingLevel;
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.api.utils.GrandExchangePrices.canAfford;
+import static net.automaters.api.unobfuscated.GrandExchangePrices.canAfford;
 import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.unethicalite.api.commons.Time.sleep;
 import static net.automaters.api.ui.GrandExchange.*;

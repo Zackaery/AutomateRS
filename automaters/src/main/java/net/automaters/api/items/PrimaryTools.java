@@ -16,7 +16,7 @@ import static net.automaters.activities.skills.woodcutting.Woodcutting.primaryTo
 import static net.automaters.api.entities.LocalPlayer.openBank;
 import static net.automaters.api.ui.GrandExchange.automateBuy;
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.api.utils.GrandExchangePrices.canAfford;
+import static net.automaters.api.unobfuscated.GrandExchangePrices.canAfford;
 import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.unethicalite.api.commons.Time.sleep;
 
@@ -40,15 +40,15 @@ public class PrimaryTools {
                         attackLevelField.setAccessible(true);
                         buyableField.setAccessible(true);
 
-                        int toolName = (int) idField.get(tool);
+                        int toolID = (int) idField.get(tool);
                         int skillLevel = (int) skillLevelField.get(tool);
                         int attackLevel = (int) attackLevelField.get(tool);
                         boolean buyable = (boolean) buyableField.get(tool);
                         Skill skill = (Skill) skillField.get(tool);
-                        String name = (String) tool.name();
+                        String toolName = tool.name();
 
                         if (primaryTool == null) {
-                            processTool(toolName, skillLevel, attackLevel, skill, buyable, name);
+                            processTool(toolID, skillLevel, attackLevel, skill, buyable, toolName);
                         }
 
                     } catch (NoSuchFieldException | IllegalAccessException e) {
@@ -62,11 +62,17 @@ public class PrimaryTools {
     private static void processTool(int toolID, int skillLevel, int attackLevel, Skill skill, Boolean buyable, String toolName) {
         debug("Processing Tool: "+toolName);
         while (scriptStarted && hasToolReq(skill, skillLevel)) {
-            debug("Has Tool Requirements: "+skillLevel+" Woodcutting");
-            if (hasTool(toolID, toolName)) {
-                debug("Has Tool: "+toolName);
+            debug("Has Tool Requirements: "+skillLevel+" "+skill.getName());
+            if (hasTool(toolID)) {
+                Item tool = Inventory.getFirst(toolID);
+                Item wornTool = Equipment.getFirst(toolID);
+                if (tool != null) {
+                    debug("Has Tool: "+tool.getName());
+                } else {
+                    debug("Has Tool: "+wornTool.getName());
+                }
                 if (canWield(attackLevel)) {
-                    wieldTool(toolID, attackLevel, toolName);
+                    wieldTool(toolID, attackLevel);
                     break;
                 }
                 break;
@@ -102,19 +108,26 @@ public class PrimaryTools {
         return (Skills.getLevel(Skill.ATTACK) >= attackLevel);
     }
 
-    private static boolean hasTool(int id, String name) {
+    private static boolean hasTool(int id) {
         if (Inventory.contains(id) || Equipment.contains(id)) {
-            primaryTool = name;
-            primaryToolID = id;
+            Item tool = Inventory.getFirst(id);
+            Item wornTool = Equipment.getFirst(id);
+            if (tool != null) {
+                primaryTool = tool.getName();
+                primaryToolID = id;
+            } else {
+                primaryTool = wornTool.getName();
+                primaryToolID = id;
+            }
             return true;
         } else {
             return false;
         }
     }
 
-    private static void wieldTool(int toolName, int attackLevel, String name) {
+    private static void wieldTool(int toolID, int attackLevel) {
         if (canWield(attackLevel)) {
-            Item item = Inventory.getFirst(toolName);
+            Item item = Inventory.getFirst(toolID);
             item.interact("Wield");
             sleep(600);
         }

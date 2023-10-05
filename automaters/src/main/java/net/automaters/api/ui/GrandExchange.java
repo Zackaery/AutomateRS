@@ -1,6 +1,5 @@
 package net.automaters.api.ui;
 
-import net.runelite.api.ItemID;
 import net.unethicalite.api.items.Inventory;
 
 import java.io.File;
@@ -10,8 +9,8 @@ import static net.automaters.api.entities.LocalPlayer.openGE;
 import static net.automaters.api.items.Items.getAmountTotal;
 import static net.automaters.api.items.Items.totalCoins;
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.api.utils.GrandExchangePrices.getPrice;
-import static net.automaters.api.utils.GrandExchangePrices.updatePrices;
+import static net.automaters.api.unobfuscated.GrandExchangePrices.getPrice;
+import static net.automaters.api.unobfuscated.GrandExchangePrices.updatePrices;
 import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.automaters.util.file_managers.FileManager.FILE_GE_PRICES;
 import static net.automaters.util.file_managers.FileManager.getLastModified;

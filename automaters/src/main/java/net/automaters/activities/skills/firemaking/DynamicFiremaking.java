@@ -104,6 +104,7 @@ public class DynamicFiremaking {
         }
 
         if (LocalPlayer.canInteract() && fireLogs == null && isPlayerInFireArea()) {
+            debug("Lighting: "+logs.getName());
             tinderbox.useOn(logs);
             verifyLogs = 0;
             sleep(333);

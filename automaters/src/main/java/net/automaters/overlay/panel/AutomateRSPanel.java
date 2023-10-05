@@ -113,14 +113,10 @@ public class AutomateRSPanel extends PluginPanel {
         removeAll();
         repaint();
         revalidate();
-        debug("Removed all on panel.");
         try {
             init();
-            debug("Reinstated panel.");
         } catch (IllegalBlockSizeException | NoSuchPaddingException | NoSuchAlgorithmException |
                  InvalidKeySpecException | BadPaddingException | InvalidKeyException e) {
-
-            debug("Failed to reinstate panel.");
             throw new RuntimeException(e);
         }
     }
@@ -344,7 +340,6 @@ public class AutomateRSPanel extends PluginPanel {
                     {
                         if (client != null && client.getGameState() == GameState.LOGGED_IN) {
                             if (localPlayer == null) {
-                                debug("Local Player not located");
                             } else if (!started) {
                             GUI.selectedBuild = loadBuildFromGUI();
                                 selectedBuild = "ALPHA_TESTER";

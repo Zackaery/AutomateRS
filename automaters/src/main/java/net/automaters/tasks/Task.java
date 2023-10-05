@@ -16,6 +16,7 @@ import net.unethicalite.api.movement.Reachable;
 import javax.swing.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.utils.Debug.debug;
@@ -36,9 +37,9 @@ public abstract class Task {
     public static long taskDuration;
     public static int skillTask;
 
-    public static boolean renderObjects;
     public static TileObject objectToRender;
 
+    public static List<String> resourceNames;
 
     public static String task;
     public static String secondaryTask = "null";
@@ -130,7 +131,6 @@ public abstract class Task {
         }
 
         if (Movement.isWalking() && tileObject != null && Reachable.isInteractable(tileObject) && tileObject.distanceTo(Players.getLocal()) < 8) {
-            renderObjects = true;
             objectToRender = tileObject;
             String location = String.format("%d, %d, %d, %d",
                     tileObject.getX(),
@@ -148,7 +148,7 @@ public abstract class Task {
             return;
         }
 
-        if (tileObject == null || tileObject.distanceTo(Players.getLocal()) > 8 || !Reachable.isInteractable(tileObject)) {
+        if (tileObject == null || tileObject.distanceTo(Players.getLocal()) > 16 || !Reachable.isInteractable(tileObject)) {
             String location = String.format("%d, %d, %d, %d, %d",
                     worldArea.minX,
                     worldArea.minY,
@@ -159,16 +159,13 @@ public abstract class Task {
             Movement.walkTo(worldArea.toWorldArea());
             return;
         } else {
-            renderObjects = true;
             objectToRender = tileObject;
-            if (LocalPlayer.canInteract()) {
+            if (LocalPlayer.canInteract() && !localPlayer.isMoving()) {
                 debug("Interacting with: "+tileObject.getName()+" - "+action);
                 tileObject.interact(action);
                 return;
             }
         }
-        debug("renderObjects = false");
-        renderObjects = false;
     }
 
 }

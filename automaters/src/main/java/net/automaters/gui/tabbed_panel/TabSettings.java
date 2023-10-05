@@ -20,17 +20,13 @@ public class TabSettings {
 
     public static void create() {
         if (!accountSettings) {
-            debug("Account.create()");
             Account.create();
         } else if (!taskSettings) {
-            debug("Task.create()");
             Task.create();
         } else if (!webhookSettings) {
-            debug("Webhook.create()");
             Webhook.create();
         } else {
             tabSettingsInitialized = true;
-            debug("tabSettingsInitialized = TRUE");
         }
 
     }

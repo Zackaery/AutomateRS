@@ -19,7 +19,7 @@ public class AlphaTester {
         debug("Generating a new AlphaTester task...");
         String[] possibleTasks = {"Woodcutting", "Mining"};
         String selectedTask = possibleTasks[(int) (Math.random() * possibleTasks.length)];
-        selectedTask = "Woodcutting";
+        selectedTask = "Mining";
         debug("Selected Task: " + selectedTask);
         taskSelected = true;
         currentTask = selectedTask;

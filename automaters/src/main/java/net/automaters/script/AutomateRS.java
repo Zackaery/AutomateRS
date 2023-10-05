@@ -137,13 +137,11 @@ public class AutomateRS extends LoopedPlugin {
 	{
 		if (e.getPlugin() != this)
 		{
-			debug("return");
 			return;
 		}
 
 		if (e.isAdded())
 		{
-			debug("client.getcallbacks");
 			client.getCallbacks();
 		}
 	}
@@ -188,7 +186,6 @@ public class AutomateRS extends LoopedPlugin {
 		configManager.setConfiguration("unethicalite", "avoidWilderness", true);
 		panel = injector.getInstance(AutomateRSPanel.class);
 		try {EventDispatchThreadRunner.runOnDispatchThread(() -> {
-			debug("panel.init");
 			panel.refreshPanel();
 			}, true);
 		} catch (InvocationTargetException e) {
@@ -265,9 +262,9 @@ public class AutomateRS extends LoopedPlugin {
 			if (started) {
 				new BuildExecutor();
 				debug("--- Initiating loop sequence ---\n");
-
 				return 600;
 			}
+			return 600;
 		}
 		return 600;
 	}

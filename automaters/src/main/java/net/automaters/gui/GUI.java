@@ -95,7 +95,6 @@ public class GUI implements ActionListener {
 
     public void initGUI(JFrame frame) throws IOException {
 
-        debug("INSIDE initGUI");
         labelSaveName = new JLabel();
         labelSaveName.setText("Save profile as:");
         labelSaveName.setHorizontalAlignment(SwingConstants.TRAILING);
@@ -153,18 +152,14 @@ public class GUI implements ActionListener {
 
         // --- tabbedPanel ---
         tabbedPanel = new JTabbedPane();
-        debug("---- Initialization process [RUNNING] ----");
 
         if (!tabSettingsInitialized) {
-            debug("TabSettings.create()");
             TabSettings.create();
         }
         if (tabSettingsInitialized && !tabSkillingGoalsInitialized) {
-            debug("TabSkillingGoals.create()");
             TabSkillingGoals.create();
         }
         if (tabSettingsInitialized && tabSkillingGoalsInitialized && !tabbedPanelInitialized) {
-            debug("createGUI()");
             createGUI();
             tabbedPanel.setTabPlacement(SwingConstants.TOP);
             tabbedPanel.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
@@ -180,10 +175,8 @@ public class GUI implements ActionListener {
             tabbedPanel.addTab("Skilling Goals", TabSkillingGoals.panelTabSkillingGoals);
             tabbedPanel.setForegroundAt(1, new Color(255, 255, 255));
 
-            debug("tabbedPanelInitialized = TRUE");
             tabbedPanelInitialized = true;
         }
-        debug("---- Initialization process [FINISHED] ----");
     }
 
     public static void createGUI() {
@@ -195,9 +188,6 @@ public class GUI implements ActionListener {
         TabSettings.panelTabSettings.add(Account.panelAccountSettings);
         TabSettings.panelTabSettings.add(Task.panelTask);
         TabSettings.panelTabSettings.add(Webhook.panelWebhookSettings);
-        debug("panelTabSettings.add(panelAccountSettings);\n" +
-                "        panelTabSettings.add(panelTask);\n" +
-                "        panelTabSettings.add(panelWebhookSettings);\n");
 
         TabSkillingGoals.panelTabSkillingGoals = new JPanel(null);
         TabSkillingGoals.panelTabSkillingGoals.add(TabSkillingGoals.checkBoxEnableRandomSkilling);
@@ -209,15 +199,6 @@ public class GUI implements ActionListener {
         TabSkillingGoals.panelTabSkillingGoals.add(Gathering.panelSkillingGoalsGathering);
         TabSkillingGoals.panelTabSkillingGoals.add(Artisan.panelSkillingGoalsArtisan);
         TabSkillingGoals.panelTabSkillingGoals.add(Support.panelSkillingGoalsSupport);
-        debug("panelTabSkillingGoals.add(checkBoxEnableRandomSkilling);\n" +
-                "        panelTabSkillingGoals.add(spinnerRandomSkillingChance);\n" +
-                "        panelTabSkillingGoals.add(labelRandomSkillingChance);\n" +
-                "        panelTabSkillingGoals.add(buttonMaxAccount);\n" +
-                "        panelTabSkillingGoals.add(buttonResetSkills);\n" +
-                "        panelTabSkillingGoals.add(panelSkillingGoalsCombat);\n" +
-                "        panelTabSkillingGoals.add(panelSkillingGoalsGathering);\n" +
-                "        panelTabSkillingGoals.add(panelSkillingGoalsArtisan);\n" +
-                "        panelTabSkillingGoals.add(panelSkillingGoalsSupport);\n");
 
         Container contentPane = frame.getContentPane();
 
