@@ -132,7 +132,7 @@ public abstract class Task {
             return;
         }
 
-        if (Movement.isWalking() && tileObject != null && Reachable.isInteractable(tileObject) && tileObject.distanceTo(Players.getLocal()) < 8) {
+        if (Movement.isWalking() && tileObject != null && Reachable.isInteractable(tileObject) && tileObject.distanceTo(Players.getLocal()) < 15) {
             objectToRender = tileObject;
             String location = String.format("%d, %d, %d, %d",
                     tileObject.getX(),
