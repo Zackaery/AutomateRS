@@ -83,17 +83,23 @@ public class PrimaryTools {
                     sleep(600, 1200);
                 }
                 if (Bank.isOpen()) {
+                    if (Inventory.isFull()) {
+                        Bank.depositAllExcept(toolID);
+                        break;
+                    }
                     if (!Bank.contains(toolID)) {
                         if (buyable && canAfford(toolID)) {
-                            debug("Attempting to buy tool: "+toolName);
+                            debug("Attempting to buy tool: " + toolName);
                             automateBuy(toolID, 1, 5);
                             sleep(600, 1200);
                         } else {
                             break;
                         }
                     } else {
-                        Bank.withdraw(toolID, 1, Bank.WithdrawMode.ITEM);
-                        sleep(600, 1200);
+                        if (!Inventory.isFull()) {
+                            Bank.withdraw(toolID, 1, Bank.WithdrawMode.ITEM);
+                            sleep(600, 1200);
+                        }
                     }
                 }
             }
@@ -143,7 +149,7 @@ public class PrimaryTools {
         MITHRIL_AXE(ItemID.MITHRIL_AXE, 21, 20, true),
         BLACK_AXE(ItemID.BLACK_AXE, 11, 10, true),
         STEEL_AXE(ItemID.STEEL_AXE, 6, 5, true),
-        IRON_AXE(ItemID.IRON_AXE, 1, 1, false),
+        IRON_AXE(ItemID.IRON_AXE, 1, 1, true),
         BRONZE_AXE(ItemID.BRONZE_AXE, 1, 1, true)
         ;
 

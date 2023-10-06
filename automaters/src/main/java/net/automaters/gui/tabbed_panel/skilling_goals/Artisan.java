@@ -137,7 +137,7 @@ public class Artisan {
             panelSkillingGoalsArtisan.add(labelGoalCrafting);
 //            panelSkillingGoalsArtisan.add(goalCrafting);
             panelSkillingGoalsArtisan.add(labelGoalFletching);
-            panelSkillingGoalsArtisan.add(goalFletching);
+//            panelSkillingGoalsArtisan.add(goalFletching);
             panelSkillingGoalsArtisan.add(labelGoalSmithing);
 //            panelSkillingGoalsArtisan.add(goalSmithing);
             panelSkillingGoalsArtisan.add(labelGoalCooking);

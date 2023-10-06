@@ -41,6 +41,7 @@ public abstract class Task {
 
     public static List<String> resourceNames;
 
+
     public static String task;
     public static String secondaryTask = "null";
     public static int primaryToolID;
@@ -51,24 +52,25 @@ public abstract class Task {
     public boolean taskStarted() {
         return started;
     }
+
     public void setStarted(boolean started) {
         this.started = started;
     }
 
     public Task() {
-        if (!taskFinished()) {
-            if (!taskStarted()) {
-                debug(currentTask+" - Not Started");
-                onStart();
-                sleep(600);
-            } else {
+        if (!taskStarted()) {
+            debug(currentTask + " - Not Started");
+            onStart();
+            sleep(600);
+        } else if (taskStarted()) {
+            if (!taskFinished()) {
                 onLoop();
                 sleep(600);
+            } else {
+                debug(currentTask + " - Finished");
+                onEnd();
+                sleep(600);
             }
-        } else {
-            debug(currentTask+" - Finished");
-            onEnd();
-            sleep(600);
         }
     }
 
@@ -157,13 +159,11 @@ public abstract class Task {
                     worldArea.thisZ);
             debug("Walking to area: " +location);
             Movement.walkTo(worldArea.toWorldArea());
-            return;
         } else {
             objectToRender = tileObject;
             if (LocalPlayer.canInteract() && !localPlayer.isMoving()) {
                 debug("Interacting with: "+tileObject.getName()+" - "+action);
                 tileObject.interact(action);
-                return;
             }
         }
     }

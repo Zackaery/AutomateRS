@@ -6,6 +6,7 @@ import net.automaters.api.walking.Area;
 import net.automaters.tasks.Task;
 import net.runelite.api.*;
 import net.unethicalite.api.commons.Predicates;
+import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.entities.TileItems;
 import net.unethicalite.api.game.Worlds;
 import net.unethicalite.api.items.Bank;
@@ -13,13 +14,17 @@ import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 
 import net.runelite.api.Item;
+import net.unethicalite.api.items.Items;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Locale;
+import java.util.function.Predicate;
 
 import static net.automaters.activities.skills.firemaking.DynamicFiremaking.firemaking;
 import static net.automaters.activities.skills.mining.Ores.*;
+import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.entities.LocalPlayer.openBank;
 import static net.automaters.api.items.SecondaryTools.getSecondaryTool;
 import static net.automaters.api.ui.InventoryUtils.getAmountItemsNotInList;
@@ -60,15 +65,21 @@ public class Mining extends Task {
                     Bank.depositAllExcept(Predicates.nameContains(taskItems));
                     sleep(333);
                 } else {
-                    Bank.close();
-                    return;
+                    break;
                 }
             }
         } else {
-            setStarted(true);
-            debug("Primary Tool: "+primaryTool);
-            debug("Secondary Tool: "+secondaryTool);
-            debug("Secondary Task: "+secondaryTask);
+            if (!Inventory.contains(primaryTool) && !Equipment.contains(primaryTool)) {
+                getPrimaryMiningTool();
+            } else {
+                if (Bank.isOpen()) {
+                    Bank.close();
+                }
+                setStarted(true);
+                debug("Primary Tool: " + primaryTool);
+                debug("Secondary Tool: " + secondaryTool);
+                debug("Secondary Task: " + secondaryTask);
+            }
         }
     }
     @Override
@@ -114,19 +125,37 @@ public class Mining extends Task {
                     }
                     return;
                 default:
-                    resource.drop();
-                    sleep(333);
+                    List<String> itemsToDropNames = new ArrayList<>();
+                    itemsToDropNames.add(" ore");
+                    itemsToDropNames.add("Uncut ");
+
+                    for (String itemName : itemsToDropNames) {
+                        Inventory.getAll(Predicates.nameContains(itemName)).forEach(item -> {
+                            if (Inventory.contains(item.getName())) {
+                                item.drop();
+                                sleep(333);
+                            }
+                        });
+                    }
+
                     secondaryTaskActive = false;
-                    return;
+                    break;
             }
         }
 
         if (!Inventory.isFull() && LocalPlayer.canInteract()) {
+            Player interactingPlayer = Players.getNearest(p -> p.isAnimating() && p.distanceTo(Players.getLocal()) <= 1 && p != Players.getLocal());
             if (resourceObject == null) {
                 resourceObject = getOre();
             }
-            interactableWalk(getOre(), "Mine", resourceLocation);
-            sleep(600);
+            if (interactingPlayer != null) {
+                debug("Player: " + interactingPlayer.getName() + ", is crashing you.");
+                interactableWalk(getFurtherOre(), "Mine", resourceLocation);
+                sleep(600);
+            } else {
+                interactableWalk(getOre(), "Mine", resourceLocation);
+                sleep(600);
+            }
         }
 
     }
@@ -135,7 +164,22 @@ public class Mining extends Task {
     public boolean hasNonTaskItems() {
         if (!taskItems.contains(primaryTool)) {
             var tool = primaryTool;
+            var resource = Inventory.getAll(Predicates.nameContains(" ore"));
             taskItems.add(tool);
+            debug("Resource: "+resource);
+
+            List<String> itemsToDropNames = new ArrayList<>();
+            itemsToDropNames.add(" ore");
+            itemsToDropNames.add("Uncut ");
+
+            for (String itemName : itemsToDropNames) {
+                Inventory.getAll(Predicates.nameContains(itemName)).forEach(item -> {
+                    if (Inventory.contains(item.getName()) && !taskItems.contains(item.getName())) {
+                        taskItems.add(item.getName());
+                        debug("Item can be dropped: "+item.getName());
+                    }
+                });
+            }
         }
 
         debug("Task Items: "+taskItems);

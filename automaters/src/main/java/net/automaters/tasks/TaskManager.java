@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static net.automaters.api.utils.Debug.debug;
+
 public class TaskManager {
-    private final List<Task> tasks = new ArrayList<>();
-    private final Random random = new Random();
 
     public static boolean taskStarted;
     public static boolean taskSelected;
@@ -22,13 +22,27 @@ public class TaskManager {
     }
 
     public void executeTask(String task) {
-        currentTask = task;
-        switch (task) {
-            case "Woodcutting":
+
+        // ENABLE TESTING
+//        new Test();
+
+        switch (currentTask) {
+            case "WOODCUTTING":
                 new Woodcutting();
                 break;
-            case "Mining":
+            case "MINING":
                 new Mining();
+                break;
+            case "FLETCHING":
+//                new Fletching();
+                new GenerateTasks();
+                break;
+            case "FIREMAKING":
+//                new Firemaking();
+                new GenerateTasks();
+                break;
+
+            default:
                 break;
         }
     }

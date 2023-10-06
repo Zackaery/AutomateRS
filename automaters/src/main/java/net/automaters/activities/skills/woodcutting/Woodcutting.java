@@ -59,15 +59,24 @@ public class Woodcutting extends Task {
                     Bank.depositAllExcept(Predicates.nameContains(taskItems));
                     sleep(333);
                 } else {
-                    Bank.close();
-                    return;
+                    break;
                 }
             }
         } else {
-            setStarted(true);
-            debug("Primary Tool: "+primaryTool);
-            debug("Secondary Tool: "+secondaryTool);
-            debug("Secondary Task: "+secondaryTask);
+            if (!Inventory.contains(primaryTool) && !Equipment.contains(primaryTool)) {
+                getPrimaryWoodcuttingTool();
+            } else if (secondaryTask.equals("Fletching") && !Inventory.contains("Knife")
+                    || secondaryTask.equals("Firemaking") && !Inventory.contains("Tinderbox")) {
+                getSecondaryTool(secondaryTask);
+            } else {
+                if (Bank.isOpen()) {
+                    Bank.close();
+                }
+                setStarted(true);
+                debug("Primary Tool: " + primaryTool);
+                debug("Secondary Tool: " + secondaryTool);
+                debug("Secondary Task: " + secondaryTask);
+            }
         }
     }
     @Override
@@ -195,7 +204,7 @@ public class Woodcutting extends Task {
 
     @Override
     public boolean taskFinished() {
-        return false;
+            return false;
     }
 
     @Override

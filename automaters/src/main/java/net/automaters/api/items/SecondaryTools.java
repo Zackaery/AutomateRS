@@ -1,6 +1,7 @@
 package net.automaters.api.items;
 
 import net.runelite.api.ItemID;
+import net.unethicalite.api.commons.Predicates;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
@@ -29,10 +30,16 @@ public class SecondaryTools {
 
     private static void processTool(int toolName) {
         while (scriptStarted && !hasTool(toolName)) {
-            if (!Bank.isOpen()) {
+            while (scriptStarted && !Bank.isOpen()) {
                 openBank();
                 sleep(600, 1200);
-            } else {
+            }
+            if (Bank.isOpen()) {
+                if (Inventory.isFull()) {
+                    Bank.depositAllExcept(Predicates.ids(primaryToolID, toolName));
+                    sleep(333);
+                    break;
+                }
                 if (!Bank.contains(toolName)) {
                     if (canAfford(toolName)) {
                         automateBuy(toolName, 1, 5);
@@ -41,8 +48,10 @@ public class SecondaryTools {
                         break;
                     }
                 } else {
-                    Bank.withdraw(toolName, 1, Bank.WithdrawMode.ITEM);
-                    sleep(600, 1200);
+                    if (!Inventory.isFull()) {
+                        Bank.withdraw(toolName, 1, Bank.WithdrawMode.ITEM);
+                        sleep(600, 1200);
+                    }
                 }
             }
         }

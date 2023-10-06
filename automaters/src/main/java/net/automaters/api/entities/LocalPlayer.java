@@ -8,6 +8,7 @@ import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.queries.GameObjectQuery;
 import net.runelite.api.widgets.Widget;
+import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.items.Bank;
@@ -120,7 +121,7 @@ public class LocalPlayer {
      */
     public static void openBank() {
         TileObject bank = getClosestBank();
-        if (!Bank.isOpen()) {
+        while (scriptStarted && !Bank.isOpen()) {
             if (bank == null || !Reachable.isInteractable(bank)) {
                 debug("Walking to closest bank!");
                 walkToNearestBank();
@@ -133,15 +134,19 @@ public class LocalPlayer {
                 } else {
                     debug("Opening "+bank.getName());
                     bank.interact("Bank");
-                    sleep(600);
+                    Time.sleepUntil(Bank::isOpen, 2400);
                 }
             }
         }
 
         if (Bank.isOpen()) {
-            Widget widget = Widgets.get(664, 29, 0);
-            if (widget != null) {
-                widget.interact("Close");
+            Widget bankTutWidget = Widgets.get(664, 29, 0);
+            Widget bankSpaceWidget = Widgets.get(289, 7);
+            if (bankTutWidget != null) {
+                bankTutWidget.interact("Close");
+            }
+            if (bankSpaceWidget != null) {
+                bankSpaceWidget.interact("Not now");
             }
         }
     }

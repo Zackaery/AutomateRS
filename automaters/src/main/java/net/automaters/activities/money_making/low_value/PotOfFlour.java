@@ -38,7 +38,7 @@ public class PotOfFlour extends Task {
             } else {
                 task = "MAKE_FLOUR";
             }
-            taskDuration = 10000;
+            taskDuration = 60;
             setStarted(true);
         }
     }
@@ -99,7 +99,11 @@ public class PotOfFlour extends Task {
 
     @Override
     public boolean taskFinished() {
-        return false;
+        if (taskDuration <= 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

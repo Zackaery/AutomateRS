@@ -1,6 +1,7 @@
 package net.automaters.activities.skills.mining;
 
 import lombok.Getter;
+import net.automaters.activities.skills.woodcutting.Trees;
 import net.automaters.api.entities.LocalPlayer;
 import net.automaters.api.walking.Area;
 import net.runelite.api.Skill;
@@ -14,6 +15,7 @@ import java.util.List;
 import static net.automaters.activities.skills.mining.Locations.getClosestOreArea;
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.utils.Debug.debug;
+import static net.automaters.tasks.Task.secondaryTask;
 
 public class Ores {
 
@@ -40,11 +42,41 @@ public class Ores {
     }
 
     public static OreType chooseOreType() {
-        int Mining = Skills.getLevel(Skill.MINING);
-        for (OreType OreType : OreType.values()) {
-            return OreType;
+        int miningLevel = Skills.getLevel(Skill.MINING);
+
+        for (int i = OreType.values().length - 1; i >= 0; i--) {
+            OreType oreType = OreType.values()[i];
+            if (miningLevel >= oreType.reqMiningLevel) {
+                return oreType;
+            }
         }
+
         return null;
+    }
+
+
+    public static TileObject getFurtherOre() {
+        OreType chosenOreType = chooseOreType();
+        TileObject ore = null;
+        if (chosenOreType != null) {
+            List<String> oreNames = chosenOreType.getOreName();
+            debug("Selected Ore Names: " + oreNames);
+
+            for (String oreName : oreNames) {
+                TileObject oreObject = TileObjects.getNearest(LocalPlayer.getPosition(), oreName);
+
+                if (oreObject != null) {
+                    if (ore == null || oreObject.distanceTo(localPlayer) > ore.distanceTo(localPlayer)) {
+                        ore = oreObject;
+                    }
+                }
+            }
+
+            return ore;
+        } else {
+            debug("No suitable ore type found.");
+            return null;
+        }
     }
 
     public static TileObject getOre() {
