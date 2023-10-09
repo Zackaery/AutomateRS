@@ -5,8 +5,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static net.automaters.util.file_managers.FileManager.PATH_RESOURCES;
-
 public class IconManager {
 
     public static final ImageIcon AUTOMATERS_TITLE;

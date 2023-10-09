@@ -1,5 +1,7 @@
 package net.automaters.overlay.panel;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLaf;
 import net.automaters.gui.GUI;
 import net.automaters.gui.utils.EventDispatchThreadRunner;
 import net.automaters.overlay.panel.auto_login.ProfilePanel;
@@ -622,7 +624,7 @@ public class AutomateRSPanel extends PluginPanel {
             EventDispatchThreadRunner.runOnDispatchThread(() -> {
                 try {
                     GUI = new GUI();
-                    GUI.open();
+                    GUI.start();
                     debug("Launching AutomateRS - GUI");
                 } catch (IOException e) {
                     e.printStackTrace();

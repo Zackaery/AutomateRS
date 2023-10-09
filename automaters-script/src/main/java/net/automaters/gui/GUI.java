@@ -1,5 +1,8 @@
 package net.automaters.gui;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLaf;
 import net.automaters.gui.tabbed_panel.TabSettings;
 import net.automaters.gui.tabbed_panel.TabSkillingGoals;
 import net.automaters.gui.tabbed_panel.settings.Account;
@@ -9,8 +12,8 @@ import net.automaters.gui.tabbed_panel.skilling_goals.Artisan;
 import net.automaters.gui.tabbed_panel.skilling_goals.Combat;
 import net.automaters.gui.tabbed_panel.skilling_goals.Gathering;
 import net.automaters.gui.tabbed_panel.skilling_goals.Support;
+import net.automaters.gui.themes.AutomateLaf;
 import net.automaters.script.AutomateRS;
-import net.automaters.util.file_managers.ImageManager;
 
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.script.AutomateRS.scriptStarted;
@@ -88,7 +91,9 @@ public class GUI implements ActionListener {
         initGUI(frame);
     }
 
-    public static void Start() throws IOException {
+    public static void start() throws IOException {
+        AutomateLaf.registerCustomDefaultsSource("themes");
+        AutomateLaf.setup();
         GUI gui = new GUI();
         gui.open();
     }
@@ -142,7 +147,7 @@ public class GUI implements ActionListener {
         comboBoxDeleteProfile = new JComboBox<>();
 
         // ======== this ========
-        frame.setTitle("Zackaery's Account Builder - Setup GUI " + versionNumber);
+        frame.setTitle("AutomateRS - Configurations " + versionNumber);
 
         // --- labelTitle ---
         labelTitle = new JLabel(AUTOMATERS_TITLE);
@@ -263,8 +268,8 @@ public class GUI implements ActionListener {
         contentPane.setLayout(contentPaneLayout);
 
         frame.pack();
-        contentPane.setForeground(new Color(17, 17, 17));
-        contentPane.setBackground(new Color(17, 17, 17));
+//        contentPane.setForeground(new Color(17, 17, 17));
+//        contentPane.setBackground(new Color(17, 17, 17));
         frame.setVisible(true);
         frame.setLocationRelativeTo(frame.getOwner());
         frame.setResizable(false);
@@ -330,10 +335,12 @@ public class GUI implements ActionListener {
     }
 
     public static void main(String[] args) throws IOException {
-        Font defaultFont = new Font("Segoe UI", Font.PLAIN, 12);
-        UIManager.put("Label.font", defaultFont);
-        UIManager.put("Button.font", defaultFont);
-        UIManager.put("TextField.font", defaultFont);
+        AutomateLaf.registerCustomDefaultsSource("themes");
+        AutomateLaf.setup();
+//        Font defaultFont = new Font("Segoe UI", Font.PLAIN, 12);
+//        UIManager.put("Label.font", defaultFont);
+//        UIManager.put("Button.font", defaultFont);
+//        UIManager.put("TextField.font", defaultFont);
         new GUI();
     }
 

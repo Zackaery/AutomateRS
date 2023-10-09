@@ -1,3 +1,6 @@
+dependencies {
+    implementation(group = "com.formdev", name = "flatlaf", version = "3.2.1")
+}
 version = "early-access"
 
 project.extra["PluginName"] = "AutomateRS"

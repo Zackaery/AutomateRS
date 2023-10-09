@@ -39,6 +39,7 @@ object Libraries {
         const val apacheCommonsText = "1.2"
         const val okhttp3 = "4.9.1"
         const val rxjava = "3.1.2"
+        const val flatlaf = "3.2.1"
     }
 
     const val guice = "com.google.inject:guice:${Versions.guice}"
@@ -50,4 +51,5 @@ object Libraries {
     const val apacheCommonsText = "org.apache.commons:commons-text:${Versions.apacheCommonsText}"
     const val gson = "com.google.code.gson:gson:${Versions.gson}"
     const val okhttp3 = "com.squareup.okhttp3:okhttp:${Versions.okhttp3}"
+    const val flatlaf = "com.formdev:flatlaf:${Versions.flatlaf}"
 }
