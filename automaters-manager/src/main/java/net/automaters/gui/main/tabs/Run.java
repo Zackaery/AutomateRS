@@ -1,8 +1,14 @@
 package net.automaters.gui.main.tabs;
 
+import net.automaters.api.ui.DynamicGridLayout;
+import net.automaters.api.panels.InfoPanel;
+
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,20 +16,25 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import static java.awt.BorderLayout.CENTER;
 import static net.automaters.AutomateManager.managerWidth;
-import static net.automaters.api.panels.findJComponent.*;
-import static net.automaters.api.panels.readContents.readFileContents;
+import static net.automaters.api.panels.FindJComponent.*;
+import static net.automaters.api.panels.ReadContents.readFileContents;
 import static net.automaters.api.utils.Debug.debug;
+import static net.automaters.api.utils.file_managers.IconManager.*;
 import static net.automaters.api.utils.file_managers.ProcessManager.getProcessPIDs;
 import static net.automaters.gui.main.MainComponents.*;
+import static net.unethicalite.api.game.Game.logout;
 
 public class Run {
 
-    public static JPanel panelRunBotList = new JPanel();
-    public static JPanel panelRunButton = new JPanel();
+    public static JPanel panelRunInfo = new JPanel();
+    private final InfoPanel infoPanel = new InfoPanel();
 
-    public static JButton buttonStart = new JButton("Start bot(s)");
-    public static JButton buttonStop = new JButton("Stop Bot(s)");
+    public static JButton buttonStart = new JButton("Start Account(s)");
+    public static JButton buttonStop = new JButton("Stop Account(s)");
+
+    public static JLabel start;
 
     private static final Path managerPath = Paths.get(System.getProperty("user.home"),
             ".openosrs", "data", "AutomateRS", "Manager");
@@ -33,16 +44,28 @@ public class Run {
         initRunComponents();
     }
 
+    private void createInfoPanel(JPanel panel, String title, String description) {
+        panel.setLayout(new DynamicGridLayout(2, 1, 0, 0));
+        panel.setBounds(0, 0, managerWidth-100, 100);
+        infoPanel.setBounds(0, 0, managerWidth, 100);
+        infoPanel.setContent(title, description);
+        panel.add(infoPanel, BorderLayout.NORTH);
+        panel.add(new JSeparator(), CENTER);
+    }
+
     private void initRunComponents() {
 
-        scrollPane.setViewportView(panelRunBotList);
+        JScrollPane scrollPane = new JScrollPane();
+        initScrollPane(scrollPane, panelRunAccountList);
 
-        panelRunBotList.setLayout(new BoxLayout(panelRunBotList, BoxLayout.Y_AXIS));
-        panelRunButton.setLayout(null);
+        createInfoPanel(panelRunInfo, "Running Accounts", "Select the account(s) you'd like to run.<br>Select your configurations.<br>Press the Start Account(s) button.</html>");
 
-        panelRunButton.setBounds(0, 200, managerWidth, 100);
-        buttonStart.setBounds(420, 32, 90, 23);
-        buttonStop.setBounds(520, 32, 90, 23);
+        panelRunAccountList.setLayout(new BoxLayout(panelRunAccountList, BoxLayout.Y_AXIS));
+        panelRunComponents.setLayout(null);
+
+        panelRunComponents.setBounds(0, 300, managerWidth, 45);
+        buttonStart.setBounds((managerWidth/2)-100-65, 10, 120, 25);
+        buttonStop.setBounds((managerWidth/2)-100+65, 10, 120, 25);
 
         buttonStart.addActionListener(e -> {
             try {
@@ -59,11 +82,12 @@ public class Run {
             }
         });
 
-        panelRunButton.add(buttonStart);
-        panelRunButton.add(buttonStop);
+        panelRunComponents.add(buttonStart);
+        panelRunComponents.add(buttonStop);
 
         tabRun.add(scrollPane);
-        tabRun.add(panelRunButton);
+        tabRun.add(panelRunComponents);
+        tabRun.add(panelRunInfo);
 
     }
 
@@ -71,69 +95,69 @@ public class Run {
         List<String> pids = getProcessPIDs();
         debug("after getting pids");
 
-        // Loop through bot rows
-        for (Component component : panelRunBotList.getComponents()) {
+        // Loop through account rows
+        for (Component component : panelRunAccountList.getComponents()) {
 
             debug("inside for component loop");
             if (component instanceof JPanel) {
                 debug("component is instance of JPanel");
-                JPanel botRowPanel = (JPanel) component;
+                JPanel accountRowPanel = (JPanel) component;
 
-                JCheckBox checkbox = findCheckbox(botRowPanel);
+                JCheckBox checkbox = findCheckbox(accountRowPanel);
                 if (checkbox != null && checkbox.isSelected()) {
                     if (start) {
-                        if (shouldStartBot(botRowPanel, pids)) {
-                            debug("should start bot");
-                            startBot(botRowPanel);
+                        if (shouldStartAccount(accountRowPanel, pids)) {
+                            debug("should start account");
+                            startAccount(accountRowPanel);
                         } else {
-                            debug("should not start bot");
+                            debug("should not start account");
                         }
                     } else {
-                        if (shouldStopBot(botRowPanel, pids)) {
-                            debug("should stop bot");
-                            stopBot(botRowPanel);
+                        if (shouldStopAccount(accountRowPanel, pids)) {
+                            debug("should stop account");
+                            stopAccount(accountRowPanel);
                         } else {
-                            debug("should not stop bot");
+                            debug("should not stop account");
                         }
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Bot not selected!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Account not selected!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
     }
 
-    private static boolean shouldStartBot(JPanel botRowPanel, List<String> pids) throws IOException {
+    public static boolean shouldStartAccount(JPanel accountRowPanel, List<String> pids) throws IOException {
 
-        JLabel botNameLabel = findLabel(botRowPanel);
-        String botName = botNameLabel.getText().trim();
-        String botNameSub = botName.split("@")[0].trim();
-        Path pidFilePath = Path.of(String.valueOf(managerPath), botNameSub, "pidlist.txt");
+        JLabel accountNameLabel = findLabel(accountRowPanel);
+        String accountName = accountNameLabel.getText().trim();
+        String accountNameSub = accountName.split("@")[0].trim();
+        Path pidFilePath = Path.of(String.valueOf(managerPath), accountNameSub, "pidlist.txt");
 
-        if (botName.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Bot name is empty!", "Error", JOptionPane.ERROR_MESSAGE);
-            return false; // Bot name is empty
+        if (accountName.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Account name is empty!", "Error", JOptionPane.ERROR_MESSAGE);
+            return false; // Account name is empty
         }
 
         if (Files.exists(pidFilePath)) {
             String fileContent = readFileContents(pidFilePath);
             if (pids.contains(fileContent.trim())) {
-                JOptionPane.showMessageDialog(null, botName + " already running!");
-                return false; // Bot is already running
+                JOptionPane.showMessageDialog(null, accountName + " already running!");
+                return false; // Account is already running
             }
         }
 
-        JOptionPane.showMessageDialog(null, botName + " starting bot!");
-        return true; // Start the bot
+        JOptionPane.showMessageDialog(null, accountName + " starting account!");
+        return true; // Start the account
     }
 
-    private static void startBot(JPanel botRowPanel) throws IOException, InterruptedException {
+    public static void startAccount(JPanel accountRowPanel) throws IOException, InterruptedException {
 
-        debug("starting bot");
-        JComboBox<String> scriptDropdown = findDropdown(botRowPanel, "scriptDropdown");
-        JComboBox<String> profileDropdown = findDropdown(botRowPanel, "profileDropdown");
-        JComboBox<String> proxyDropdown = findDropdown(botRowPanel, "proxyDropdown");
-        JComboBox<String> worldDropdown = findDropdown(botRowPanel, "worldDropdown");
+        debug("starting account");
+        JComboBox<String> scriptDropdown = findDropdown(accountRowPanel, "scriptDropdown");
+        JComboBox<String> profileDropdown = findDropdown(accountRowPanel, "profileDropdown");
+        JComboBox<String> proxyDropdown = findDropdown(accountRowPanel, "proxyDropdown");
+        JComboBox<String> worldDropdown = findDropdown(accountRowPanel, "worldDropdown");
 
         String scriptValue = scriptDropdown.getSelectedItem().toString();
         String profileValue = profileDropdown.getSelectedItem().toString();
@@ -142,13 +166,14 @@ public class Run {
 
         if ("Script".equals(scriptValue)) {
             JOptionPane.showMessageDialog(null, "No script selected", "Error", JOptionPane.ERROR_MESSAGE);
-            return; // Script not selected, don't start the bot
+            return; // Script not selected, don't start the account
         }
 
-        String botName = findLabel(botRowPanel).getText().trim();
-        String botNameSub = botName.split("@")[0].trim();
-        String command = buildCommand(botName, scriptValue, worldValue, profileValue, proxyValue);
-        Path pidFilePath = Path.of(String.valueOf(managerPath), botNameSub, "pidlist.txt");
+        String accountName = findLabel(accountRowPanel).getText().trim();
+        String accountNameSub = accountName.split("@")[0].trim();
+
+        String command = buildCommand(accountName, scriptValue, worldValue, profileValue, proxyValue);
+        Path pidFilePath = Path.of(String.valueOf(managerPath), accountNameSub, "pidlist.txt");
 
         Process process = Runtime.getRuntime().exec(command);
         Thread.sleep(2000);
@@ -166,68 +191,72 @@ public class Run {
         }
     }
 
-    private boolean shouldStopBot(JPanel botRowPanel, List<String> pids) throws IOException {
+    public static boolean shouldStopAccount(JPanel accountRowPanel, List<String> pids) throws IOException {
 
-        JLabel botNameLabel = findLabel(botRowPanel);
-        String botName = botNameLabel.getText().trim();
-        String botNameSub = botName.split("@")[0].trim();
-        Path pidFilePath = Path.of(String.valueOf(managerPath), botNameSub, "pidlist.txt");
+        JLabel accountNameLabel = findLabel(accountRowPanel);
+        String accountName = accountNameLabel.getText().trim();
+        String accountNameSub = accountName.split("@")[0].trim();
+        Path pidFilePath = Path.of(String.valueOf(managerPath), accountNameSub, "pidlist.txt");
 
         if (Files.exists(pidFilePath)) {
             String fileContent = readFileContents(pidFilePath);
             if (pids.contains(fileContent.trim())) {
-                return true; // Bot should be stopped
+                return true; // Account should be stopped
             }
         }
 
-        return false; // Bot should not be stopped
+        return false; // Account should not be stopped
     }
 
-    private void stopBot(JPanel botRowPanel) {
+    public static void stopAccount(JPanel accountRowPanel) {
 
-        JLabel botNameLabel = findLabel(botRowPanel);
-        String botName = botNameLabel.getText().trim();
-        String botNameSub = botName.split("@")[0].trim();
-        Path pidFilePath = Path.of(String.valueOf(managerPath), botNameSub, "pidlist.txt");
+        JLabel accountNameLabel = findLabel(accountRowPanel);
+        String accountName = accountNameLabel.getText().trim();
+        String accountNameSub = accountName.split("@")[0].trim();
+        Path pidFilePath = Path.of(String.valueOf(managerPath), accountNameSub, "pidlist.txt");
 
         try {
             String fileContent = readFileContents(pidFilePath);
             ProcessBuilder processBuilder = new ProcessBuilder("taskkill", "/F", "/PID", fileContent.trim());
             Process stopProcess = processBuilder.start();
             stopProcess.waitFor();
-            JOptionPane.showMessageDialog(null, "Bot " + botName + " stopped successfully!");
+            JOptionPane.showMessageDialog(null, "Account " + accountName + " stopped successfully!");
         } catch (IOException | InterruptedException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to stop " + botName + ".", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Failed to stop " + accountName + ".", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private static String buildCommand(String botName, String scriptValue, String worldValue, String profileValue, String proxyValue) {
+    public static String buildCommand(String accountName, String scriptValue, String worldValue, String profileValue, String proxyValue) {
         // Specify the path to the JAR file you want to launch
         String jarFilePath = "C:\\Users\\Lindz\\IdeaProjects\\devious-client\\runelite-client\\build\\libs\\runelite-client-1.0.20-EXPERIMENTAL-shaded.jar"; // Update with the actual path
 
+//        --account=user:pass
+//        --proxy=ip:port:user:pass
+//        --script=name
+//        --scriptArgs=arg1,arg2,...
         // Create the base command
         StringBuilder command = new StringBuilder("java -jar ");
         command.append(jarFilePath);
 
-        // Add bot-specific parameters
-        command.append(" --account ").append(botName);
-        command.append(" --script \"").append(scriptValue).append("\"");
+        // Add account-specific parameters
+        command.append(" --account=").append(accountName);
+        command.append(" --script=\"").append(scriptValue).append("\"");
 
         // Add optional parameters
         if (!"World".equals(worldValue)) {
             try {
                 int intValue = Integer.parseInt(worldValue);
-                command.append(" --world ").append(intValue);
+                command.append(" --world=").append(intValue);
             } catch (NumberFormatException e) {
                 // Handle the error or log a message
             }
         }
         if (!"Profile".equals(profileValue)) {
-            command.append(" --scriptargs ").append(profileValue);
+            command.append(" --scriptargs=").append(profileValue);
         }
         if (!"Proxy".equals(proxyValue)) {
-            command.append(" --proxy ").append(proxyValue);
+            command.append(" --proxy=").append(proxyValue);
         }
 
         return command.toString();

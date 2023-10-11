@@ -24,7 +24,7 @@ public class IconManager {
     public static final ImageIcon LOADING_ICON;
 
     static {
-        AUTOMATERS_TITLE = set("script\\title.png");
+        AUTOMATERS_TITLE = set("manager\\title.png");
         AUTOMATERS_ICON = set("script\\icon.png");
 
         ARROW_UP_ICON = set("util\\arrow_up.png");

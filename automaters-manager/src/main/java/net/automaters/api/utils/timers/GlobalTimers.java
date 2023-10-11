@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class globaltimers {
+public class GlobalTimers {
     public static Timer timer1;
     public static Timer timer2;
 

@@ -3,8 +3,9 @@ package net.automaters.api.panels;
 import javax.swing.*;
 import java.awt.*;
 
-public class findJComponent {
+public class FindJComponent {
 
+    // finding JComboBox<String>
     public static JComboBox<String> findDropdown(JPanel panel, String name) {
         Component[] components = panel.getComponents();
 
@@ -20,7 +21,7 @@ public class findJComponent {
         return null; // Return null if the JComboBox is not found
     }
 
-    // finding checkbox
+    // finding JCheckBox
     public static JCheckBox findCheckbox(JPanel panel) {
         for (Component component : panel.getComponents()) {
             if (component instanceof JCheckBox) {
@@ -30,7 +31,7 @@ public class findJComponent {
         return null; // Return null if no checkbox is found
     }
 
-    // finding botname
+    // finding JLabel
     public static JLabel findLabel(JPanel panel) {
         for (Component component : panel.getComponents()) {
             if (component instanceof JLabel) {
