@@ -1,7 +1,6 @@
 package net.automaters.activities.skills.woodcutting;
 
 import net.automaters.activities.skills.firemaking.DynamicFiremaking;
-import net.automaters.api.walking.Area;
 import net.automaters.tasks.Task;
 import net.runelite.api.*;
 import net.unethicalite.api.commons.Predicates;
@@ -19,10 +18,10 @@ import java.util.Locale;
 
 import static net.automaters.activities.skills.firemaking.DynamicFiremaking.firemaking;
 import static net.automaters.activities.skills.woodcutting.Trees.*;
+import static net.automaters.api.automate_utils.AutomateInventory.getAmount;
+import static net.automaters.api.automate_utils.AutomateInventory.getItemsFromList;
 import static net.automaters.api.entities.LocalPlayer.openBank;
 import static net.automaters.api.items.SecondaryTools.getSecondaryTool;
-import static net.automaters.api.ui.InventoryUtils.getAmountItemsNotInList;
-import static net.automaters.api.ui.InventoryUtils.getItemsNotInList;
 import static net.automaters.api.utils.Calculator.random;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.gui.tabbed_panel.skilling_goals.Artisan.goalFiremaking;
@@ -34,9 +33,6 @@ import static net.unethicalite.api.game.Skills.getLevel;
 
 public class Woodcutting extends Task {
 
-    private static TileObject resourceObject;
-    private static Area resourceLocation;
-    private static boolean hasResources;
     public Woodcutting() {
         super();
     }
@@ -95,7 +91,7 @@ public class Woodcutting extends Task {
         List<Item> inventoryItems = Inventory.getAll(); // Get your inventory items
         List<String> itemsToCheck = taskItems; // Define the list of item names to check
 
-        if (getAmountItemsNotInList(inventoryItems, itemsToCheck) >= 5) {
+        if (getAmount(false, itemsToCheck) >= 5) {
             debug("Banking non-task items.");
             openBank();
             while (scriptStarted && Bank.isOpen() && Inventory.contains(Predicates.nameContains(taskItems))) {
@@ -117,12 +113,15 @@ public class Woodcutting extends Task {
             return;
         }
 
-        if (resourceObject == null || resourceLocation == null || resource == null && (!hasResources)) {
-            getResources();
+        if (!secondaryTaskActive) {
+            if (resourceObject == null || resourceLocation == null || resource == null && (!hasResources)) {
+                getResources();
+            }
         }
 
         if (Inventory.isFull() && resource != null || secondaryTaskActive) {
             hasResources = false;
+            secondaryTaskActive = true;
             switch (secondaryTask) {
                 case "Firemaking":
                     if (tinderbox != null && Inventory.isFull() || firemaking) {
@@ -184,9 +183,8 @@ public class Woodcutting extends Task {
         }
         debug("Task Items: "+taskItems);
 
-        List<Item> inventory = Inventory.getAll();
         List<String> itemsToCheck = taskItems;
-        List<Item> itemsNotInList = getItemsNotInList(inventory, itemsToCheck);
+        List<Item> itemsNotInList = getItemsFromList(false, itemsToCheck);
 
         int itemCount = 0;
         for (Item item : itemsNotInList) {

@@ -78,6 +78,7 @@ public class PrimaryTools {
                 break;
             }
             if (primaryTool == null) {
+                debug("in primaryTool == null");
                 while (scriptStarted && !Bank.isOpen()) {
                     openBank();
                     sleep(600, 1200);

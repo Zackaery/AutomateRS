@@ -4,12 +4,7 @@ package net.automaters.tasks;
 
 import net.automaters.activities.skills.mining.Mining;
 import net.automaters.activities.skills.woodcutting.Woodcutting;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import static net.automaters.api.utils.Debug.debug;
+import net.automaters.tasks.tasks.GenerateTasks;
 
 public class TaskManager {
 

@@ -43,12 +43,16 @@ allprojects {
         compileOnly("net.unethicalite:runelite-client:$unethicaliteVersion+")
         compileOnly("net.unethicalite.rs:runescape-api:$unethicaliteVersion+")
 
-//        compileOnly(Libraries.flatlaf)
+        compileOnly(Libraries.flatlaf)
         compileOnly(Libraries.gson)
         compileOnly(Libraries.guice)
         compileOnly(Libraries.javax)
         compileOnly(Libraries.lombok)
         compileOnly(Libraries.pf4j)
+    }
+
+    dependencies {
+        implementation(group = "com.formdev", name = "flatlaf", version = "3.2.1")
     }
 
     configure<JavaPluginConvention> {

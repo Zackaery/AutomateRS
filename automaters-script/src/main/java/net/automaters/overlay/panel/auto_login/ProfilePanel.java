@@ -119,12 +119,15 @@ public class ProfilePanel extends JPanel {
             public void mousePressed(MouseEvent e) {
                 if (start.getIcon() == START_ICON || start.getIcon() == START_HOVER_ICON) {
                     if (useWorld && client.getWorld() != world) {
+                        start.setIcon(LOADING_ICON);
                         prepareLogin();
                     } else {
+                        start.setIcon(LOADING_ICON);
                         login(client);
                     }
                 }
                 if (start.getIcon() == STOP_HOVER_ICON) {
+                    start.setIcon(LOADING_ICON);
                     scriptStarted = false;
                     started = false;
                     logout();
@@ -141,14 +144,24 @@ public class ProfilePanel extends JPanel {
                 if (start.getIcon() == STOP_ICON) {
                     start.setIcon(STOP_HOVER_ICON);
                     start.setToolTipText("Logout - "+profileName);
-
+                }
+                if (start.getIcon() == LOADING_ICON) {
+                    start.setToolTipText("Logging in - "+profileName);
                 }
             }
 
             @Override
             public void mouseExited(MouseEvent e)
             {
-                displayProfileStatus(client);
+                if (start.getIcon() == START_HOVER_ICON) {
+                    start.setIcon(START_ICON);
+                }
+                if (start.getIcon() == STOP_HOVER_ICON) {
+                    start.setIcon(STOP_ICON);
+                }
+                if (start.getIcon() == LOADING_ICON) {
+                    start.setIcon(LOADING_ICON);
+                }
             }
         });
 
@@ -202,14 +215,12 @@ public class ProfilePanel extends JPanel {
 
     public void displayProfileStatus(Client client) {
         if (client != null) {
-
             if (client.getGameState() == GameState.LOGIN_SCREEN || client.getGameState() == GameState.LOGIN_SCREEN_AUTHENTICATOR) {
                 start.setIcon(START_ICON);
             } else if (client.getGameState() == GameState.LOGGING_IN || client.getGameState() == GameState.LOADING) {
                 repaint();
                 revalidate();
                 start.setIcon(LOADING_ICON);
-                sleep(2000,4000);
             } else {
                 start.setIcon(STOP_ICON);
             }

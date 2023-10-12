@@ -1,11 +1,12 @@
 package net.automaters.overlay;
 
 import net.automaters.activities.skills.firemaking.DynamicFiremaking;
-import net.runelite.api.Client;
-import net.runelite.api.Tile;
+import net.automaters.script.AutomateRS;
+import net.runelite.api.*;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
+import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
 import net.unethicalite.api.scene.Tiles;
 
@@ -15,10 +16,12 @@ import java.util.List;
 
 import static net.automaters.activities.skills.firemaking.DynamicFiremaking.firemaking;
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
+import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.tasks.Task.objectToRender;
 public class OverlayUtil extends OverlayPanel {
 
     private final Client client;
+    private final AutomateRS plugin;
     private final ModelOutlineRenderer modelOutlineRenderer;
 
     public static final Color ORANGE = new Color(255, 109, 0);
@@ -30,29 +33,30 @@ public class OverlayUtil extends OverlayPanel {
     public static Color ORANGE_COLOR = new Color(HEX_ORANGE_COLOR);
 
     @Inject
-    private OverlayUtil(Client client, ModelOutlineRenderer modelOutlineRenderer) {
+    private OverlayUtil(Client client, AutomateRS plugin, ModelOutlineRenderer modelOutlineRenderer) {
         this.client = client;
+        this.plugin = plugin;
         this.modelOutlineRenderer = modelOutlineRenderer;
-        setLayer(OverlayLayer.UNDER_WIDGETS);
         setPosition(OverlayPosition.DYNAMIC);
+        setLayer(OverlayLayer.ABOVE_SCENE);
+        setPriority(OverlayPriority.HIGH);
     }
 
     @Override
     public Dimension render(Graphics2D g) {
+        localPlayer.getWorldLocation().outline(client, g, ORANGE_COLOR);
 
-        Tile localTile = Tiles.getAt(localPlayer.getWorldLocation());
-        localTile.getWorldLocation().outline(client, g, ORANGE_COLOR);
+        renderTarget();
+        renderFiremaking(g);
+        return null;
+    }
 
-        if (objectToRender != null) {
-            modelOutlineRenderer.drawOutline(objectToRender, 12, OPACITY_ORANGE, 4);
-        }
-
+    private void renderFiremaking(Graphics2D g) {
         if (firemaking) {
-            objectToRender = null;
-			List<Tile> fireArea = DynamicFiremaking.getFireArea();
-			if (fireArea == null || fireArea.isEmpty()) {
-				return null;
-			}
+            List<Tile> fireArea = DynamicFiremaking.getFireArea();
+            if (fireArea == null || fireArea.isEmpty()) {
+                return;
+            }
 
             for (Tile t : DynamicFiremaking.getFireArea()) {
                 Tile tile = Tiles.getAt(t.getWorldLocation());
@@ -61,7 +65,18 @@ public class OverlayUtil extends OverlayPanel {
                 }
             }
         }
-
-        return null;
     }
+
+    private void renderTarget() {
+        TileObject interactedObject = plugin.getInteractedObject();
+        if (interactedObject != null) {
+            modelOutlineRenderer.drawOutline(interactedObject, 12, OPACITY_ORANGE, 4);
+        }
+
+        Actor target = plugin.getInteractedTarget();
+        if (target instanceof NPC) {
+            modelOutlineRenderer.drawOutline((NPC) target, 12, OPACITY_ORANGE, 4);
+        }
+    }
+
 }

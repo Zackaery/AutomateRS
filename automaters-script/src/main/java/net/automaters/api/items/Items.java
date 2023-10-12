@@ -5,6 +5,7 @@ import net.unethicalite.api.items.Inventory;
 
 import static net.automaters.api.entities.LocalPlayer.openBank;
 import static net.automaters.api.ui.GrandExchange.automateBuy;
+import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.unethicalite.api.commons.Time.sleep;
 
@@ -15,6 +16,7 @@ public class Items {
     public static int totalCoins = -1;
 
     public static int getAmountBank(String name) {
+        debug("in getAmountBank");
         while (scriptStarted && !Bank.isOpen()) {
             openBank();
         }

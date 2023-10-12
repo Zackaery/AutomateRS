@@ -209,7 +209,7 @@ public class DynamicFiremaking {
     }
 
     private void endTask() {
-        //debug("endTask");
+        debug("endTask");
         firemaking = false;
         secondaryTaskActive = false;
     }

@@ -1,16 +1,16 @@
 package net.automaters.api.entities;
 
 import net.automaters.api.walking.Area;
-import net.runelite.api.GameObject;
 import net.runelite.api.Player;
 import net.runelite.api.TileObject;
+import net.runelite.api.World;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
-import net.runelite.api.queries.GameObjectQuery;
 import net.runelite.api.widgets.Widget;
 import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.entities.TileObjects;
+import net.unethicalite.api.game.Worlds;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.GrandExchange;
 import net.unethicalite.api.movement.Movement;
@@ -18,12 +18,16 @@ import net.unethicalite.api.movement.Reachable;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Widgets;
 
+import java.util.Map;
+
+import static net.automaters.activities.skills.mining.Mining.resourceObject;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.walking.Walking.automateWalk;
 import static net.automaters.script.AutomateRS.scriptStarted;
-import static net.automaters.tasks.Task.objectToRender;
+import static net.automaters.tasks.Task.*;
 import static net.automaters.util.locations.Constants.GRAND_EXCHANGE;
 import static net.unethicalite.api.commons.Time.sleep;
+import static net.unethicalite.api.commons.Time.sleepUntil;
 
 public class LocalPlayer {
 
@@ -111,8 +115,10 @@ public class LocalPlayer {
      * Walks your player to the closest bank.
      */
     public static void walkToNearestBank() {
-        if (!Bank.isOpen() && !isInBank()) {
-            Movement.walkTo(BankLocation.getNearest());
+        BankLocation closestBank = BankLocation.getNearest();
+        while (scriptStarted && !Bank.isOpen() && !closestBank.getArea().contains(localPlayer)) {
+            Movement.walkTo(closestBank);
+            sleep(600, 1800);
         }
     }
 
@@ -127,7 +133,7 @@ public class LocalPlayer {
                 walkToNearestBank();
                 return;
             } else if (Reachable.isInteractable(bank)) {
-                if (bank.distanceTo(Players.getLocal()) > 5) {
+                if (bank.distanceTo(Players.getLocal()) >= 6) {
                     debug("Walking to "+bank.getName());
                     Movement.walkNextTo(bank);
                     return;
@@ -192,6 +198,40 @@ public class LocalPlayer {
         }
     }
 
+    public static void hopWorld(boolean resetVariables) {
+        World currentWorld = Worlds.getCurrentWorld();
+        World newWorld;
+
+        if (currentWorld.isMembers()) {
+            newWorld = Worlds.getRandom(world -> world.isMembers() && world.isNormal());
+        } else {
+            newWorld = Worlds.getRandom(world -> !world.isMembers() && world.isNormal());
+        }
+
+        if (resetVariables) {
+            debug("player crash counts: \n"+playerCrashCounts);
+            for (Map.Entry<String, Long> entry : lastCrashTimes.entrySet()) {
+                String playerName = entry.getKey();
+                long lastCrashTimeMs = entry.getValue();
+
+                // Convert milliseconds to seconds
+                long lastCrashTimeSec = lastCrashTimeMs / 1000;
+
+                debug("Player: " + playerName + ", Last Crash Time (seconds): " + lastCrashTimeSec);
+            }
+            playerCrashCounts.clear();
+            lastCrashTimes.clear();
+            resourceObject = null;
+            resourceLocation = null;
+            hasResources = false;
+        }
+
+        if (currentWorld == Worlds.getCurrentWorld()) {
+            debug("Current World: "+currentWorld.getId()+", New World: "+newWorld.getId());
+            Worlds.hopTo(newWorld);
+            sleepUntil(() -> Worlds.getCurrentWorld() == newWorld, 10000);
+        }
+    }
 }
 
 

@@ -26,8 +26,6 @@
 rootProject.name = "automaters"
 
 include("automaters-script")
-include("automaters-manager")
-
 
 for (project in rootProject.children) {
     project.apply {

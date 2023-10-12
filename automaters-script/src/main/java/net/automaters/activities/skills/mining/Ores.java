@@ -1,7 +1,6 @@
 package net.automaters.activities.skills.mining;
 
 import lombok.Getter;
-import net.automaters.activities.skills.woodcutting.Trees;
 import net.automaters.api.entities.LocalPlayer;
 import net.automaters.api.walking.Area;
 import net.runelite.api.Skill;
@@ -15,15 +14,12 @@ import java.util.List;
 import static net.automaters.activities.skills.mining.Locations.getClosestOreArea;
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.tasks.Task.secondaryTask;
 
 public class Ores {
 
     @Getter
     public enum OreType {
         BRONZE(Arrays.asList("Copper rocks", "Tin rocks"),  1, false, Locations.Bronze.class),
-        COPPER(Arrays.asList("Copper rocks"), 1, false, Locations.Bronze.class),
-        TIN(Arrays.asList("Tin rocks"), 1, false, Locations.Bronze.class),
         IRON(Arrays.asList("Iron rocks"), 15, false, Locations.Iron.class),
         COAL(Arrays.asList("Coal rocks"), 99, false, Locations.Coal.class),
         ;
@@ -66,11 +62,12 @@ public class Ores {
                 TileObject oreObject = TileObjects.getNearest(LocalPlayer.getPosition(), oreName);
 
                 if (oreObject != null) {
-                    if (ore == null || oreObject.distanceTo(localPlayer) > ore.distanceTo(localPlayer)) {
+                    if (ore == null || oreObject.distanceTo(localPlayer) > 3) {
                         ore = oreObject;
                     }
                 }
             }
+            debug("further ore location: "+ore.getWorldLocation().toString());
 
             return ore;
         } else {
@@ -92,6 +89,7 @@ public class Ores {
                 if (oreObject != null) {
                     if (ore == null || oreObject.distanceTo(localPlayer) < ore.distanceTo(localPlayer)) {
                         ore = oreObject;
+                        debug("ore location: "+ore.getWorldLocation().toString());
                     }
                 }
             }

@@ -13,22 +13,19 @@ import net.automaters.overlay.OverlayUtil;
 import net.automaters.overlay.panel.AutomateRSPanel;
 import net.automaters.overlay.panel.auto_login.ProfilePanel;
 import net.automaters.util.file_managers.ImageManager;
-import net.runelite.api.Client;
-import net.runelite.api.World;
-import net.runelite.api.events.ConfigButtonClicked;
-import net.runelite.api.events.GameStateChanged;
-import net.runelite.api.events.WidgetLoaded;
+import net.runelite.api.*;
+import net.runelite.api.events.*;
 import net.runelite.api.widgets.Widget;
+import net.runelite.api.widgets.WidgetID;
+import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.plugins.account.AccountPlugin;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayMenuEntry;
-import net.runelite.client.util.ImageUtil;
 import net.unethicalite.api.events.LobbyWorldSelectToggled;
 import net.unethicalite.api.game.Worlds;
 import net.unethicalite.api.plugins.LoopedPlugin;
@@ -39,12 +36,13 @@ import net.unethicalite.api.script.blocking_events.WelcomeScreenEvent;
 import net.unethicalite.api.widgets.Widgets;
 import org.pf4j.Extension;
 
+import javax.annotation.Nullable;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.inject.Inject;
 import javax.swing.*;
-import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -80,6 +78,8 @@ public class AutomateRS extends LoopedPlugin {
 	@Inject
 	private OverlayUtil overlayUtil;
 
+
+
 	@Inject
 	private ClientToolbar clientToolbar;
 
@@ -99,10 +99,18 @@ public class AutomateRS extends LoopedPlugin {
 	private final LoginEvent loginEvent = new LoginEvent(this.blockingEventManager);
 
 	@Getter(AccessLevel.PROTECTED)
-
 	private AutomateRSPanel panel;
 	private NavigationButton navButton;
 	private ProfilePanel profilePanel = new ProfilePanel();
+
+	@Getter(AccessLevel.PUBLIC)
+	private TileObject interactedObject;
+	private NPC interactedNpc;
+	@Getter(AccessLevel.PUBLIC)
+	boolean attacked;
+	private int clickTick;
+	@Getter(AccessLevel.PUBLIC)
+	private int gameCycle;
 
 	@Provides
 	AutomateRSConfig getConfig(ConfigManager configManager)
@@ -120,16 +128,12 @@ public class AutomateRS extends LoopedPlugin {
 	private boolean hotswapEnabled = true;
 	private ExecutorService executorService = Executors.newFixedThreadPool(1);
 
-	private static final BufferedImage LOGIN_IMAGE, LOGOUT_IMAGE;
-
-	static
-	{
-		LOGIN_IMAGE = ImageUtil.loadImageResource(AccountPlugin.class, "login_icon.png");
-		LOGOUT_IMAGE = ImageUtil.loadImageResource(AccountPlugin.class, "logout_icon.png");
-	}
 	@Subscribe
 	private void onGameStateChanged(GameStateChanged e) {
-		profilePanel.displayProfileStatus(client);
+			if (e.getGameState() == GameState.LOADING)
+			{
+				interactedObject = null;
+			}
 	}
 
 	@Subscribe
@@ -218,7 +222,7 @@ public class AutomateRS extends LoopedPlugin {
 	}
 
 	@Subscribe
-	public void onConfigButtonPressed(ConfigButtonClicked event) throws InterruptedException {
+	public void onConfigButtonPressed(ConfigButtonClicked event) throws InterruptedException, IOException {
 			if (event.getGroup().contains("automaters")) {
 				if (event.getKey().toLowerCase().contains("start")) {
 					if (client != null && client.getGameState() == LOGGED_IN) {
@@ -229,8 +233,6 @@ public class AutomateRS extends LoopedPlugin {
 							selectedBuild = loadBuildFromGUI();
 							selectedBuild = "ALPHA_TESTER";
 							started = true;
-//							this.scriptStarted = true;
-							scriptTimer = (System.currentTimeMillis() - elapsedTime);
 							debug("Started - AutomateRS");
 						} else {
 							this.scriptStarted = true;
@@ -255,7 +257,6 @@ public class AutomateRS extends LoopedPlugin {
 			}
 	}
 
-
 	@Override
 	protected int loop()  {
 		if (scriptStarted) {
@@ -268,6 +269,167 @@ public class AutomateRS extends LoopedPlugin {
 		}
 		return 600;
 	}
+
+	@Subscribe
+	public void onNpcDespawned(NpcDespawned npcDespawned)
+	{
+		if (npcDespawned.getNpc() == interactedNpc)
+		{
+			interactedNpc = null;
+		}
+	}
+
+	@Subscribe
+	public void onGameTick(GameTick gameTick)
+	{
+		if (client.getTickCount() > clickTick && client.getLocalDestinationLocation() == null)
+		{
+			// when the destination is reached, clear the interacting object
+//			interactedObject = null;
+//			interactedNpc = null;
+		}
+	}
+
+	@Subscribe
+	public void onInteractingChanged(InteractingChanged interactingChanged)
+	{
+		if (interactingChanged.getSource() == client.getLocalPlayer()
+				&& client.getTickCount() > clickTick && interactingChanged.getTarget() != interactedNpc)
+		{
+			interactedNpc = null;
+			attacked = interactingChanged.getTarget() != null && interactingChanged.getTarget().getCombatLevel() > 0;
+		}
+	}
+	@Subscribe
+	public void onMenuOptionClicked(MenuOptionClicked menuOptionClicked)
+	{
+		switch (menuOptionClicked.getMenuAction())
+		{
+			case WIDGET_TARGET_ON_GAME_OBJECT:
+			case GAME_OBJECT_FIRST_OPTION:
+			case GAME_OBJECT_SECOND_OPTION:
+			case GAME_OBJECT_THIRD_OPTION:
+			case GAME_OBJECT_FOURTH_OPTION:
+			case GAME_OBJECT_FIFTH_OPTION:
+			{
+				int x = menuOptionClicked.getParam0();
+				int y = menuOptionClicked.getParam1();
+				int id = menuOptionClicked.getId();
+				interactedObject = findTileObject(x, y, id);
+				debug(interactedObject.getName() + " Location: "+interactedObject.getWorldLocation().toString());
+				interactedNpc = null;
+				clickTick = client.getTickCount();
+				gameCycle = client.getGameCycle();
+				break;
+			}
+			case WIDGET_TARGET_ON_NPC:
+			case NPC_FIRST_OPTION:
+			case NPC_SECOND_OPTION:
+			case NPC_THIRD_OPTION:
+			case NPC_FOURTH_OPTION:
+			case NPC_FIFTH_OPTION:
+			{
+				interactedObject = null;
+				interactedNpc = menuOptionClicked.getMenuEntry().getNpc();
+				attacked = menuOptionClicked.getMenuAction() == MenuAction.NPC_SECOND_OPTION ||
+						menuOptionClicked.getMenuAction() == MenuAction.WIDGET_TARGET_ON_NPC && WidgetInfo.TO_GROUP(client.getSelectedWidget().getId()) == WidgetID.SPELLBOOK_GROUP_ID;
+				clickTick = client.getTickCount();
+				gameCycle = client.getGameCycle();
+				break;
+			}
+			// Any menu click which clears an interaction
+			case WALK:
+			case WIDGET_TARGET_ON_WIDGET:
+			case WIDGET_TARGET_ON_GROUND_ITEM:
+			case WIDGET_TARGET_ON_PLAYER:
+			case GROUND_ITEM_FIRST_OPTION:
+			case GROUND_ITEM_SECOND_OPTION:
+			case GROUND_ITEM_THIRD_OPTION:
+			case GROUND_ITEM_FOURTH_OPTION:
+			case GROUND_ITEM_FIFTH_OPTION:
+				interactedObject = null;
+				interactedNpc = null;
+				break;
+			default:
+				if (menuOptionClicked.isItemOp())
+				{
+
+					interactedObject = null;
+					interactedNpc = null;
+				}
+		}
+	}
+
+	TileObject findTileObject(int x, int y, int id)
+	{
+		Scene scene = client.getScene();
+		Tile[][][] tiles = scene.getTiles();
+		Tile tile = tiles[client.getPlane()][x][y];
+		if (tile != null)
+		{
+			for (GameObject gameObject : tile.getGameObjects())
+			{
+				if (gameObject != null && gameObject.getId() == id)
+				{
+					return gameObject;
+				}
+			}
+
+			WallObject wallObject = tile.getWallObject();
+			if (wallObject != null && wallObject.getId() == id)
+			{
+				return wallObject;
+			}
+
+			DecorativeObject decorativeObject = tile.getDecorativeObject();
+			if (decorativeObject != null && decorativeObject.getId() == id)
+			{
+				return decorativeObject;
+			}
+
+			GroundObject groundObject = tile.getGroundObject();
+			if (groundObject != null && groundObject.getId() == id)
+			{
+				return groundObject;
+			}
+		}
+		return null;
+	}
+
+	@Nullable
+	public Actor getInteractedTarget()
+	{
+		return interactedNpc != null ? interactedNpc : client.getLocalPlayer().getInteracting();
+	}
+
+//	@Override
+//	protected int loop() {
+//		if (scriptStarted) {
+//			if (started) {
+//				if (client != null && client.getGameState() == GameState.LOGGED_IN) {
+//					new BuildExecutor();
+//					debug("--- Initiating loop sequence ---\n");
+//					return 600;
+//				} else {
+//					scriptStarted = false;
+//					sleep(1800);
+//					debug("Logging player back in.");
+//					init(client);
+//					sleep(1800);
+//					return 600;
+//				}
+//			}
+//		} else {
+//			if (started) {
+//				if (client != null && client.getGameState() == GameState.LOGGED_IN) {
+//					scriptStarted = true;
+//				}
+//			} else {
+//				return 600;
+//			}
+//		}
+//		return 1000;
+//	}
 
 //	@Override
 //	public void onStart(String... args) {

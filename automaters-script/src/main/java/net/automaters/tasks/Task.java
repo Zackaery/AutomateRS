@@ -1,12 +1,11 @@
 package net.automaters.tasks;
 
 import net.automaters.api.entities.LocalPlayer;
+import net.automaters.api.entities.PlayerCrashInfo;
 import net.automaters.api.walking.Area;
 import net.runelite.api.NPC;
-import net.runelite.api.Player;
 import net.runelite.api.Skill;
 import net.runelite.api.TileObject;
-import net.unethicalite.api.commons.Predicates;
 import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.game.Skills;
@@ -16,7 +15,9 @@ import net.unethicalite.api.movement.Reachable;
 import javax.swing.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.utils.Debug.debug;
@@ -48,6 +49,20 @@ public abstract class Task {
     public static String primaryTool = null;
     public static int secondaryTool;
     public static String outfit = null;
+
+    public static Map<String, PlayerCrashInfo> playerCrashInfo = new HashMap<>();
+
+    public static Map<String, Integer> playerCrashCounts = new HashMap<>();
+    public static Map<String, Long> lastCrashTimes = new HashMap<>();
+
+    public static TileObject resourceObject;
+    public static Area resourceLocation;
+    public static boolean hasResources;
+
+    private static long lastInteractionTime = 0;
+    private static long interactionCooldown = 8000; // 8000ms
+    private static boolean delayWalk;
+
 
     public boolean taskStarted() {
         return started;
@@ -128,8 +143,21 @@ public abstract class Task {
             automateWalk(worldArea);
         }
 
+        // Check if the timer has elapsed
+        long currentTime = System.currentTimeMillis();
+
+//        System.out.println("Last Interaction Time: "+(currentTime - lastInteractionTime));
+
         if (!LocalPlayer.canInteract()) {
+            lastInteractionTime = System.currentTimeMillis();
             return;
+        }
+
+
+        if (currentTime - lastInteractionTime < interactionCooldown) {
+            delayWalk = true;
+        } else {
+            delayWalk = false;
         }
 
         if (Movement.isWalking() && tileObject != null && Reachable.isInteractable(tileObject) && tileObject.distanceTo(Players.getLocal()) < 15) {
@@ -151,19 +179,22 @@ public abstract class Task {
         }
 
         if (tileObject == null || tileObject.distanceTo(Players.getLocal()) > 16 || !Reachable.isInteractable(tileObject)) {
-            String location = String.format("%d, %d, %d, %d, %d",
-                    worldArea.minX,
-                    worldArea.minY,
-                    worldArea.maxX,
-                    worldArea.maxY,
-                    worldArea.thisZ);
-            debug("Walking to area: " +location);
-            Movement.walkTo(worldArea.toWorldArea());
+            if (!delayWalk) {
+                String location = String.format("%d, %d, %d, %d, %d",
+                        worldArea.minX,
+                        worldArea.minY,
+                        worldArea.maxX,
+                        worldArea.maxY,
+                        worldArea.thisZ);
+                debug("Walking to area: " + location);
+                Movement.walkTo(worldArea.toWorldArea());
+            }
         } else {
             objectToRender = tileObject;
             if (LocalPlayer.canInteract() && !localPlayer.isMoving()) {
                 debug("Interacting with: "+tileObject.getName()+" - "+action);
                 tileObject.interact(action);
+                lastInteractionTime = System.currentTimeMillis();
             }
         }
     }

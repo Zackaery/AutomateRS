@@ -1,4 +1,4 @@
-package net.automaters.tasks;
+package net.automaters.tasks.tasks;
 
 import net.unethicalite.api.game.Skills;
 

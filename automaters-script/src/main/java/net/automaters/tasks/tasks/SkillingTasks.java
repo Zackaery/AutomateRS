@@ -1,4 +1,4 @@
-package net.automaters.tasks;
+package net.automaters.tasks.tasks;
 
 import lombok.Getter;
 import net.runelite.api.Skill;

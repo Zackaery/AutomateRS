@@ -7,6 +7,7 @@ import net.runelite.api.Skill;
 import net.runelite.api.TileObject;
 import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.game.Skills;
+import net.unethicalite.api.game.Worlds;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,9 +25,9 @@ public class Trees {
         TREE(Arrays.asList("Tree", "Dead tree", "Evergreen tree"),  1, 15, false, Locations.Tree.class),
         OAK(Arrays.asList("Oak tree"), 15, 30, false, Locations.Oak.class),
         WILLOW(Arrays.asList("Willow tree"), 30, 60, false, Locations.Willow.class),
-        TEAK(Arrays.asList("Teak tree"), 35, 99, true, Locations.Teak.class),
-        MAPLE(Arrays.asList("Maple tree"), 45, 60, true, Locations.Maple.class),
-        YEW(Arrays.asList("Yew tree"), 60, 99, false, Locations.Yew.class),
+        TEAK(Arrays.asList("Teak tree"), 99, 99, true, Locations.Teak.class),
+        MAPLE(Arrays.asList("Maple tree"), 99, 99, true, Locations.Maple.class),
+        YEW(Arrays.asList("Yew tree"), 99, 99, false, Locations.Yew.class),
         ;
 
         private final List<String> treeName;
@@ -54,18 +55,22 @@ public class Trees {
 
         TreeType[] treeTypes = TreeType.values();
 
-        for (int i = 0; i < treeTypes.length; i++) {
+        for (int i = treeTypes.length - 1; i >= 0; i--) {
             TreeType currentTree = treeTypes[i];
-            int nextWoodcuttingLevel = (i < treeTypes.length - 1) ? treeTypes[i + 1].reqWoodcuttingLevel : Integer.MAX_VALUE;
+            int nextWoodcuttingLevel = (i > 0) ? treeTypes[i - 1].reqWoodcuttingLevel : Integer.MIN_VALUE;
 
-            if (woodcutting >= currentTree.reqWoodcuttingLevel) {
+            if (currentTree.isMembers() && !Worlds.inMembersWorld()) {
+                continue;
+            } else if (woodcutting >= currentTree.reqWoodcuttingLevel) {
                 if (taskFletching) {
-                    if (fletching >= currentTree.reqWoodcuttingLevel && fletching < currentTree.maxSkillLevel) {
-                        return currentTree;
+                    if (fletching >= currentTree.reqWoodcuttingLevel) {
+                        return currentTree; // Check if the tree type is for members
                     }
                 } else if (taskFiremaking) {
-                    if (firemaking >= currentTree.reqWoodcuttingLevel && firemaking < currentTree.maxSkillLevel) {
-                        return currentTree;
+                    if (firemaking >= currentTree.reqWoodcuttingLevel) {
+                        if (!currentTree.isMembers() || Worlds.inMembersWorld()) {
+                            return currentTree; // Check if the tree type is for members
+                        }
                     }
                 }
 
@@ -91,7 +96,6 @@ public class Trees {
                     }
                 }
             }
-
             return tree;
         } else {
             debug("No suitable tree type found.");

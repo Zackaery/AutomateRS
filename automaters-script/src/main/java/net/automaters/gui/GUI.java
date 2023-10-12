@@ -1,8 +1,5 @@
 package net.automaters.gui;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.formdev.flatlaf.FlatLaf;
 import net.automaters.gui.tabbed_panel.TabSettings;
 import net.automaters.gui.tabbed_panel.TabSkillingGoals;
 import net.automaters.gui.tabbed_panel.settings.Account;
@@ -12,25 +9,25 @@ import net.automaters.gui.tabbed_panel.skilling_goals.Artisan;
 import net.automaters.gui.tabbed_panel.skilling_goals.Combat;
 import net.automaters.gui.tabbed_panel.skilling_goals.Gathering;
 import net.automaters.gui.tabbed_panel.skilling_goals.Support;
-import net.automaters.gui.themes.AutomateLaf;
+import net.automaters.gui.utils.EventDispatchThreadRunner;
 import net.automaters.script.AutomateRS;
-
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.script.AutomateRS.scriptStarted;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import static net.automaters.script.AutomateRS.*;
 import static net.automaters.util.file_managers.IconManager.AUTOMATERS_TITLE;
 import static net.automaters.util.file_managers.IconManager.set;
 
 public class GUI implements ActionListener {
 
-    static JFrame frame = new JFrame();
+    public static JFrame frame;
     public static String versionNumber = "v0.28";
     public static JTabbedPane tabbedPanel;
     public static JLabel labelTitle;
@@ -88,18 +85,30 @@ public class GUI implements ActionListener {
 
 
     public GUI() throws IOException {
+        frame = new JFrame();
         initGUI(frame);
     }
 
     public static void start() throws IOException {
-        AutomateLaf.registerCustomDefaultsSource("themes");
-        AutomateLaf.setup();
-        GUI gui = new GUI();
-        gui.open();
+        try {
+            EventDispatchThreadRunner.runOnDispatchThread(() -> {
+                try {
+                    GUI gui = new GUI();
+                    gui.open();
+                    debug("Launching AutomateRS - GUI");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }, true);
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void initGUI(JFrame frame) throws IOException {
-
+        SwingUtilities.invokeLater(() -> {
         labelSaveName = new JLabel();
         labelSaveName.setText("Save profile as:");
         labelSaveName.setHorizontalAlignment(SwingConstants.TRAILING);
@@ -125,6 +134,7 @@ public class GUI implements ActionListener {
             selectedBuild = getSelectedBuild();
             configStats();
             frame.dispose();
+            scriptTimer = (System.currentTimeMillis() - elapsedTime);
         });
         buttonLoad = new JButton();
         buttonLoad.setText("LOAD");
@@ -160,11 +170,13 @@ public class GUI implements ActionListener {
 
         if (!tabSettingsInitialized) {
             TabSettings.create();
-        }
-        if (tabSettingsInitialized && !tabSkillingGoalsInitialized) {
-            TabSkillingGoals.create();
-        }
-        if (tabSettingsInitialized && tabSkillingGoalsInitialized && !tabbedPanelInitialized) {
+        } else if (!tabSkillingGoalsInitialized) {
+            try {
+                TabSkillingGoals.create();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (!tabbedPanelInitialized) {
             createGUI();
             tabbedPanel.setTabPlacement(SwingConstants.TOP);
             tabbedPanel.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
@@ -182,6 +194,7 @@ public class GUI implements ActionListener {
 
             tabbedPanelInitialized = true;
         }
+        });
     }
 
     public static void createGUI() {
@@ -335,13 +348,20 @@ public class GUI implements ActionListener {
     }
 
     public static void main(String[] args) throws IOException {
-        AutomateLaf.registerCustomDefaultsSource("themes");
-        AutomateLaf.setup();
-//        Font defaultFont = new Font("Segoe UI", Font.PLAIN, 12);
-//        UIManager.put("Label.font", defaultFont);
-//        UIManager.put("Button.font", defaultFont);
-//        UIManager.put("TextField.font", defaultFont);
-        new GUI();
+        try {
+            EventDispatchThreadRunner.runOnDispatchThread(() -> {
+                try {
+                    new GUI();
+                    debug("Launching AutomateRS - GUI");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }, true);
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void open() throws IOException {
