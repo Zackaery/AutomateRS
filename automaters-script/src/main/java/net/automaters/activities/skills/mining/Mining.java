@@ -138,13 +138,18 @@ public class Mining extends Task {
     }
 
     private void interactWithResource() {
-        if (localPlayer.distanceTo(resourceObject) <= 10 && Reachable.isInteractable(resourceObject)) {
+        debug("interact with resource");
+        if (resourceObject != null && localPlayer.distanceTo(resourceObject) <= 10 && Reachable.isInteractable(resourceObject)) {
+            debug("passed normal checks");
             if (LocalPlayer.canInteract()) {
+                debug("can interact");
                 resourceObject.interact("Mine");
                 debug("Mining: " + resourceObject.getName());
                 sleepUntil(() -> LocalPlayer.canInteract() || !Reachable.isInteractable(resourceObject) || playerCrashing(), 5500);
             }
+            debug("after interact");
         } else {
+            debug("automate walk");
             automateWalk(resourceLocation);
         }
     }

@@ -2,9 +2,11 @@ package net.automaters.activities.skills.mining;
 
 import lombok.Getter;
 import net.automaters.api.walking.Area;
+import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.game.Worlds;
 
 import static net.automaters.api.entities.LocalPlayer.getClosestArea;
+import static net.automaters.api.utils.Debug.debug;
 
 public class Locations {
 
@@ -16,22 +18,30 @@ public class Locations {
         T[] allOres = enumClass.getEnumConstants();
         Area[] allAreas = new Area[allOres.length];
         boolean isInMembersWorld = Worlds.inMembersWorld();
+        int playerCombatLevel = Players.getLocal().getCombatLevel();
 
         for (int i = 0; i < allOres.length; i++) {
             if (allOres[i] instanceof Bronze) {
-                Bronze bronzeEnum = (Bronze) allOres[i];
-                if (!bronzeEnum.isMembersArea() && !isInMembersWorld) {
-                    allAreas[i] = bronzeEnum.getBronze();
+                Bronze location = (Bronze) allOres[i];
+                if ((location.isMembersArea() && isInMembersWorld) || (!location.isMembersArea() && !isInMembersWorld)) {
+                    if (location.getMinCombatLevel() <= playerCombatLevel) {
+                        allAreas[i] = location.getBronze();
+                    }
                 }
             } else if (allOres[i] instanceof Iron) {
-                Iron ironEnum = (Iron) allOres[i];
-                if (!ironEnum.isMembersArea() && !isInMembersWorld) {
-                    allAreas[i] = ironEnum.getIron();
+                Iron location = (Iron) allOres[i];
+                if ((location.isMembersArea() && isInMembersWorld) || (!location.isMembersArea() && !isInMembersWorld)) {
+                    if (location.getMinCombatLevel() <= playerCombatLevel) {
+                        allAreas[i] = location.getIron();
+                        debug("Location: "+location);
+                    }
                 }
             } else if (allOres[i] instanceof Coal) {
-                Coal coalEnum = (Coal) allOres[i];
-                if (!coalEnum.isMembersArea() && !isInMembersWorld) {
-                    allAreas[i] = coalEnum.getCoal();
+                Coal location = (Coal) allOres[i];
+                if ((location.isMembersArea() && isInMembersWorld) || (!location.isMembersArea() && !isInMembersWorld)) {
+                    if (location.getMinCombatLevel() <= playerCombatLevel) {
+                        allAreas[i] = location.getCoal();
+                    }
                 }
             }
         }
@@ -42,81 +52,30 @@ public class Locations {
     @Getter
     public enum Bronze {
         // Hosidius Ore Areas
-        HOSIDIUS_ORE_AREA_I  (3, false, new Area(1751, 3718, 1754, 3715, 0)),
-        HOSIDIUS_ORE_AREA_II (3, false, new Area(1756, 3715, 1758, 3713, 0)),
-        HOSIDIUS_ORE_AREA_III(3, false, new Area(1755, 3713, 1759, 3711, 0)),
-        HOSIDIUS_ORE_AREA_IV (3, false, new Area(1772, 3487, 1774, 3485, 0)),
-        HOSIDIUS_ORE_AREA_V  (3, false, new Area(1783, 3494, 1785, 3492, 0)),
+        HOSIDIUS_ORE_AREA_I  (3, true, new Area(1751, 3718, 1754, 3715, 0)),
+        HOSIDIUS_ORE_AREA_II (3, true, new Area(1756, 3715, 1758, 3713, 0)),
+        HOSIDIUS_ORE_AREA_III(3, true, new Area(1755, 3713, 1759, 3711, 0)),
+        HOSIDIUS_ORE_AREA_IV (3, true, new Area(1772, 3487, 1774, 3485, 0)),
+        HOSIDIUS_ORE_AREA_V  (3, true, new Area(1783, 3494, 1785, 3492, 0)),
 
         // Lumbridge Ore Areas
         LUMBRIDGE_ORE_AREA_I  (3, false, new Area(3222, 3149, 3231, 3144, 0)),
-        LUMBRIDGE_ORE_AREA_II (3, false, new Area(3222, 3149, 3231, 3144, 0)),
-        LUMBRIDGE_ORE_AREA_III(3, false, new Area(3222, 3149, 3231, 3144, 0)),
-        LUMBRIDGE_ORE_AREA_IV (13, false, new Area(3281, 3366, 3290, 3361, 0)),
-        LUMBRIDGE_ORE_AREA_V  (13, false, new Area(3281, 3366, 3290, 3361, 0)),
+        LUMBRIDGE_ORE_AREA_II  (13, false, new Area(3281, 3366, 3290, 3361, 0)),
 
         // Draynor Village Ore Areas
         DRAYNORVILLAGE_ORE_AREA_I  (3, false, new Area(3294, 3309, 3295, 3311, 0)),
         DRAYNORVILLAGE_ORE_AREA_II (3, false, new Area(3033, 9826, 3032, 9825, 0)),
         DRAYNORVILLAGE_ORE_AREA_III(3, false, new Area(2987, 3234, 2976, 3247, 0)),
-        DRAYNORVILLAGE_ORE_AREA_IV (3, false, new Area(2987, 3234, 2976, 3247, 0)),
-        DRAYNORVILLAGE_ORE_AREA_V  (3, false, new Area(3222, 3149, 3231, 3144, 0)),
 
         // Falador Ore Areas
         FALADOR_ORE_AREA_I  (3, true, new Area(2905, 3364, 2911, 3358, 0)),
-        FALADOR_ORE_AREA_II (3, false, new Area(3033, 9826, 3032, 9825, 0)),
-        FALADOR_ORE_AREA_III(3, false, new Area(2987, 3234, 2976, 3247, 0)),
-        FALADOR_ORE_AREA_IV (3, false, new Area(2987, 3234, 2976, 3247, 0)),
-        FALADOR_ORE_AREA_V  (3, false, new Area(3033, 9826, 3032, 9825, 0)),
-
-        // Varrock Ore Areas
-        VARROCK_ORE_AREA_I  (3, false, new Area(3033, 9826, 3032, 9825, 0)),
-        VARROCK_ORE_AREA_II (13, false, new Area(3281, 3366, 3290, 3361, 0)),
-        VARROCK_ORE_AREA_III(13, false, new Area(3281, 3366, 3290, 3361, 0)),
-        VARROCK_ORE_AREA_IV (13, false, new Area(3281, 3366, 3290, 3361, 0)),
-        VARROCK_ORE_AREA_V  (13, false, new Area(3281, 3366, 3290, 3361, 0)),
-
-        // Edgeville Ore Areas
-        EDGEVILLE_ORE_AREA_I  (3, false, new Area(2987, 3234, 2976, 3247, 0)),
-        EDGEVILLE_ORE_AREA_II (3, false, new Area(3033, 9826, 3032, 9825, 0)),
-        EDGEVILLE_ORE_AREA_III(13, false, new Area(3281, 3366, 3290, 3361, 0)),
-        EDGEVILLE_ORE_AREA_IV (3, false, new Area(3033, 9826, 3032, 9825, 0)),
-        EDGEVILLE_ORE_AREA_V  (13, false, new Area(3281, 3366, 3290, 3361, 0)),
 
         // Camelot Ore Areas
-        CAMELOT_ORE_AREA_I  (3, false, new Area(2654, 3169, 2657, 3167, 0)),
-        CAMELOT_ORE_AREA_II (3, false, new Area(2628, 3150, 2629, 3148, 0)),
-        CAMELOT_ORE_AREA_III(3, false, new Area(2629, 3148, 2631, 3146, 0)),
-        CAMELOT_ORE_AREA_IV (3, false, new Area(2630, 3144, 2632, 3142, 0)),
-        CAMELOT_ORE_AREA_V  (3, false, new Area(2655, 3169, 2656, 3167, 0)),
-
-        // Ardougne Ore Areas
-        ARDOUGNE_ORE_AREA_I  (3, false, new Area(2654, 3169, 2657, 3167, 0)),
-        ARDOUGNE_ORE_AREA_II (3, false, new Area(2628, 3150, 2629, 3148, 0)),
-        ARDOUGNE_ORE_AREA_III(3, false, new Area(2629, 3148, 2631, 3146, 0)),
-        ARDOUGNE_ORE_AREA_IV (3, false, new Area(2630, 3144, 2632, 3142, 0)),
-        ARDOUGNE_ORE_AREA_V  (3, false, new Area(2655, 3169, 2656, 3167, 0)),
-
-        // Yanille Ore Areas
-        YANILLE_ORE_AREA_I  (3, false, new Area(2654, 3169, 2657, 3167, 0)),
-        YANILLE_ORE_AREA_II (3, false, new Area(2628, 3150, 2629, 3148, 0)),
-        YANILLE_ORE_AREA_III(3, false, new Area(2629, 3148, 2631, 3146, 0)),
-        YANILLE_ORE_AREA_IV (3, false, new Area(2630, 3144, 2632, 3142, 0)),
-        YANILLE_ORE_AREA_V  (3, false, new Area(2655, 3169, 2656, 3167, 0)),
-
-        // Barbarian Outpost Ore Areas
-        BARBARIANOUTPOST_ORE_AREA_I  (3, false, new Area(2654, 3169, 2657, 3167, 0)),
-        BARBARIANOUTPOST_ORE_AREA_II (3, false, new Area(2628, 3150, 2629, 3148, 0)),
-        BARBARIANOUTPOST_ORE_AREA_III(3, false, new Area(2629, 3148, 2631, 3146, 0)),
-        BARBARIANOUTPOST_ORE_AREA_IV (3, false, new Area(2630, 3144, 2632, 3142, 0)),
-        BARBARIANOUTPOST_ORE_AREA_V  (3, false, new Area(2655, 3169, 2656, 3167, 0)),
-
-        // Gnome Stronghold Ore Areas
-        GNOMESTRONGHOLD_ORE_AREA_I  (3, false, new Area(2654, 3169, 2657, 3167, 0)),
-        GNOMESTRONGHOLD_ORE_AREA_II (3, false, new Area(2628, 3150, 2629, 3148, 0)),
-        GNOMESTRONGHOLD_ORE_AREA_III(3, false, new Area(2629, 3148, 2631, 3146, 0)),
-        GNOMESTRONGHOLD_ORE_AREA_IV (3, false, new Area(2630, 3144, 2632, 3142, 0)),
-        GNOMESTRONGHOLD_ORE_AREA_V  (3, false, new Area(2655, 3169, 2656, 3167, 0)),
+        CAMELOT_ORE_AREA_I  (3, true, new Area(2654, 3169, 2657, 3167, 0)),
+        CAMELOT_ORE_AREA_II (3, true, new Area(2628, 3150, 2629, 3148, 0)),
+        CAMELOT_ORE_AREA_III(3, true, new Area(2629, 3148, 2631, 3146, 0)),
+        CAMELOT_ORE_AREA_IV (3, true, new Area(2630, 3144, 2632, 3142, 0)),
+        CAMELOT_ORE_AREA_V  (3, true, new Area(2655, 3169, 2656, 3167, 0)),
         ;
 
         private final int minCombatLevel;
@@ -135,82 +94,35 @@ public class Locations {
     public enum Iron {
 
         // Hosidius Ore Areas
-        HOSIDIUS_ORE_AREA_I  (3, false, new Area(1780, 3495, 1783, 3493, 0)),
-        HOSIDIUS_ORE_AREA_II (3, false, new Area(1769, 3491, 1771, 3489, 0)),
-        HOSIDIUS_ORE_AREA_III(3, false, new Area(1599, 3642, 1602, 3639, 0)),
-        HOSIDIUS_ORE_AREA_IV (3, false, new Area(1760, 3719, 1762, 3715, 0)),
-        HOSIDIUS_ORE_AREA_V  (3, false, new Area(1764, 3718, 1766, 3712, 0)),
+        HOSIDIUS_ORE_AREA_I  (3, true, new Area(1780, 3495, 1783, 3493, 0)),
+        HOSIDIUS_ORE_AREA_II (3, true, new Area(1769, 3491, 1771, 3489, 0)),
+        HOSIDIUS_ORE_AREA_III(3, true, new Area(1599, 3642, 1602, 3639, 0)),
+        HOSIDIUS_ORE_AREA_IV (3, true, new Area(1760, 3719, 1762, 3715, 0)),
+        HOSIDIUS_ORE_AREA_V  (3, true, new Area(1764, 3718, 1766, 3712, 0)),
 
         // Lumbridge Ore Areas
-        LUMBRIDGE_ORE_AREA_I  (3, false, new Area(3302, 3284, 3303, 3285, 0)),
-        LUMBRIDGE_ORE_AREA_II (3, false, new Area(3304, 3302, 3305, 3301, 0)),
+        LUMBRIDGE_ORE_AREA_I  (29, false, new Area(3302, 3284, 3303, 3285, 0)),
+        LUMBRIDGE_ORE_AREA_II (29, false, new Area(3304, 3302, 3305, 3301, 0)),
         LUMBRIDGE_ORE_AREA_III(3, false, new Area(3033, 9826, 3032, 9825, 0)),
         LUMBRIDGE_ORE_AREA_IV (13, false, new Area(3175, 3366, 3175, 3368, 0)),
-        LUMBRIDGE_ORE_AREA_V  (3, false, new Area(3284, 3370, 3288, 3368, 0)),
+        LUMBRIDGE_ORE_AREA_V  (13, false, new Area(3284, 3370, 3288, 3368, 0)),
 
         // Draynor Village Ore Areas
         DRAYNORVILLAGE_ORE_AREA_I  (3, false, new Area(3034, 9737, 3032, 9739, 0)),
-        DRAYNORVILLAGE_ORE_AREA_II (3, false, new Area(3294, 3309, 3295, 3311, 0)),
+        DRAYNORVILLAGE_ORE_AREA_II (29, false, new Area(3294, 3309, 3295, 3311, 0)),
         DRAYNORVILLAGE_ORE_AREA_III(3, false, new Area(2967, 3238, 2970, 3243, 0)),
         DRAYNORVILLAGE_ORE_AREA_IV (3, false, new Area(2982, 3233, 2981, 3234, 0)),
-        DRAYNORVILLAGE_ORE_AREA_V  (3, false, new Area(3033, 9826, 3032, 9825, 0)),
 
         // Falador Ore Areas
         FALADOR_ORE_AREA_I  (3, true, new Area(3022, 9722, 3020, 9720, 0)),
-        FALADOR_ORE_AREA_II (3, false, new Area(3034, 9737, 3032, 9739, 0)),
         FALADOR_ORE_AREA_III(3, true, new Area(2905, 3364, 2911, 3358, 0)),
-        FALADOR_ORE_AREA_IV (3, false, new Area(2967, 3238, 2970, 3243, 0)),
-        FALADOR_ORE_AREA_V  (3, false, new Area(3033, 9826, 3032, 9825, 0)),
-
-        // Varrock Ore Areas
-        VARROCK_ORE_AREA_I  (13, false, new Area(3175, 3366, 3175, 3368, 0)),
-        VARROCK_ORE_AREA_II (13, false, new Area(3175, 3366, 3175, 3368, 0)),
-        VARROCK_ORE_AREA_III(3, false, new Area(3033, 9826, 3032, 9825, 0)),
-        VARROCK_ORE_AREA_IV (3, false, new Area(3284, 3370, 3288, 3368, 0)),
-        VARROCK_ORE_AREA_V  (3, false, new Area(3284, 3370, 3288, 3368, 0)),
-
-        // Edgeville Ore Areas
-        EDGEVILLE_ORE_AREA_I  (3, true, new Area(3022, 9722, 3020, 9720, 0)),
-        EDGEVILLE_ORE_AREA_II (3, false, new Area(3034, 9737, 3032, 9739, 0)),
-        EDGEVILLE_ORE_AREA_III(13, false, new Area(3175, 3366, 3175, 3368, 0)),
-        EDGEVILLE_ORE_AREA_IV (3, false, new Area(3033, 9826, 3032, 9825, 0)),
-        EDGEVILLE_ORE_AREA_V  (3, false, new Area(3284, 3370, 3288, 3368, 0)),
 
         // Camelot Ore Areas
-        CAMELOT_ORE_AREA_I  (3, false, new Area(2601, 3238, 2605, 3230, 0)),
-        CAMELOT_ORE_AREA_II (3, false, new Area(2623, 3152, 2627, 3148, 0)),
-        CAMELOT_ORE_AREA_III(3, false, new Area(2625, 3143, 2629, 3139, 0)),
-        CAMELOT_ORE_AREA_IV (3, false, new Area(2691, 3330, 2694, 3328, 0)),
-        CAMELOT_ORE_AREA_V  (3, false, new Area(2711, 3331, 2713, 3329, 0)),
-
-        // Ardougne Ore Areas
-        ARDOUGNE_ORE_AREA_I  (3, false, new Area(2601, 3238, 2605, 3230, 0)),
-        ARDOUGNE_ORE_AREA_II (3, false, new Area(2623, 3152, 2627, 3148, 0)),
-        ARDOUGNE_ORE_AREA_III(3, false, new Area(2625, 3143, 2629, 3139, 0)),
-        ARDOUGNE_ORE_AREA_IV (3, false, new Area(2691, 3330, 2694, 3328, 0)),
-        ARDOUGNE_ORE_AREA_V  (3, false, new Area(2711, 3331, 2713, 3329, 0)),
-
-        // Yanille Ore Areas
-        YANILLE_ORE_AREA_I  (3, false, new Area(2601, 3238, 2605, 3230, 0)),
-        YANILLE_ORE_AREA_II (3, false, new Area(2623, 3152, 2627, 3148, 0)),
-        YANILLE_ORE_AREA_III(3, false, new Area(2625, 3143, 2629, 3139, 0)),
-        YANILLE_ORE_AREA_IV (3, false, new Area(2691, 3330, 2694, 3328, 0)),
-        YANILLE_ORE_AREA_V  (3, false, new Area(2711, 3331, 2713, 3329, 0)),
-
-        // Barbarian Outpost Ore Areas
-        BARBARIANOUTPOST_ORE_AREA_I  (3, false, new Area(2601, 3238, 2605, 3230, 0)),
-        BARBARIANOUTPOST_ORE_AREA_II (3, false, new Area(2623, 3152, 2627, 3148, 0)),
-        BARBARIANOUTPOST_ORE_AREA_III(3, false, new Area(2625, 3143, 2629, 3139, 0)),
-        BARBARIANOUTPOST_ORE_AREA_IV (3, false, new Area(2691, 3330, 2694, 3328, 0)),
-        BARBARIANOUTPOST_ORE_AREA_V  (3, false, new Area(2711, 3331, 2713, 3329, 0)),
-
-        // Gnome Stronghold Ore Areas
-        GNOMESTRONGHOLD_ORE_AREA_I  (3, false, new Area(2601, 3238, 2605, 3230, 0)),
-        GNOMESTRONGHOLD_ORE_AREA_II (3, false, new Area(2623, 3152, 2627, 3148, 0)),
-        GNOMESTRONGHOLD_ORE_AREA_III(3, false, new Area(2625, 3143, 2629, 3139, 0)),
-        GNOMESTRONGHOLD_ORE_AREA_IV (3, false, new Area(2691, 3330, 2694, 3328, 0)),
-        GNOMESTRONGHOLD_ORE_AREA_V  (3, false, new Area(2711, 3331, 2713, 3329, 0)),
-
+        CAMELOT_ORE_AREA_I  (3, true, new Area(2601, 3238, 2605, 3230, 0)),
+        CAMELOT_ORE_AREA_II (3, true, new Area(2623, 3152, 2627, 3148, 0)),
+        CAMELOT_ORE_AREA_III(3, true, new Area(2625, 3143, 2629, 3139, 0)),
+        CAMELOT_ORE_AREA_IV (43, true, new Area(2691, 3330, 2694, 3328, 0)),
+        CAMELOT_ORE_AREA_V  (43, true, new Area(2711, 3331, 2713, 3329, 0)),
         ;
 
         private final int minCombatLevel;

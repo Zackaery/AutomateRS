@@ -2,9 +2,11 @@ package net.automaters.activities.skills.woodcutting;
 
 import lombok.Getter;
 import net.automaters.api.walking.Area;
+import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.game.Worlds;
 
 import static net.automaters.api.entities.LocalPlayer.getClosestArea;
+import static net.automaters.api.utils.Debug.debug;
 
 public class Locations {
 
@@ -16,37 +18,50 @@ public class Locations {
         T[] allTrees = enumClass.getEnumConstants();
         Area[] allAreas = new Area[allTrees.length];
         boolean isInMembersWorld = Worlds.inMembersWorld();
+        int playerCombatLevel = Players.getLocal().getCombatLevel();
 
         for (int i = 0; i < allTrees.length; i++) {
             if (allTrees[i] instanceof Tree) {
-                Tree treeEnum = (Tree) allTrees[i];
-                if (!treeEnum.isMembersArea() && !isInMembersWorld) {
-                    allAreas[i] = treeEnum.getTree();
+                Tree location = (Tree) allTrees[i];
+                if ((location.isMembersArea() && isInMembersWorld) || (!location.isMembersArea() && !isInMembersWorld)) {
+                    if (location.getMinCombatLevel() <= playerCombatLevel) {
+                        allAreas[i] = location.getTree();
+                    }
                 }
             } else if (allTrees[i] instanceof Oak) {
-                Oak oakEnum = (Oak) allTrees[i];
-                if (!oakEnum.isMembersArea() && !isInMembersWorld) {
-                    allAreas[i] = oakEnum.getOak();
+                Oak location = (Oak) allTrees[i];
+                if ((location.isMembersArea() && isInMembersWorld) || (!location.isMembersArea() && !isInMembersWorld)) {
+                    if (location.getMinCombatLevel() <= playerCombatLevel) {
+                        allAreas[i] = location.getOak();
+                    }
                 }
             } else if (allTrees[i] instanceof Willow) {
-                Willow willowEnum = (Willow) allTrees[i];
-                if (!willowEnum.isMembersArea() && !isInMembersWorld) {
-                    allAreas[i] = willowEnum.getWillow();
+                Willow location = (Willow) allTrees[i];
+                if ((location.isMembersArea() && isInMembersWorld) || (!location.isMembersArea() && !isInMembersWorld)) {
+                    if (location.getMinCombatLevel() <= playerCombatLevel) {
+                        allAreas[i] = location.getWillow();
+                    }
                 }
             } else if (allTrees[i] instanceof Teak) {
-                Teak teakEnum = (Teak) allTrees[i];
-                if (!teakEnum.isMembersArea() && !isInMembersWorld) {
-                    allAreas[i] = teakEnum.getTeak();
+                Teak location = (Teak) allTrees[i];
+                if ((location.isMembersArea() && isInMembersWorld) || (!location.isMembersArea() && !isInMembersWorld)) {
+                    if (location.getMinCombatLevel() <= playerCombatLevel) {
+                        allAreas[i] = location.getTeak();
+                    }
                 }
             } else if (allTrees[i] instanceof Maple) {
-                Maple mapleEnum = (Maple) allTrees[i];
-                if (!mapleEnum.isMembersArea() && !isInMembersWorld) {
-                    allAreas[i] = mapleEnum.getMaple();
+                Maple location = (Maple) allTrees[i];
+                if ((location.isMembersArea() && isInMembersWorld) || (!location.isMembersArea() && !isInMembersWorld)) {
+                    if (location.getMinCombatLevel() <= playerCombatLevel) {
+                        allAreas[i] = location.getMaple();
+                    }
                 }
             } else if (allTrees[i] instanceof Yew) {
-                Yew yewEnum = (Yew) allTrees[i];
-                if (!yewEnum.isMembersArea() && !isInMembersWorld) {
-                    allAreas[i] = yewEnum.getYew();
+                Yew location = (Yew) allTrees[i];
+                if ((location.isMembersArea() && isInMembersWorld) || (!location.isMembersArea() && !isInMembersWorld)) {
+                    if (location.getMinCombatLevel() <= playerCombatLevel) {
+                        allAreas[i] = location.getYew();
+                    }
                 }
             }
         }

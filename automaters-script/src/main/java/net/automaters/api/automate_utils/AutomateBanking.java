@@ -1,7 +1,5 @@
 package net.automaters.api.automate_utils;
 
-import net.automaters.api.entities.LocalPlayer;
-import net.runelite.api.Item;
 import net.unethicalite.api.commons.Predicates;
 import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Inventory;
@@ -10,10 +8,8 @@ import java.util.*;
 
 import static net.automaters.api.automate_utils.AutomateUtils.addItemsToList;
 import static net.automaters.api.entities.LocalPlayer.openBank;
-import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.unethicalite.api.commons.Time.sleep;
-import static net.unethicalite.api.commons.Time.sleepTicks;
 
 public class AutomateBanking {
 

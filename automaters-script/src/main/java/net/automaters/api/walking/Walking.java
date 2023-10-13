@@ -17,7 +17,12 @@ public class Walking {
         WorldArea worldArea = area.toWorldArea();
         debug("Walking to area...");
         var attempts = 0;
-        while (scriptStarted && !worldArea.contains(localPlayer) && attempts < 15) {
+        while (scriptStarted && !area.contains(Players.getLocal()) && attempts < 15) {
+            debug("Script started: "+scriptStarted);
+            debug("In area: "+area.contains(Players.getLocal()));
+            debug("World Area: "+area.toWorldArea());
+            debug("Player point: "+Players.getLocal().getWorldLocation());
+            debug("Attempts: "+attempts);
             if (Players.getLocal().isMoving() || Movement.isWalking()) {
                 attempts = 0;
             } else {
