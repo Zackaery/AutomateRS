@@ -25,7 +25,7 @@ import static net.unethicalite.api.commons.Time.sleep;
 
 
 @SuppressWarnings({"ConstantConditions","unused"})
-public class WoodcuttingBored extends Task {
+public abstract class WoodcuttingBored extends Task {
 
     @Inject
     private Client client;
@@ -387,11 +387,6 @@ public class WoodcuttingBored extends Task {
         }
 
         // end willow trees
-    }
-
-    @Override
-    public boolean hasNonTaskItems() {
-        return false;
     }
 
     @Override

@@ -33,7 +33,6 @@ public class Locations {
                 if ((location.isMembersArea() && isInMembersWorld) || (!location.isMembersArea() && !isInMembersWorld)) {
                     if (location.getMinCombatLevel() <= playerCombatLevel) {
                         allAreas[i] = location.getIron();
-                        debug("Location: "+location);
                     }
                 }
             } else if (allOres[i] instanceof Coal) {
@@ -111,7 +110,7 @@ public class Locations {
         DRAYNORVILLAGE_ORE_AREA_I  (3, false, new Area(3034, 9737, 3032, 9739, 0)),
         DRAYNORVILLAGE_ORE_AREA_II (29, false, new Area(3294, 3309, 3295, 3311, 0)),
         DRAYNORVILLAGE_ORE_AREA_III(3, false, new Area(2967, 3238, 2970, 3243, 0)),
-        DRAYNORVILLAGE_ORE_AREA_IV (3, false, new Area(2982, 3233, 2981, 3234, 0)),
+        DRAYNORVILLAGE_ORE_AREA_IV (3, false, new Area(2979, 3236, 2984, 3231, 0)),
 
         // Falador Ore Areas
         FALADOR_ORE_AREA_I  (3, true, new Area(3022, 9722, 3020, 9720, 0)),

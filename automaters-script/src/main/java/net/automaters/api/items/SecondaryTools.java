@@ -18,13 +18,15 @@ public class SecondaryTools {
 
     public static void getSecondaryTool(String secondaryTask) {
         switch (secondaryTask) {
-            case "Fletching":
-                secondaryTool = ItemID.KNIFE;
-                processTool(secondaryTool);
+            case "fletching":
+                secondaryToolID = ItemID.KNIFE;
+                secondaryTool = "Knife";
+                processTool(secondaryToolID);
                 break;
-            case "Firemaking":
-                secondaryTool = ItemID.TINDERBOX;
-                processTool(secondaryTool);
+            case "firemaking":
+                secondaryToolID = ItemID.TINDERBOX;
+                secondaryTool = "Tinderbox";
+                processTool(secondaryToolID);
                 break;
         }
     }

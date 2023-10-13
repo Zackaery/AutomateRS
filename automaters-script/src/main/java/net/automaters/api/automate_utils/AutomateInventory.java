@@ -89,11 +89,6 @@ public class AutomateInventory {
     }
 
     public static int getAmount(boolean inList, List<String> itemsToCheck) {
-        if (inList) {
-            System.out.println("Amount of items in list: "+getAmountList(true, itemsToCheck));
-        } else {
-            System.out.println("Amount of items not in list: "+getAmountList(false, itemsToCheck));
-        }
         return getAmountList(inList, itemsToCheck);
     }
 

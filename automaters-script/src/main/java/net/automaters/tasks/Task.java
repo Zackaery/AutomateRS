@@ -1,8 +1,11 @@
 package net.automaters.tasks;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.automaters.api.entities.LocalPlayer;
 import net.automaters.api.entities.PlayerCrashInfo;
 import net.automaters.api.walking.Area;
+import net.runelite.api.GameObject;
 import net.runelite.api.NPC;
 import net.runelite.api.Skill;
 import net.runelite.api.TileObject;
@@ -31,7 +34,14 @@ public abstract class Task {
 
     public static ArrayList<String> taskItems = new ArrayList<>();
 
+    @Getter
+    @Setter
     private static boolean started;
+
+    @Getter
+    @Setter
+    private static boolean ended;
+
     public static boolean secondaryTaskActive;
 
     public static long startTime;
@@ -40,14 +50,14 @@ public abstract class Task {
 
     public static TileObject objectToRender;
 
-    public static List<String> resourceNames;
 
 
     public static String task;
     public static String secondaryTask = "null";
     public static int primaryToolID;
+    public static int secondaryToolID;
     public static String primaryTool = null;
-    public static int secondaryTool;
+    public static String secondaryTool = null;
     public static String outfit = null;
 
     public static Map<String, PlayerCrashInfo> playerCrashInfo = new HashMap<>();
@@ -55,46 +65,40 @@ public abstract class Task {
     public static Map<String, Integer> playerCrashCounts = new HashMap<>();
     public static Map<String, Long> lastCrashTimes = new HashMap<>();
 
-    public static TileObject resourceObject;
-    public static Area resourceLocation;
-    public static boolean hasResources;
-
     private static long lastInteractionTime = 0;
     private static long interactionCooldown = 8000; // 8000ms
     private static boolean delayWalk;
 
 
-    public boolean taskStarted() {
-        return started;
-    }
-
-    public void setStarted(boolean started) {
-        this.started = started;
-    }
 
     public Task() {
-        if (!taskStarted()) {
-            debug(currentTask + " - Not Started");
-            onStart();
-            sleep(600);
-        } else if (taskStarted()) {
-            if (!taskFinished()) {
-                onLoop();
-                sleep(600);
+        if (isStarted()) {
+            if (taskFinished()) {
+                if (isEnded()) {
+                    debug(currentTask + " - Finished");
+                    sleep(600);
+                    reset();
+                } else {
+                    sleep(600);
+                    onEnd();
+                }
             } else {
-                debug(currentTask + " - Finished");
-                onEnd();
                 sleep(600);
+                onLoop();
             }
+        } else {
+            debug(currentTask + " - Not Started");
+            sleep(600);
+            onStart();
         }
     }
 
-    public abstract void onStart();
+    protected abstract void onStart();
     protected abstract void onLoop();
-    public abstract boolean hasNonTaskItems();
-    public abstract boolean taskFinished();
-    public abstract void generateSecondaryTask();
-    protected void onEnd() {
+    protected abstract void onEnd();
+    protected abstract boolean taskFinished();
+    protected abstract void generateSecondaryTask();
+    private void reset() {
         debug("Completed Task: "+currentTask+"\n\n");
         started = false;
         secondaryTaskActive = false;
@@ -108,8 +112,9 @@ public abstract class Task {
         secondaryTask = "null";
 
         primaryToolID = -1;
+        secondaryToolID = -1;
         primaryTool = null;
-        secondaryTool = -1;
+        secondaryTool = null;
         outfit = null;
 
         taskSelected = false;

@@ -43,6 +43,16 @@ public class Area {
                 area.getWidth() + ", " + area.getHeight() + ", " + area.getPlane());
     }
 
+    public static String getAreaCoords(Area area) {
+        String location = String.format("%d, %d, %d, %d, %d",
+                area.minX,
+                area.minY,
+                area.maxX,
+                area.maxY,
+                area.thisZ);
+        return location;
+    }
+
     public Position randomPosition() {
         var x = Calculator.random(minX, maxX);
         var y = Calculator.random(minY, maxY);

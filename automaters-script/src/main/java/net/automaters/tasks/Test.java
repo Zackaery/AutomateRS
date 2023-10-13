@@ -14,6 +14,7 @@ import static net.automaters.script.AutomateRS.scriptStarted;
 
 public class Test extends LoopedPlugin {
 
+    private TileObject object = TileObjects.getNearest("Iron rocks");
     public Test() {
         loop();
     }
@@ -21,19 +22,12 @@ public class Test extends LoopedPlugin {
     @Override
     protected int loop() {
 
-        if ((localPlayer == null) || !scriptStarted) {
-            debug("Player does not exist.");
-            return -1;
+        if (object != null) {
+            debug(object.getName()+" - Location: "+object.getWorldLocation());
+        } else {
+            debug(" ! exist ");
         }
-
-        Player test = Players.getNearest(p -> p.isAnimating() && p.distanceTo(Players.getLocal()) <= 1);
-        if (test != null) {
-            debug("PLAYER = "+test.getName());
-        }
-
-
-
-       return 50;
+        return 1200;
     }
 
 }

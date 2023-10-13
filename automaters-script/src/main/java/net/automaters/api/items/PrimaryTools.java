@@ -212,7 +212,7 @@ public class PrimaryTools {
         }
     }
 
-    public enum FishingTools implements Equippable {
+    public enum FishingTools {
         LOBSTER_POT(ItemID.LOBSTER_POT,41, 40, true),
         FLY_FISHING_ROD(ItemID.FLY_FISHING_ROD,21, 20, true),
         FISHING_ROD(ItemID.FISHING_ROD,11, 10, true),
@@ -233,17 +233,14 @@ public class PrimaryTools {
             this.skill = Skill.FISHING;
         }
 
-        @Override
         public int getId() {
             return id;
         }
 
-        @Override
         public int getSkillLevel() {
             return skillLevel;
         }
 
-        @Override
         public int getFishingLevel() {
             return fishingLevel;
         }

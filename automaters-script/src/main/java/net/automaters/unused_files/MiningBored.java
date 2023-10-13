@@ -24,7 +24,7 @@ import static net.automaters.util.locations.Mining.*;
 import static net.unethicalite.api.commons.Time.sleep;
 
 @SuppressWarnings({"ConstantConditions","unused"})
-public class MiningBored extends Task {
+public abstract class MiningBored extends Task {
 
     @Inject
     private Client client;
@@ -210,17 +210,12 @@ public class MiningBored extends Task {
     }
 
     @Override
-    public boolean hasNonTaskItems() {
-        return false;
-    }
-
-    @Override
     public boolean taskFinished() {
         return false;
     }
 
     @Override
     public void generateSecondaryTask() {
-        secondaryTask = "None";
+        secondaryTask = "none";
     }
 }

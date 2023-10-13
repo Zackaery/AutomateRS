@@ -17,10 +17,10 @@ public class TaskManager {
     }
 
     public void executeTask(String task) {
-
-        // ENABLE TESTING
-//        new Test();
-
+        boolean testing = false;
+        if (testing) {
+            new Test();
+        } else {
         switch (currentTask) {
             case "WOODCUTTING":
                 new Woodcutting();
@@ -39,6 +39,7 @@ public class TaskManager {
 
             default:
                 break;
+        }
         }
     }
 

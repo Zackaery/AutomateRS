@@ -7,6 +7,7 @@ import net.unethicalite.api.movement.Movement;
 
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.utils.Debug.debug;
+import static net.automaters.api.walking.Area.getAreaCoords;
 import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.unethicalite.api.commons.Time.sleep;
 
@@ -15,24 +16,17 @@ public class Walking {
 
     public static boolean automateWalk(Area area) {
         WorldArea worldArea = area.toWorldArea();
-        debug("Walking to area...");
+        debug("Walking to: "+getAreaCoords(area));
         var attempts = 0;
-        while (scriptStarted && !area.contains(Players.getLocal()) && attempts < 15) {
-            debug("Script started: "+scriptStarted);
-            debug("In area: "+area.contains(Players.getLocal()));
-            debug("World Area: "+area.toWorldArea());
-            debug("Player point: "+Players.getLocal().getWorldLocation());
-            debug("Attempts: "+attempts);
+        while (scriptStarted && !worldArea.contains(Players.getLocal()) && attempts < 15) {
             if (Players.getLocal().isMoving() || Movement.isWalking()) {
                 attempts = 0;
             } else {
                 Movement.walkTo(worldArea);
                 attempts++;
-                debug("Walking to area... Add an attempt: " + attempts);
             }
             Movement.walkTo(worldArea);
             sleep(600, 2400);
-            debug("Walking to area... Total attempts: " + attempts);
         }
         if (attempts >= 15) {
             debug("Failed to walk to area.");

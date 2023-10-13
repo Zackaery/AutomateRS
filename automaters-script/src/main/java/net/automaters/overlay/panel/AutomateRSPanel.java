@@ -343,7 +343,7 @@ public class AutomateRSPanel extends PluginPanel {
                         if (client != null && client.getGameState() == GameState.LOGGED_IN) {
                             if (localPlayer == null) {
                             } else if (!started) {
-//                            GUI.selectedBuild = loadBuildFromGUI();
+                            GUI.selectedBuild = loadBuildFromGUI();
                                 selectedBuild = "ALPHA_TESTER";
                                 started = true;
 //                                AutomateRS.scriptStarted = true;
@@ -621,11 +621,23 @@ public class AutomateRSPanel extends PluginPanel {
         titleLabel.requestFocusInWindow();
     }
 
-    public static String loadBuildFromGUI() throws IOException {
-
-        GUI = new GUI();
-        GUI.start();
-        debug("Launching AutomateRS - GUI 1");
+    public static String loadBuildFromGUI() {
+        try {
+            EventDispatchThreadRunner.runOnDispatchThread(() -> {
+                try {
+                    GUI = new GUI();
+                    GUI.start();
+                    debug("Launching AutomateRS - GUI");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }, true);
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+            return null;
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         if (GUI.started) {
             debug("SELECTED BUILD = " + GUI.selectedBuild);

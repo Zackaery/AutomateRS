@@ -6,6 +6,7 @@ import net.unethicalite.api.items.Inventory;
 
 import java.util.*;
 
+import static net.automaters.api.automate_utils.AutomateUtils.addIdsToList;
 import static net.automaters.api.automate_utils.AutomateUtils.addItemsToList;
 import static net.automaters.api.entities.LocalPlayer.openBank;
 import static net.automaters.script.AutomateRS.scriptStarted;
@@ -45,6 +46,18 @@ public class AutomateBanking {
         if (!nonListItems.isEmpty()) {
             if (isOpen()) {
                 Bank.depositAllExcept(Predicates.nameContains(nonListItems));
+            } else {
+                openBank();
+            }
+        }
+    }
+
+    public static void bankAllExceptIDs(boolean inList, List<Integer> listItems) {
+        ArrayList<Integer> nonListItems = new ArrayList<>();
+        addIdsToList(!inList, nonListItems, listItems);
+        if (!nonListItems.isEmpty()) {
+            if (isOpen()) {
+                Bank.depositAllExcept(Predicates.ids(nonListItems));
             } else {
                 openBank();
             }

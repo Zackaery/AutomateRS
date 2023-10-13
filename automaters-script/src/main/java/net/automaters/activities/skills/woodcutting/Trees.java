@@ -3,6 +3,7 @@ package net.automaters.activities.skills.woodcutting;
 import lombok.Getter;
 import net.automaters.api.entities.LocalPlayer;
 import net.automaters.api.walking.Area;
+import net.runelite.api.GameObject;
 import net.runelite.api.Skill;
 import net.runelite.api.TileObject;
 import net.unethicalite.api.entities.TileObjects;
@@ -15,7 +16,6 @@ import java.util.List;
 import static net.automaters.activities.skills.woodcutting.Locations.getClosestTreeArea;
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.tasks.Task.resourceNames;
 import static net.automaters.tasks.Task.secondaryTask;
 
 public class Trees {
@@ -50,8 +50,8 @@ public class Trees {
         int firemaking = Skills.getLevel(Skill.FIREMAKING);
         int fletching = Skills.getLevel(Skill.FLETCHING);
 
-        boolean taskFletching = secondaryTask.equals("Fletching");
-        boolean taskFiremaking = secondaryTask.equals("Firemaking");
+        boolean taskFletching = secondaryTask.equals("fletching");
+        boolean taskFiremaking = secondaryTask.equals("firemaking");
 
         TreeType[] treeTypes = TreeType.values();
 
@@ -82,17 +82,16 @@ public class Trees {
         return null;
     }
 
-    public static TileObject getTree() {
-        TileObject tree = null;
+    public static GameObject getTree() {
+        GameObject tree = null;
         TreeType chosenTreeType = chooseTreeType();
         if (chosenTreeType != null) {
             List<String> treeNames = chosenTreeType.getTreeName();
-            resourceNames = treeNames;
             for (String treeName : treeNames) {
                 TileObject treeObject = TileObjects.getNearest(LocalPlayer.getPosition(), treeName);
                 if (treeObject != null) {
                     if (tree == null || treeObject.distanceTo(localPlayer) < tree.distanceTo(localPlayer)) {
-                        tree = treeObject;
+                        tree = (GameObject) treeObject;
                     }
                 }
             }

@@ -3,12 +3,17 @@ package net.automaters.api.entities;
 public class PlayerCrashInfo {
     private int crashCount;
     private long lastCrashTime;
-
+    private String name;
     public PlayerCrashInfo() {
         this.crashCount = 0;
         this.lastCrashTime = 0;
+        this.name = null;
     }
 
+    public void updateName(String crasher) {
+        name = crasher;
+    }
+    public String getName() { return name; }
     public int getCrashCount() {
         return crashCount;
     }
@@ -19,8 +24,7 @@ public class PlayerCrashInfo {
 
     public long getLastCrashTimeSeconds() {
         long currentTimeMillis = System.currentTimeMillis();
-        long lastCrashTimeSeconds = (currentTimeMillis - lastCrashTime) / 1000; // Convert to seconds
-        return lastCrashTimeSeconds;
+        return (currentTimeMillis - lastCrashTime) / 1000;
     }
 
     public long getLastCrashTime() {

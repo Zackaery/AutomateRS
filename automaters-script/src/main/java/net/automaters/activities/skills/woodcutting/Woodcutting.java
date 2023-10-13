@@ -1,37 +1,59 @@
 package net.automaters.activities.skills.woodcutting;
 
 import net.automaters.activities.skills.firemaking.DynamicFiremaking;
+import net.automaters.api.automate_utils.AutomateBanking;
+import net.automaters.api.automate_utils.AutomateInventory;
+import net.automaters.api.automate_utils.AutomatePlayer;
+import net.automaters.api.entities.LocalPlayer;
+import net.automaters.api.walking.Area;
 import net.automaters.tasks.Task;
 import net.runelite.api.*;
 import net.unethicalite.api.commons.Predicates;
+import net.unethicalite.api.entities.NPCs;
 import net.unethicalite.api.entities.TileItems;
 import net.unethicalite.api.game.Worlds;
-import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 
 import net.runelite.api.Item;
+import net.unethicalite.api.movement.Reachable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import java.util.Locale;
 
 import static net.automaters.activities.skills.firemaking.DynamicFiremaking.firemaking;
-import static net.automaters.activities.skills.woodcutting.Trees.*;
-import static net.automaters.api.automate_utils.AutomateInventory.getAmount;
-import static net.automaters.api.automate_utils.AutomateInventory.getItemsFromList;
-import static net.automaters.api.entities.LocalPlayer.openBank;
+import static net.automaters.api.automate_utils.AutomateUtils.addItemsToList;
+import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.items.SecondaryTools.getSecondaryTool;
 import static net.automaters.api.utils.Calculator.random;
 import static net.automaters.api.utils.Debug.debug;
+import static net.automaters.api.walking.Walking.automateWalk;
 import static net.automaters.gui.tabbed_panel.skilling_goals.Artisan.goalFiremaking;
 import static net.automaters.gui.tabbed_panel.skilling_goals.Artisan.goalFletching;
 import static net.automaters.api.items.PrimaryTools.*;
-import static net.automaters.script.AutomateRS.scriptStarted;
+import static net.automaters.tasks.utils.Setup.*;
+import static net.automaters.tasks.utils.Setup.startTask;
 import static net.unethicalite.api.commons.Time.sleep;
+import static net.unethicalite.api.commons.Time.sleepUntil;
 import static net.unethicalite.api.game.Skills.getLevel;
 
 public class Woodcutting extends Task {
+
+    private GameObject resourceObject;
+    private Area resourceLocation;
+
+    static ArrayList<String> resources = new ArrayList<>();
+    static ArrayList<String> taskItems = new ArrayList<>();
+
+    static {
+        addItemsToList(resources, " logs");
+        addItemsToList(resources, "Tinderbox");
+        addItemsToList(resources, "Knife");
+        taskItems.addAll(resources);
+    }
 
     public Woodcutting() {
         super();
@@ -39,196 +61,66 @@ public class Woodcutting extends Task {
 
     @Override
     public void onStart() {
-        if (primaryTool == null) {
-            getPrimaryWoodcuttingTool();
-            sleep(333);
-        } else if (skillTask == 0) {
-            generateSecondaryTask();
-            if (!secondaryTask.equals("none")) {
-                getSecondaryTool(secondaryTask);
-                sleep(333);
-            }
-        } else if (hasNonTaskItems()) {
-            openBank();
-            while (scriptStarted && Bank.isOpen()) {
-                if (hasNonTaskItems()) {
-                    Bank.depositAllExcept(Predicates.nameContains(taskItems));
-                    sleep(333);
+        if (setupPrimaryTool()) {
+            if (setupSecondaryTask()) {
+                if (setupSecondaryTool()) {
+                    if (!hasNonTaskItems()) {
+                        startTask();
+                        setStarted(true);
+                    } else {
+                        handleNonTaskItems();
+                    }
                 } else {
-                    break;
+                    getSecondaryTool(secondaryTask);
                 }
+            } else {
+                generateSecondaryTask();
             }
         } else {
-            if (!Inventory.contains(primaryTool) && !Equipment.contains(primaryTool)) {
-                getPrimaryWoodcuttingTool();
-            } else if (secondaryTask.equals("Fletching") && !Inventory.contains("Knife")
-                    || secondaryTask.equals("Firemaking") && !Inventory.contains("Tinderbox")) {
-                getSecondaryTool(secondaryTask);
-            } else {
-                if (Bank.isOpen()) {
-                    Bank.close();
-                }
-                setStarted(true);
-                debug("Primary Tool: " + primaryTool);
-                debug("Secondary Tool: " + secondaryTool);
-                debug("Secondary Task: " + secondaryTask);
-            }
+            getPrimaryWoodcuttingTool();
         }
     }
+
     @Override
-    protected void onLoop() {
-        var tool = primaryTool;
-        var resource = Inventory.getFirst(x -> x.getName().toLowerCase(Locale.ROOT).contains("logs"));
-        var tinderbox = Inventory.getFirst("Tinderbox");
-        var knife = Inventory.getFirst("Knife");
-        var nest = TileItems.getNearest(x -> x.getName().toLowerCase(Locale.ROOT).contains(" nest"));
+    public void onLoop() {
+        addItemsToList(taskItems, primaryTool);
+        addItemsToList(true, taskItems, resources);
 
-        if (tool != null) taskItems.add(tool);
-        if (resource != null) taskItems.add(resource.getName());
-        if (tinderbox != null) taskItems.add(tinderbox.getName());
-        if (knife != null) taskItems.add(knife.getName());
-
-        List<Item> inventoryItems = Inventory.getAll(); // Get your inventory items
-        List<String> itemsToCheck = taskItems; // Define the list of item names to check
-
-        if (getAmount(false, itemsToCheck) >= 5) {
-            debug("Banking non-task items.");
-            openBank();
-            while (scriptStarted && Bank.isOpen() && Inventory.contains(Predicates.nameContains(taskItems))) {
-                Bank.depositAllExcept(Predicates.nameContains(taskItems));
-                sleep(333);
-            }
+        if (AutomateInventory.getAmount(false, taskItems) >= 5) {
+            handleNonTaskItems();
         }
 
-        if (!Inventory.contains(tool) && !Equipment.contains(tool)) {
-            debug("no tool found");
+        if (!AutomatePlayer.hasItems(primaryTool)) {
             getPrimaryWoodcuttingTool();
-            sleep(333);
+        }
+
+        if (Inventory.isFull() || secondaryTaskActive) {
+            handleInventory();
             return;
         }
 
-        if (nest != null) {
-            nest.interact("Take");
-            sleep(333);
-            return;
-        }
-
-        if (!secondaryTaskActive) {
-            if (resourceObject == null || resourceLocation == null || resource == null && (!hasResources)) {
-                getResources();
-            }
-        }
-
-        if (Inventory.isFull() && resource != null || secondaryTaskActive) {
-            hasResources = false;
-            secondaryTaskActive = true;
-            switch (secondaryTask) {
-                case "Firemaking":
-                    if (tinderbox != null && Inventory.isFull() || firemaking) {
-                        new DynamicFiremaking();
-                        sleep(333);
-                        return;
-                    }
-                    break;
-                case "Fletching":
-                    if (knife != null) {
-                        //execute Fletching.java task
-                        return;
-                    }
-                    break;
-                case "Bank":
-                    if (Inventory.isFull() && !Bank.isOpen()) {
-                        openBank();
-                        if (Bank.isOpen()) {
-                            Bank.depositAllExcept(Predicates.nameContains(taskItems));
-                        }
-                        sleep(333);
-                    }
-                    return;
-                default:
-                    resource.drop();
-                    sleep(333);
-                    secondaryTaskActive = false;
-                    return;
-            }
+        if (resourceObject == null && LocalPlayer.canInteract()) {
+            getResources();
         }
 
         if (!Inventory.isFull()) {
-            if (resourceObject == null) {
-                resourceObject = getTree();
-            }
-            interactableWalk(getTree(), "Chop down", resourceLocation);
-            sleep(600);
+            interactWithResource();
         }
-
     }
 
     @Override
-    public boolean hasNonTaskItems() {
-        if (!taskItems.contains(primaryTool)) {
-            var tool = primaryTool;
-            taskItems.add(tool);
-        }
-        if (!taskItems.contains("Tinderbox")) {
-            taskItems.add("Tinderbox");
-        }
-        if (!taskItems.contains("Knife")) {
-            taskItems.add("Knife");
-        }
-        var resource = Inventory.getAll(x -> x.getName().toLowerCase(Locale.ROOT).contains("logs"));
-        for (Item item : resource) {
-            if (!taskItems.contains(item.getName())) {
-                taskItems.add(item.getName());
-            }
-        }
-        debug("Task Items: "+taskItems);
-
-        List<String> itemsToCheck = taskItems;
-        List<Item> itemsNotInList = getItemsFromList(false, itemsToCheck);
-
-        int itemCount = 0;
-        for (Item item : itemsNotInList) {
-            if (Inventory.contains(item.getName())) {
-                itemCount++;
-                System.out.println("Has non task item: " + item.getName());
-            }
-        }
-        if (itemCount != 0) {
-            return true;
-        }
-        System.out.println("All items in the inventory are in the list.");
-        return false;
+    protected void onEnd() {
+        // Handle end methods
+        setEnded(true);
     }
 
-    @Override
-    public boolean taskFinished() {
-            return false;
-    }
-
-    @Override
-    public void generateSecondaryTask() {
-        skillTask = random(1, 100);
-        if (Worlds.inMembersWorld()) {
-            if (getLevel(Skill.FLETCHING) < getGoal(goalFletching) && getLevel(Skill.FIREMAKING) < getGoal(goalFiremaking)) {
-                secondaryTask = (random(1, 100) <= 50) ? "Fletching" : "Firemaking";
-            } else if (getLevel(Skill.FLETCHING) < getGoal(goalFletching)) {
-                secondaryTask = "Fletching";
-            } else if (getLevel(Skill.FIREMAKING) < getGoal(goalFiremaking)) {
-                secondaryTask = "Firemaking";
-            } else {
-                secondaryTask = "None";
-            }
-        } else if (getLevel(Skill.FIREMAKING) < getGoal(goalFiremaking)) {
-            secondaryTask = "Firemaking";
-        } else {
-            secondaryTask = "None";
-        }
-    }
+    /**
+     * # onStart() methods below
+     */
 
     private void getPrimaryWoodcuttingTool() {
         if (!Inventory.contains(Predicates.nameContains(" axe"))
                 && !Equipment.contains(Predicates.nameContains(" axe"))) {
-            debug("getPrimaryTool");
             primaryTool = null;
             primaryToolID = -1;
             getPrimaryTool(WoodcuttingTools.class);
@@ -247,25 +139,118 @@ public class Woodcutting extends Task {
         }
     }
 
-    private void getResources() {
-        firemaking = false;
-//        fletching = false;
-        secondaryTaskActive = false;
-        hasResources = true;
-        resourceObject = Trees.getTree();
-        resourceLocation = Trees.getTreeLocation();
-        if (resourceObject != null && resourceLocation != null) {
-            String location = String.format("Location: %d, %d, %d, %d, %d",
-                    resourceLocation.minX,
-                    resourceLocation.minY,
-                    resourceLocation.maxX,
-                    resourceLocation.maxY,
-                    resourceLocation.thisZ);
-            debug("Resource: " + resourceNames);
-            debug(location);
+    @Override
+    public void generateSecondaryTask() {
+        skillTask = random(1, 100);
+        if (Worlds.inMembersWorld()) {
+            if (getLevel(Skill.FLETCHING) < getGoal(goalFletching) && getLevel(Skill.FIREMAKING) < getGoal(goalFiremaking)) {
+                secondaryTask = (random(1, 100) <= 50) ? "fletching" : "firemaking";
+            } else if (getLevel(Skill.FLETCHING) < getGoal(goalFletching)) {
+                secondaryTask = "fletching";
+            } else if (getLevel(Skill.FIREMAKING) < getGoal(goalFiremaking)) {
+                secondaryTask = "firemaking";
+            } else {
+                secondaryTask = "none";
+            }
+        } else if (getLevel(Skill.FIREMAKING) < getGoal(goalFiremaking)) {
+            secondaryTask = "firemaking";
+        } else {
+            secondaryTask = "none";
+        }
+    }
+
+    private void handleNonTaskItems() {
+        if (!isStarted()) {
+            List<String> tools = Arrays.asList(primaryTool, secondaryTool);
+            AutomateBanking.bankAllExcept(false, tools);
+        } else {
+            AutomateBanking.bankAll(false, taskItems);
+        }
+    }
+
+    /**
+     * # onLoop() methods below
+     */
+
+    private void handleInventory() {
+        secondaryTaskActive = true;
+        switch (secondaryTask) {
+            case "firemaking":
+                new DynamicFiremaking();
+                sleep(333);
+                return;
+            case "fletching":
+                //execute Fletching.java task
+                return;
+            case "bank":
+                handleNonTaskItems();
+                return;
+            default:
+                AutomateInventory.dropAll(resources);
+                secondaryTaskActive = false;
+                break;
         }
     }
 
 
+    private void getResources() {
+        firemaking = false;
+//        fletching = false;
+        secondaryTaskActive = false;
+        resourceObject = Trees.getTree();
+        resourceLocation = Trees.getTreeLocation();
+        String l = String.format("%d, %d, %d, %d, %d",
+                resourceLocation.minX,
+                resourceLocation.minY,
+                resourceLocation.maxX,
+                resourceLocation.maxY,
+                resourceLocation.thisZ);
+        debug("Resource Name: " + resourceObject.getName());
+        debug("Resource Location: "+l);
+    }
+
+    private void interactWithResource() {
+
+        var nest = TileItems.getNearest(x -> x.getName().toLowerCase(Locale.ROOT).contains(" nest"));
+        if (nest != null) {
+            debug("Looting: "+nest.getName());
+            nest.interact("Take");
+            sleep(333);
+        }
+
+        NPC attacking = NPCs.getNearest(x -> x.getName() != null);
+        if (attacking != null && attacking.getInteracting() != null && attacking.getInteracting() == localPlayer && localPlayer.getHealthScale() != -1) {
+            debug("NPC Attacking player: "+attacking);
+            automateWalk(resourceLocation);
+        }
+
+        if (resourceObject != null && localPlayer.distanceTo(resourceObject) <= 12
+                && Reachable.isInteractable(resourceObject)) {
+            debug("Chopping down: " + resourceObject.getName());
+            resourceObject.interact("Chop down");
+            sleepUntil(() -> !LocalPlayer.canInteract(), 1800);
+            sleepUntil(() -> LocalPlayer.canInteract() || !Reachable.isInteractable(resourceObject), 5500);
+        } else {
+            if (LocalPlayer.canInteract()) {
+                if (resourceLocation != null) {
+                    automateWalk(resourceLocation);
+                } else {
+                    getResources();
+                }
+            } else {
+                sleepUntil(() -> LocalPlayer.canInteract(), 1200);
+            }
+        }
+    }
+
+    /**
+     * # onEnd() methods below
+     *
+     */
+
+    @Override
+    public boolean taskFinished() {
+        return false;
+    }
 
 }

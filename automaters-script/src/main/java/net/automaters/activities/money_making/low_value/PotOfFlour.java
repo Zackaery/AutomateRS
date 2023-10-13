@@ -93,8 +93,8 @@ public class PotOfFlour extends Task {
     }
 
     @Override
-    public boolean hasNonTaskItems() {
-        return false;
+    protected void onEnd() {
+
     }
 
     @Override
@@ -108,7 +108,7 @@ public class PotOfFlour extends Task {
 
     @Override
     public void generateSecondaryTask() {
-        secondaryTask = "None";
+        secondaryTask = "none";
     }
 
     private int getPots() {

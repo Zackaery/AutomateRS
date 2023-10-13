@@ -316,7 +316,6 @@ public class AutomateRS extends LoopedPlugin {
 				int y = menuOptionClicked.getParam1();
 				int id = menuOptionClicked.getId();
 				interactedObject = findTileObject(x, y, id);
-				debug(interactedObject.getName() + " Location: "+interactedObject.getWorldLocation().toString());
 				interactedNpc = null;
 				clickTick = client.getTickCount();
 				gameCycle = client.getGameCycle();
@@ -401,40 +400,5 @@ public class AutomateRS extends LoopedPlugin {
 	{
 		return interactedNpc != null ? interactedNpc : client.getLocalPlayer().getInteracting();
 	}
-
-//	@Override
-//	protected int loop() {
-//		if (scriptStarted) {
-//			if (started) {
-//				if (client != null && client.getGameState() == GameState.LOGGED_IN) {
-//					new BuildExecutor();
-//					debug("--- Initiating loop sequence ---\n");
-//					return 600;
-//				} else {
-//					scriptStarted = false;
-//					sleep(1800);
-//					debug("Logging player back in.");
-//					init(client);
-//					sleep(1800);
-//					return 600;
-//				}
-//			}
-//		} else {
-//			if (started) {
-//				if (client != null && client.getGameState() == GameState.LOGGED_IN) {
-//					scriptStarted = true;
-//				}
-//			} else {
-//				return 600;
-//			}
-//		}
-//		return 1000;
-//	}
-
-//	@Override
-//	public void onStart(String... args) {
-//
-//	}
-
 
 }

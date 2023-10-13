@@ -20,7 +20,6 @@ import net.unethicalite.api.widgets.Widgets;
 
 import java.util.Map;
 
-import static net.automaters.activities.skills.mining.Mining.resourceObject;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.walking.Walking.automateWalk;
 import static net.automaters.script.AutomateRS.scriptStarted;
@@ -209,7 +208,7 @@ public class LocalPlayer {
         }
 
         if (resetVariables) {
-            debug("player crash counts: \n"+playerCrashCounts);
+            debug("player crash counts: \n" + playerCrashCounts);
             for (Map.Entry<String, Long> entry : lastCrashTimes.entrySet()) {
                 String playerName = entry.getKey();
                 long lastCrashTimeMs = entry.getValue();
@@ -221,9 +220,6 @@ public class LocalPlayer {
             }
             playerCrashCounts.clear();
             lastCrashTimes.clear();
-            resourceObject = null;
-            resourceLocation = null;
-            hasResources = false;
         }
 
         if (currentWorld == Worlds.getCurrentWorld()) {
