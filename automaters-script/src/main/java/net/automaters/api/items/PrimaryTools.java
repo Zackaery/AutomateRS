@@ -211,5 +211,42 @@ public class PrimaryTools {
         }
     }
 
+    public enum FishingTools implements Equippable {
+        LOBSTER_POT(ItemID.LOBSTER_POT,41, 40, true),
+        FLY_FISHING_ROD(ItemID.FLY_FISHING_ROD,21, 20, true),
+        FISHING_ROD(ItemID.FISHING_ROD,11, 10, true),
+        SMALL_FISHING_NET(ItemID.SMALL_FISHING_NET,1, 1, true),
+        ;
+
+        public final int id;
+        public final int skillLevel;
+        public final int fishingLevel;
+        public final boolean buyable;
+        public final Skill skill;
+
+        FishingTools(int id, int skillLevel, int fishingLevel, boolean buyable) {
+            this.id = id;
+            this.skillLevel = skillLevel;
+            this.fishingLevel = fishingLevel;
+            this.buyable = buyable;
+            this.skill = Skill.FISHING;
+        }
+
+        @Override
+        public int getId() {
+            return id;
+        }
+
+        @Override
+        public int getSkillLevel() {
+            return skillLevel;
+        }
+
+        @Override
+        public int getFishingLevel() {
+            return fishingLevel;
+        }
+    }
+
 
 }
