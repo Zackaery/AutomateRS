@@ -24,6 +24,7 @@ import static net.automaters.api.utils.Calculator.random;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.walking.Walking.automateWalk;
 import static net.automaters.api.items.PrimaryTools.*;
+import static net.automaters.script.Variables.*;
 import static net.automaters.tasks.utils.Setup.*;
 import static net.unethicalite.api.commons.Time.sleepUntil;
 
@@ -32,13 +33,11 @@ public class Mining extends Task {
     private GameObject resourceObject;
     private Area resourceLocation;
 
-    static ArrayList<String> resources = new ArrayList<>();
+    static ArrayList<String> resources;
     static ArrayList<String> taskItems = new ArrayList<>();
 
     static {
-        addItemsToList(resources, " ore");
-        addItemsToList(resources, "Uncut ");
-        taskItems.addAll(resources);
+        resources = new ArrayList<>(Arrays.asList("Tin ore", "Copper ore", "Iron ore", "Coal ore", "Uncut sapphire", "Uncut ruby", "Uncut emerald"));
     }
 
     public Mining() {
@@ -66,8 +65,8 @@ public class Mining extends Task {
 
     @Override
     public void onLoop() {
-        addItemsToList(taskItems, primaryTool);
         addItemsToList(true, taskItems, resources);
+        addItemsToList(taskItems, primaryTool);
 
         if (AutomateInventory.getAmount(false, taskItems) >= 5) {
             handleNonTaskItems();
@@ -85,8 +84,10 @@ public class Mining extends Task {
             getResources();
         }
 
-        if (playerCrashing()) {
-            handlePlayerCrashing();
+        if (resourceObject != null && localPlayer.distanceTo(resourceObject) <= 12) {
+            if (playerCrashing()) {
+                handlePlayerCrashing();
+            }
         }
 
         if (!Inventory.isFull()) {
@@ -164,21 +165,24 @@ public class Mining extends Task {
         debug("[HANDLE PLAYER CRASHING] - Handling crash");
         resourceObject = getFurtherOre();
         resourceObject.interact("Mine");
-        sleepUntil(() -> LocalPlayer.canInteract() || !Reachable.isInteractable(resourceObject) || playerCrashing(), 5500);
+        sleepUntil(() -> localPlayer.distanceTo(resourceObject) <= 1, 5500);
     }
 
     private void getResources() {
         secondaryTaskActive = false;
         resourceObject = Ores.getOre();
         resourceLocation = Ores.getOreLocation();
-        String l = String.format("%d, %d, %d, %d, %d",
-                resourceLocation.minX,
-                resourceLocation.minY,
-                resourceLocation.maxX,
-                resourceLocation.maxY,
-                resourceLocation.thisZ);
-        debug("Resource Name: " + resourceObject.getName());
-        debug("Resource Location: "+l);
+        if (resourceObject != null
+                && resourceLocation != null) {
+            String l = String.format("%d, %d, %d, %d, %d",
+                    resourceLocation.minX,
+                    resourceLocation.minY,
+                    resourceLocation.maxX,
+                    resourceLocation.maxY,
+                    resourceLocation.thisZ);
+            debug("Resource Name: " + resourceObject.getName());
+            debug("Resource Location: " + l);
+        }
     }
 
     private void interactWithResource() {

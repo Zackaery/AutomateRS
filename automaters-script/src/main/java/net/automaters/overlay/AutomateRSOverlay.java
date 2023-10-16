@@ -17,9 +17,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.time.Duration;
 
 import static net.automaters.api.utils.Debug.displayMessage;
-import static net.automaters.gui.GUI.started;
-import static net.automaters.script.AutomateRS.*;
 import static net.automaters.overlay.OverlayUtil.MATERIAL_DARK;
+import static net.automaters.script.Variables.guiStarted;
+import static net.automaters.script.Variables.scriptStarted;
+import static net.automaters.script.Variables.scriptTimer;
+import static net.automaters.script.Variables.elapsedTime;
 import static net.automaters.util.file_managers.ImageResizer.resizeImage;
 import static net.runelite.api.MenuAction.RUNELITE_OVERLAY_CONFIG;
 import static net.runelite.client.ui.overlay.OverlayManager.OPTION_CONFIGURE;
@@ -45,7 +47,7 @@ public class AutomateRSOverlay extends OverlayPanel {
 			SwingUtilities.invokeAndWait(new Runnable() {
 				@Override
 				public void run() {
-					if (!started || scriptTimer == -1 || title == null) {
+					if (!guiStarted || scriptTimer == -1 || title == null) {
 						return;
 					}
 

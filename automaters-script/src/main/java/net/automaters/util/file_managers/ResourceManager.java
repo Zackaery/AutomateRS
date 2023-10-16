@@ -4,14 +4,12 @@ import java.io.*;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.file.FileSystem;
 import java.nio.file.*;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.automaters.util.file_managers.FileManager.URL_GITHUB;
 
 public class ResourceManager {

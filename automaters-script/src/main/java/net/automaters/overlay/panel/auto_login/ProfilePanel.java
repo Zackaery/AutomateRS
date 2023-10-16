@@ -23,18 +23,14 @@ import java.security.spec.InvalidKeySpecException;
 
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.overlay.panel.AutomateRSPanel.*;
+import static net.automaters.script.Variables.guiStarted;
 import static net.automaters.util.file_managers.IconManager.*;
-import static net.unethicalite.api.commons.Time.sleep;
 import static net.unethicalite.api.game.Game.logout;
-import static net.automaters.script.AutomateRS.scriptStarted;
-import static net.automaters.gui.GUI.started;
+import static net.automaters.script.Variables.scriptStarted;
 
 public class ProfilePanel extends JPanel {
 
     private AutomateRS plugin;
-
-
-
     AutomateRSConfig config;
     public static String profileName = null;
     private static String loginText = null;
@@ -129,7 +125,7 @@ public class ProfilePanel extends JPanel {
                 if (start.getIcon() == STOP_HOVER_ICON) {
                     start.setIcon(LOADING_ICON);
                     scriptStarted = false;
-                    started = false;
+                    guiStarted = false;
                     logout();
                 }
             }
@@ -206,10 +202,6 @@ public class ProfilePanel extends JPanel {
         });
 
         add(labelWrapper, BorderLayout.CENTER);
-
-    }
-
-    public ProfilePanel() {
 
     }
 

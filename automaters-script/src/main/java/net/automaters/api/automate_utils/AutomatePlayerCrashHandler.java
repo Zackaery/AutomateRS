@@ -4,12 +4,10 @@ import net.automaters.api.entities.PlayerCrashInfo;
 import net.runelite.api.Player;
 import net.unethicalite.api.entities.Players;
 import static net.automaters.api.entities.LocalPlayer.hopWorld;
-import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.tasks.Task.playerCrashCounts;
-import static net.automaters.tasks.Task.playerCrashInfo;
+import static net.automaters.api.entities.LocalPlayer.localPlayer;
+import static net.automaters.script.Variables.playerCrashInfo;
 import static net.unethicalite.api.commons.Time.sleep;
-import static net.unethicalite.api.commons.Time.sleepUntil;
 
 public class AutomatePlayerCrashHandler {
 
@@ -35,7 +33,7 @@ public class AutomatePlayerCrashHandler {
         for (Player player : Players.getAll()) {
             if (player != localPlayer && player.distanceTo(localPlayer) <= 1) {
                 playerCount++;
-                debug("- [CRASH HANDLER] - Current Player Count: " + playerCount);
+                debug("[CRASH HANDLER] - Player Count Withing 1 Tile: " + playerCount);
             }
         }
         return playerCount;
@@ -79,21 +77,14 @@ public class AutomatePlayerCrashHandler {
     }
 
     private static void handleNewCrasher(Player p) {
-        debug("- [CRASH HANDLER] - New Player has crashed you: " + p.getName());
+        debug("[CRASH HANDLER] - New Player has crashed you: " + p.getName());
         // Create a new PlayerCrashInfo object for this player
         PlayerCrashInfo c = new PlayerCrashInfo();
         c.updateName(p.getName());
-        debug("- [CRASH HANDLER] new - Creating new hashmap for: " + p.getName());
+        debug("[CRASH HANDLER] - Creating new data for: " + p.getName());
         c.incrementCrashCount();
-        debug("- [CRASH HANDLER] new - " + p.getName() + " has crashed you " + c.getCrashCount() + " times.");
-        debug("- [CRASH HANDLER] new - Last crash happened: " + c.getLastCrashTimeSeconds() + " seconds ago.");
         c.updateLastCrashTime();
-        debug("- [CRASH HANDLER] new - Resetting crash time to: " + c.getLastCrashTimeSeconds() + " seconds ago.");
-
-        // Rest of the new crash handling logic
-        // ...
-
         playerCrashInfo.put(p.getName(), c);
-        debug("- [CRASH HANDLER] new - Added " + p.getName() + " to your crash list");
+        debug("[CRASH HANDLER] - Added " + p.getName() + " to your crash list");
     }
 }

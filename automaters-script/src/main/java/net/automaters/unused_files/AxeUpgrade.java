@@ -17,7 +17,7 @@ import static net.automaters.api.entities.SkillCheck.getAttackLevel;
 import static net.automaters.api.entities.SkillCheck.getWoodcuttingLevel;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.unobfuscated.GrandExchangePrices.canAfford;
-import static net.automaters.script.AutomateRS.scriptStarted;
+import static net.automaters.script.Variables.scriptStarted;
 import static net.unethicalite.api.commons.Time.sleep;
 import static net.automaters.api.ui.GrandExchange.*;
 

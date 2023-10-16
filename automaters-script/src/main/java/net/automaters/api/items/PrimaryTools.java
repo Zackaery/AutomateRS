@@ -11,13 +11,11 @@ import net.unethicalite.api.items.Inventory;
 
 import java.lang.reflect.Field;
 
-import static net.automaters.activities.skills.woodcutting.Woodcutting.primaryTool;
-import static net.automaters.activities.skills.woodcutting.Woodcutting.primaryToolID;
 import static net.automaters.api.entities.LocalPlayer.openBank;
 import static net.automaters.api.ui.GrandExchange.automateBuy;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.unobfuscated.GrandExchangePrices.canAfford;
-import static net.automaters.script.AutomateRS.scriptStarted;
+import static net.automaters.script.Variables.*;
 import static net.unethicalite.api.commons.Time.sleep;
 
 public class PrimaryTools {

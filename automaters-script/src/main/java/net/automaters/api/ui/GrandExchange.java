@@ -7,11 +7,11 @@ import java.util.ArrayList;
 
 import static net.automaters.api.entities.LocalPlayer.openGE;
 import static net.automaters.api.items.Items.getAmountTotal;
-import static net.automaters.api.items.Items.totalCoins;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.unobfuscated.GrandExchangePrices.getPrice;
 import static net.automaters.api.unobfuscated.GrandExchangePrices.updatePrices;
-import static net.automaters.script.AutomateRS.scriptStarted;
+import static net.automaters.script.Variables.scriptStarted;
+import static net.automaters.script.Variables.totalCoins;
 import static net.automaters.util.file_managers.FileManager.FILE_GE_PRICES;
 import static net.automaters.util.file_managers.FileManager.getLastModified;
 import static net.unethicalite.api.commons.Time.sleep;

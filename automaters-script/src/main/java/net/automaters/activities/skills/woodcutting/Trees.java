@@ -14,9 +14,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import static net.automaters.activities.skills.woodcutting.Locations.getClosestTreeArea;
-import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.tasks.Task.secondaryTask;
+import static net.automaters.api.entities.LocalPlayer.localPlayer;
+import static net.automaters.script.Variables.secondaryTask;
 
 public class Trees {
 

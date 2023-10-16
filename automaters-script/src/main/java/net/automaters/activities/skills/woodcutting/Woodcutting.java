@@ -34,6 +34,7 @@ import static net.automaters.api.walking.Walking.automateWalk;
 import static net.automaters.gui.tabbed_panel.skilling_goals.Artisan.goalFiremaking;
 import static net.automaters.gui.tabbed_panel.skilling_goals.Artisan.goalFletching;
 import static net.automaters.api.items.PrimaryTools.*;
+import static net.automaters.script.Variables.*;
 import static net.automaters.tasks.utils.Setup.*;
 import static net.automaters.tasks.utils.Setup.startTask;
 import static net.unethicalite.api.commons.Time.sleep;
@@ -45,14 +46,11 @@ public class Woodcutting extends Task {
     private GameObject resourceObject;
     private Area resourceLocation;
 
-    static ArrayList<String> resources = new ArrayList<>();
+    static ArrayList<String> resources;
     static ArrayList<String> taskItems = new ArrayList<>();
 
     static {
-        addItemsToList(resources, " logs");
-        addItemsToList(resources, "Tinderbox");
-        addItemsToList(resources, "Knife");
-        taskItems.addAll(resources);
+        resources = new ArrayList<>(Arrays.asList("Logs", "Oak logs", "Willow logs", "Maple logs", "Teak logs", "Yew logs", "Magic logs"));
     }
 
     public Woodcutting() {
@@ -83,8 +81,10 @@ public class Woodcutting extends Task {
 
     @Override
     public void onLoop() {
-        addItemsToList(taskItems, primaryTool);
         addItemsToList(true, taskItems, resources);
+        addItemsToList(taskItems, primaryTool);
+        addItemsToList(taskItems, "Tinderbox");
+        addItemsToList(taskItems, "Knife");
 
         if (AutomateInventory.getAmount(false, taskItems) >= 5) {
             handleNonTaskItems();
@@ -199,14 +199,17 @@ public class Woodcutting extends Task {
         secondaryTaskActive = false;
         resourceObject = Trees.getTree();
         resourceLocation = Trees.getTreeLocation();
-        String l = String.format("%d, %d, %d, %d, %d",
-                resourceLocation.minX,
-                resourceLocation.minY,
-                resourceLocation.maxX,
-                resourceLocation.maxY,
-                resourceLocation.thisZ);
-        debug("Resource Name: " + resourceObject.getName());
-        debug("Resource Location: "+l);
+        if (resourceObject != null
+                && resourceLocation != null) {
+            String l = String.format("%d, %d, %d, %d, %d",
+                    resourceLocation.minX,
+                    resourceLocation.minY,
+                    resourceLocation.maxX,
+                    resourceLocation.maxY,
+                    resourceLocation.thisZ);
+            debug("Resource Name: " + resourceObject.getName());
+            debug("Resource Location: " + l);
+        }
     }
 
     private void interactWithResource() {

@@ -2,22 +2,14 @@ package net.automaters.tasks.tasks;
 
 import net.unethicalite.api.game.Skills;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.script.AutomateRS.scriptStarted;
+import static net.automaters.script.Variables.*;
 import static net.automaters.tasks.TaskManager.currentTask;
 import static net.automaters.tasks.TaskManager.taskSelected;
 
 public class GenerateTasks {
-
-    private static List<Object> taskList = new ArrayList<>();
-    private static List<SkillingTasks> skillingTasks = new ArrayList<>();
-    private static List<QuestingTasks> questingTasks = new ArrayList<>();
-    private static List<MoneyMakingTasks> moneyMakingTasks = new ArrayList<>();
-    private static List<MiscellaneousTasks> miscellaneousTasks = new ArrayList<>();
 
     public GenerateTasks() {
         resetLists();
@@ -25,8 +17,6 @@ public class GenerateTasks {
     }
 
     private void getTask() {
-        debug("getting task");
-
         // SKILLING TASKS
         for (SkillingTasks task : SkillingTasks.values()) {
             if (task.getSkillGoal() > Skills.getLevel(task.getSkill())) {

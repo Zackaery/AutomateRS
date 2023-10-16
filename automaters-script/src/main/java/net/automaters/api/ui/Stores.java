@@ -1,18 +1,11 @@
 package net.automaters.api.ui;
 
-import net.automaters.api.walking.Area;
 import net.runelite.api.NPC;
-import net.runelite.api.coords.WorldArea;
 import net.runelite.api.widgets.Widget;
 import net.unethicalite.api.entities.NPCs;
-import net.unethicalite.api.entities.TileObjects;
 import net.unethicalite.api.widgets.Widgets;
 
 import java.util.function.Supplier;
-
-import static net.automaters.api.entities.LocalPlayer.localPlayer;
-import static net.automaters.api.walking.Walking.automateWalk;
-import static net.automaters.script.AutomateRS.scriptStarted;
 
 public class Stores {
 

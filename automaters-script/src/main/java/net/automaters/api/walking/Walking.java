@@ -5,10 +5,9 @@ import net.runelite.api.coords.WorldArea;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.movement.Movement;
 
-import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.walking.Area.getAreaCoords;
-import static net.automaters.script.AutomateRS.scriptStarted;
+import static net.automaters.script.Variables.scriptStarted;
 import static net.unethicalite.api.commons.Time.sleep;
 
 @Slf4j

@@ -19,7 +19,7 @@ import static net.automaters.api.entities.LocalPlayer.*;
 import static net.automaters.api.entities.SkillCheck.*;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.walking.Walking.automateWalk;
-import static net.automaters.script.AutomateRS.scriptStarted;
+import static net.automaters.script.Variables.*;
 import static net.automaters.util.locations.Mining.*;
 import static net.unethicalite.api.commons.Time.sleep;
 

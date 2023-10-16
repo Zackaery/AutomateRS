@@ -13,9 +13,9 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 import static net.automaters.api.items.Items.getAmountTotal;
-import static net.automaters.api.items.Items.totalCoins;
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.script.AutomateRS.scriptStarted;
+import static net.automaters.script.Variables.scriptStarted;
+import static net.automaters.script.Variables.totalCoins;
 import static net.automaters.util.file_managers.FileManager.*;
 import static net.automaters.util.file_managers.GsonManager.formatJsonFile;
 import static net.automaters.util.file_managers.GsonManager.readJsonFromFile;

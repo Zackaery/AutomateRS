@@ -8,15 +8,14 @@ import net.runelite.api.Skill;
 import net.runelite.api.TileObject;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.entities.TileObjects;
-import net.unethicalite.api.game.Game;
 import net.unethicalite.api.game.Skills;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static net.automaters.activities.skills.mining.Locations.getClosestOreArea;
-import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.utils.Debug.debug;
+import static net.automaters.api.entities.LocalPlayer.localPlayer;
 
 public class Ores {
 
@@ -74,12 +73,11 @@ public class Ores {
                         if (distance >= minDistance && distance < closestDistance) {
                             closestDistantOre = (GameObject) oreObject;
                             closestDistance = distance;
-                            debug("Distant Ore location: " + oreObject.getWorldLocation().toString());
                         }
                     }
                 }
             }
-            debug("Distant Ore location: " + closestDistantOre.getWorldLocation().toString());
+            debug("Further Ore Location: " + closestDistantOre.getWorldLocation().toString());
             return closestDistantOre;
         } else {
             debug("No suitable ore type found.");
@@ -89,7 +87,6 @@ public class Ores {
 
     public static GameObject getOre() {
         OreType chosenOreType = chooseOreType();
-
         if (chosenOreType != null) {
             List<String> oreNames = chosenOreType.getOreName();
 

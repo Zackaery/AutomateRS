@@ -16,6 +16,8 @@ import net.unethicalite.api.packets.DialogPackets;
 
 import static net.automaters.api.entities.LocalPlayer.openBank;
 import static net.automaters.api.utils.Debug.debug;
+import static net.automaters.script.Variables.secondaryTask;
+import static net.automaters.script.Variables.taskDuration;
 
 
 public class PotOfFlour extends Task {

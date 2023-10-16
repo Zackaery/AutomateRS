@@ -16,8 +16,7 @@ import java.util.List;
 
 import static net.automaters.activities.skills.firemaking.DynamicFiremaking.firemaking;
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
-import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.tasks.Task.objectToRender;
+
 public class OverlayUtil extends OverlayPanel {
 
     private final Client client;

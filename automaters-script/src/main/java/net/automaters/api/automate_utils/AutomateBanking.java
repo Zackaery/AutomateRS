@@ -9,18 +9,10 @@ import java.util.*;
 import static net.automaters.api.automate_utils.AutomateUtils.addIdsToList;
 import static net.automaters.api.automate_utils.AutomateUtils.addItemsToList;
 import static net.automaters.api.entities.LocalPlayer.openBank;
-import static net.automaters.script.AutomateRS.scriptStarted;
 import static net.unethicalite.api.commons.Time.sleep;
+import static net.automaters.script.Variables.scriptStarted;
 
 public class AutomateBanking {
-
-//    public static void bankAllExcept(String... items) {
-//        if (Bank.isOpen()) {
-//            if (Inventory.contains)
-//        }
-//    }
-//
-
 
     private static boolean isOpen() {
         return Bank.isOpen();

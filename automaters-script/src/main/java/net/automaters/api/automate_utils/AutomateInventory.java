@@ -2,6 +2,7 @@ package net.automaters.api.automate_utils;
 
 import net.runelite.api.Item;
 import net.unethicalite.api.commons.Predicates;
+import net.unethicalite.api.commons.Time;
 import net.unethicalite.api.items.Inventory;
 
 import java.util.ArrayList;
@@ -19,14 +20,13 @@ public class AutomateInventory {
     }
 
     public static void dropAll(ArrayList<String> dropList) {
-        if (Inventory.contains(Predicates.nameContains(dropList))) {
-            for (String itemName : dropList) {
-                Inventory.getAll(Predicates.nameContains(itemName)).forEach(item -> {
-                    if (Inventory.contains(item.getName())) {
-                        item.drop();
-                        sleep(333);
-                    }
-                });
+        debug("drop all");
+        for (String itemName : dropList) {
+            debug("item name: "+itemName);
+            if (Inventory.contains(itemName)) {
+                debug("invent contains: "+itemName);
+                Inventory.getAll(itemName).forEach(Item::drop);
+                Time.sleepTick();
             }
         }
     }

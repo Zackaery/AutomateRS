@@ -11,7 +11,6 @@ import net.automaters.gui.utils.EventDispatchThreadRunner;
 import net.automaters.overlay.AutomateRSOverlay;
 import net.automaters.overlay.OverlayUtil;
 import net.automaters.overlay.panel.AutomateRSPanel;
-import net.automaters.overlay.panel.auto_login.ProfilePanel;
 import net.automaters.util.file_managers.ImageManager;
 import net.runelite.api.*;
 import net.runelite.api.events.*;
@@ -28,7 +27,7 @@ import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayMenuEntry;
 import net.unethicalite.api.events.LobbyWorldSelectToggled;
 import net.unethicalite.api.game.Worlds;
-import net.unethicalite.api.plugins.LoopedPlugin;
+import net.unethicalite.api.plugins.Script;
 import net.unethicalite.api.plugins.Task;
 import net.unethicalite.api.script.blocking_events.BlockingEventManager;
 import net.unethicalite.api.script.blocking_events.LoginEvent;
@@ -56,6 +55,7 @@ import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.gui.GUI.*;
 import static net.automaters.overlay.panel.AutomateRSPanel.*;
 import static net.automaters.overlay.panel.auto_login.ProfilePanel.init;
+import static net.automaters.script.Variables.*;
 import static net.runelite.api.GameState.LOGGED_IN;
 import static net.runelite.api.MenuAction.RUNELITE_OVERLAY_CONFIG;
 import static net.runelite.client.ui.overlay.OverlayManager.OPTION_CONFIGURE;
@@ -64,7 +64,7 @@ import static net.runelite.client.ui.overlay.OverlayManager.OPTION_CONFIGURE;
 @PluginDescriptor(name = "AutomateRS", description = "RuneScape - Automated")
 @Extension
 @Slf4j
-public class AutomateRS extends LoopedPlugin {
+public class AutomateRS extends Script {
 
 	@Inject
 	private Client client;
@@ -77,8 +77,6 @@ public class AutomateRS extends LoopedPlugin {
 
 	@Inject
 	private OverlayUtil overlayUtil;
-
-
 
 	@Inject
 	private ClientToolbar clientToolbar;
@@ -101,7 +99,6 @@ public class AutomateRS extends LoopedPlugin {
 	@Getter(AccessLevel.PROTECTED)
 	private AutomateRSPanel panel;
 	private NavigationButton navButton;
-	private ProfilePanel profilePanel = new ProfilePanel();
 
 	@Getter(AccessLevel.PUBLIC)
 	private TileObject interactedObject;
@@ -120,11 +117,8 @@ public class AutomateRS extends LoopedPlugin {
 
 	Date currentDate = new Date();
 
-	public static long scriptTimer;
-	public static long elapsedTime;
 	private GUI GUI;
 	private final Task[] tasks = new Task[] {};
-	public static boolean scriptStarted;
 	private boolean hotswapEnabled = true;
 	private ExecutorService executorService = Executors.newFixedThreadPool(1);
 
@@ -205,9 +199,9 @@ public class AutomateRS extends LoopedPlugin {
 				.build();
 		clientToolbar.addNavigation(navButton);
 		blockingEventManager.remove(LoginEvent.class);
-
 		overlayManager.add(automateRSOverlay);
 		overlayManager.add(overlayUtil);
+		new Variables();
 	}
 
 	public Task[] getTasks() { return new Task[0]; }
@@ -215,10 +209,13 @@ public class AutomateRS extends LoopedPlugin {
 	@Override
 	public void stop() {
 		super.stop();
-		debug("AutomateRS has stopped.");
+		Variables.resetAll();
+		clientToolbar.removeNavigation(navButton);
 		if (GUI != null && GUI.isOpen()) { GUI.close();	}
 		overlayManager.remove(automateRSOverlay);
 		overlayManager.remove(overlayUtil);
+		debug("AutomateRS has stopped.");
+		clientToolbar.addNavigation(navButton);
 	}
 
 	@Subscribe
@@ -229,13 +226,13 @@ public class AutomateRS extends LoopedPlugin {
 						if (localPlayer == null) {
 							debug("Local Player not located");
 							return;
-						} else if (!started) {
+						} else if (!guiStarted) {
 							selectedBuild = loadBuildFromGUI();
 							selectedBuild = "ALPHA_TESTER";
-							started = true;
+							guiStarted = true;
 							debug("Started - AutomateRS");
 						} else {
-							this.scriptStarted = true;
+							scriptStarted = true;
 							scriptTimer = (System.currentTimeMillis() - elapsedTime);
 							debug("Started - AutomateRS");
 						}
@@ -248,19 +245,21 @@ public class AutomateRS extends LoopedPlugin {
 						elapsedTime = System.currentTimeMillis() - scriptTimer;
 						debug("Paused - AutomateRS");
 				} else {
-						scriptTimer = 0;
-						elapsedTime = 0;
-						started = false;
-						scriptStarted = false;
-						debug("Stopped - AutomateRS");
+					stop();
 				}
 			}
 	}
 
 	@Override
-	protected int loop()  {
+	protected int loop() {
+//		if (scriptStarted && client != null && client.getGameState() != LOGGED_IN) {
+//			scriptStarted = false;
+//			elapsedTime = System.currentTimeMillis() - scriptTimer;
+//			debug("Paused - AutomateRS");
+//		}
+
 		if (scriptStarted) {
-			if (started) {
+			if (guiStarted) {
 				new BuildExecutor();
 				debug("--- Initiating loop sequence ---\n");
 				return 600;
@@ -268,6 +267,11 @@ public class AutomateRS extends LoopedPlugin {
 			return 600;
 		}
 		return 600;
+	}
+
+	@Override
+	public void onStart(String... args) {
+
 	}
 
 	@Subscribe

@@ -22,18 +22,18 @@ import java.lang.reflect.InvocationTargetException;
 
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import static net.automaters.script.AutomateRS.*;
+import static net.automaters.script.Variables.*;
 import static net.automaters.util.file_managers.IconManager.AUTOMATERS_TITLE;
 import static net.automaters.util.file_managers.IconManager.set;
 
 public class GUI implements ActionListener {
 
-    public static JFrame frame;
+    public JFrame frame = new JFrame();
     public static String versionNumber = "v0.28";
     public static JTabbedPane tabbedPanel;
     public static JLabel labelTitle;
 
     public static boolean F2P;
-    public static boolean started = false;
     public static boolean tabbedPanelInitialized = false;
     public static boolean tabSettingsInitialized = false;
     public static boolean tabSkillingGoalsInitialized = false;
@@ -85,30 +85,16 @@ public class GUI implements ActionListener {
 
 
     public GUI() throws IOException {
-        frame = new JFrame();
         initGUI(frame);
     }
 
     public static void start() throws IOException {
-        try {
-            EventDispatchThreadRunner.runOnDispatchThread(() -> {
-                try {
-                    GUI gui = new GUI();
-                    gui.open();
-                    debug("Launching AutomateRS - GUI");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }, true);
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        GUI gui = new GUI();
+        gui.open();
+        debug("Launching AutomateRS - GUI");
     }
 
     public void initGUI(JFrame frame) throws IOException {
-        SwingUtilities.invokeLater(() -> {
         labelSaveName = new JLabel();
         labelSaveName.setText("Save profile as:");
         labelSaveName.setHorizontalAlignment(SwingConstants.TRAILING);
@@ -129,7 +115,7 @@ public class GUI implements ActionListener {
         buttonStart.setText("START SCRIPT");
         buttonStart.setSize(50, 15);
         buttonStart.addActionListener(e -> {
-            started = true;
+            guiStarted = true;
             scriptStarted = true;
             selectedBuild = getSelectedBuild();
             configStats();
@@ -139,19 +125,23 @@ public class GUI implements ActionListener {
         buttonLoad = new JButton();
         buttonLoad.setText("LOAD");
         buttonLoad.setSize(150, 15);
-        buttonLoad.addActionListener(e -> {});
+        buttonLoad.addActionListener(e -> {
+        });
         buttonSave = new JButton();
         buttonSave.setText("SAVE");
         buttonSave.setSize(50, 15);
-        buttonSave.addActionListener(e -> {});
+        buttonSave.addActionListener(e -> {
+        });
         buttonDelete = new JButton();
         buttonDelete.setText("DELETE");
         buttonDelete.setSize(50, 15);
-        buttonDelete.addActionListener(e -> {});
+        buttonDelete.addActionListener(e -> {
+        });
         generateCLIArgs = new JButton();
         generateCLIArgs.setText("GENERATE CLI ARGUMENTS");
         generateCLIArgs.setSize(150, 15);
-        generateCLIArgs.addActionListener(e -> {});
+        generateCLIArgs.addActionListener(e -> {
+        });
 
         comboBoxLoadProfile = new JComboBox<>();
         comboBoxDeleteProfile = new JComboBox<>();
@@ -194,10 +184,9 @@ public class GUI implements ActionListener {
 
             tabbedPanelInitialized = true;
         }
-        });
     }
 
-    public static void createGUI() {
+    public void createGUI() {
         Component selected = tabbedPanel.getSelectedComponent();
         if (selected != null) {
             selected.requestFocusInWindow();
@@ -287,7 +276,6 @@ public class GUI implements ActionListener {
         frame.setLocationRelativeTo(frame.getOwner());
         frame.setResizable(false);
         frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        debug("frame.setVisible(true)\n");
     }
 
     public static void configStats() {
@@ -331,20 +319,9 @@ public class GUI implements ActionListener {
         label.setIcon(icon);
     }
 
-//    public static void setImage(Image image, JLabel label) throws IOException {
-//        ImageIcon icon = new ImageIcon(image);
-//        label.setIcon(icon);
-//    }
-
     public void setImage(String pathToImage, JButton button) {
         ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(pathToImage));
         button.setIcon(icon);
-    }
-
-
-
-    public boolean isStarted() {
-        return started;
     }
 
     public static void main(String[] args) throws IOException {

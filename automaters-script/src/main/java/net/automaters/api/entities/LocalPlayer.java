@@ -18,23 +18,24 @@ import net.unethicalite.api.movement.Reachable;
 import net.unethicalite.api.movement.pathfinder.model.BankLocation;
 import net.unethicalite.api.widgets.Widgets;
 
-import java.util.Map;
+import java.util.HashMap;
 
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.walking.Walking.automateWalk;
-import static net.automaters.script.AutomateRS.scriptStarted;
-import static net.automaters.tasks.Task.*;
+import static net.automaters.script.Variables.*;
 import static net.automaters.util.locations.Constants.GRAND_EXCHANGE;
 import static net.unethicalite.api.commons.Time.sleep;
 import static net.unethicalite.api.commons.Time.sleepUntil;
 
 public class LocalPlayer {
 
+
+    public static Player localPlayer = Players.getLocal();
+
     private LocalPlayer() {
 
     }
 
-    public static Player localPlayer = Players.getLocal();
 
     public static WorldPoint getPosition() { return localPlayer.getWorldLocation(); }
 
@@ -199,33 +200,22 @@ public class LocalPlayer {
 
     public static void hopWorld(boolean resetVariables) {
         World currentWorld = Worlds.getCurrentWorld();
-        World newWorld;
+        while (scriptStarted && currentWorld == Worlds.getCurrentWorld()) {
+            World newWorld;
+            if (currentWorld.isMembers()) {
+                newWorld = Worlds.getRandom(world -> world.isMembers() && world.isNormal());
+            } else {
+                newWorld = Worlds.getRandom(world -> !world.isMembers() && world.isNormal());
+            }
 
-        if (currentWorld.isMembers()) {
-            newWorld = Worlds.getRandom(world -> world.isMembers() && world.isNormal());
-        } else {
-            newWorld = Worlds.getRandom(world -> !world.isMembers() && world.isNormal());
+            debug("Current World: " + currentWorld.getId() + ", New World: " + newWorld.getId());
+            Worlds.hopTo(newWorld);
+            sleepUntil(() -> Worlds.getCurrentWorld() != currentWorld, 10000);
         }
 
         if (resetVariables) {
-            debug("player crash counts: \n" + playerCrashCounts);
-            for (Map.Entry<String, Long> entry : lastCrashTimes.entrySet()) {
-                String playerName = entry.getKey();
-                long lastCrashTimeMs = entry.getValue();
-
-                // Convert milliseconds to seconds
-                long lastCrashTimeSec = lastCrashTimeMs / 1000;
-
-                debug("Player: " + playerName + ", Last Crash Time (seconds): " + lastCrashTimeSec);
-            }
-            playerCrashCounts.clear();
-            lastCrashTimes.clear();
-        }
-
-        if (currentWorld == Worlds.getCurrentWorld()) {
-            debug("Current World: "+currentWorld.getId()+", New World: "+newWorld.getId());
-            Worlds.hopTo(newWorld);
-            sleepUntil(() -> Worlds.getCurrentWorld() == newWorld, 10000);
+            debug("[CRASH HANDLER] - Cleared all stored data.");
+            playerCrashInfo = new HashMap<>();
         }
     }
 }

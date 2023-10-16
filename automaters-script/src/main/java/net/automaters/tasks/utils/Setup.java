@@ -12,6 +12,7 @@ import static net.automaters.api.automate_utils.AutomateInventory.getAmount;
 import static net.automaters.api.automate_utils.AutomateInventory.getItemsFromList;
 import static net.automaters.api.automate_utils.AutomateUtils.addItemsToList;
 import static net.automaters.api.utils.Debug.debug;
+import static net.automaters.script.Variables.*;
 import static net.automaters.tasks.Task.*;
 
 public class Setup {

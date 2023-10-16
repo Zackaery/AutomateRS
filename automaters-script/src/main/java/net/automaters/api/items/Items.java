@@ -4,16 +4,11 @@ import net.unethicalite.api.items.Bank;
 import net.unethicalite.api.items.Inventory;
 
 import static net.automaters.api.entities.LocalPlayer.openBank;
-import static net.automaters.api.ui.GrandExchange.automateBuy;
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.script.AutomateRS.scriptStarted;
-import static net.unethicalite.api.commons.Time.sleep;
+import static net.automaters.script.Variables.scriptStarted;
+import static net.automaters.script.Variables.totalCoins;
 
 public class Items {
-
-    private static PrimaryTools primaryTools = new PrimaryTools();
-
-    public static int totalCoins = -1;
 
     public static int getAmountBank(String name) {
         debug("in getAmountBank");

@@ -14,7 +14,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-import static net.automaters.script.AutomateRS.scriptStarted;
+import static net.automaters.script.Variables.scriptStarted;
 
 @Slf4j
 @Singleton

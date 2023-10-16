@@ -3,9 +3,7 @@ package net.automaters.tasks;
 import lombok.Getter;
 import lombok.Setter;
 import net.automaters.api.entities.LocalPlayer;
-import net.automaters.api.entities.PlayerCrashInfo;
 import net.automaters.api.walking.Area;
-import net.runelite.api.GameObject;
 import net.runelite.api.NPC;
 import net.runelite.api.Skill;
 import net.runelite.api.TileObject;
@@ -17,59 +15,22 @@ import net.unethicalite.api.movement.Reachable;
 
 import javax.swing.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.api.walking.Walking.automateWalk;
-import static net.automaters.script.AutomateRS.scriptStarted;
+import static net.automaters.script.Variables.*;
 import static net.automaters.tasks.TaskManager.*;
 import static net.unethicalite.api.commons.Time.sleep;
 
 public abstract class Task {
 
-
-    public static ArrayList<String> taskItems = new ArrayList<>();
+    @Getter
+    @Setter
+    protected static boolean started;
 
     @Getter
     @Setter
-    private static boolean started;
-
-    @Getter
-    @Setter
-    private static boolean ended;
-
-    public static boolean secondaryTaskActive;
-
-    public static long startTime;
-    public static long taskDuration;
-    public static int skillTask;
-
-    public static TileObject objectToRender;
-
-
-
-    public static String task;
-    public static String secondaryTask = "null";
-    public static int primaryToolID;
-    public static int secondaryToolID;
-    public static String primaryTool = null;
-    public static String secondaryTool = null;
-    public static String outfit = null;
-
-    public static Map<String, PlayerCrashInfo> playerCrashInfo = new HashMap<>();
-
-    public static Map<String, Integer> playerCrashCounts = new HashMap<>();
-    public static Map<String, Long> lastCrashTimes = new HashMap<>();
-
-    private static long lastInteractionTime = 0;
-    private static long interactionCooldown = 8000; // 8000ms
-    private static boolean delayWalk;
-
-
+    protected static boolean ended;
 
     public Task() {
         if (isStarted()) {
@@ -150,8 +111,6 @@ public abstract class Task {
 
         // Check if the timer has elapsed
         long currentTime = System.currentTimeMillis();
-
-//        System.out.println("Last Interaction Time: "+(currentTime - lastInteractionTime));
 
         if (!LocalPlayer.canInteract()) {
             lastInteractionTime = System.currentTimeMillis();

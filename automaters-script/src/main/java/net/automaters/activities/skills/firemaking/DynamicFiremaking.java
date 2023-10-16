@@ -2,6 +2,7 @@ package net.automaters.activities.skills.firemaking;
 
 import lombok.Getter;
 import net.automaters.api.entities.LocalPlayer;
+import net.automaters.script.Variables;
 import net.runelite.api.GameObject;
 import net.runelite.api.Tile;
 import net.runelite.api.WallObject;
@@ -15,8 +16,8 @@ import net.unethicalite.api.scene.Tiles;
 
 import java.util.*;
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.script.AutomateRS.scriptStarted;
-import static net.automaters.tasks.Task.secondaryTaskActive;
+import static net.automaters.script.Variables.scriptStarted;
+import static net.automaters.script.Variables.secondaryTaskActive;
 import static net.unethicalite.api.commons.Time.sleep;
 
 public class DynamicFiremaking {

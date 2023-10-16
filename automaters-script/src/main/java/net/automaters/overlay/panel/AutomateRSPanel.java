@@ -1,7 +1,5 @@
 package net.automaters.overlay.panel;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatLaf;
 import net.automaters.gui.GUI;
 import net.automaters.gui.utils.EventDispatchThreadRunner;
 import net.automaters.overlay.panel.auto_login.ProfilePanel;
@@ -44,10 +42,8 @@ import java.util.Base64;
 import static net.automaters.api.client.ui.components.InfoPanel.buildLinkPanel;
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.gui.GUI.*;
-import static net.automaters.gui.GUI.started;
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.script.AutomateRS.elapsedTime;
-import static net.automaters.script.AutomateRS.scriptTimer;
+import static net.automaters.script.Variables.*;
 import static net.automaters.util.file_managers.FileManager.*;
 import static net.automaters.util.file_managers.IconManager.AUTOMATERS_ICON;
 import static net.automaters.util.file_managers.IconManager.AUTOMATERS_TITLE;
@@ -110,6 +106,8 @@ public class AutomateRSPanel extends PluginPanel {
     public static boolean boolWorld;
     private static final int iterations = 100000;
     private static GUI GUI;
+
+    AutomateRS automateRS = new AutomateRS();
 
     public void refreshPanel() {
         removeAll();
@@ -342,10 +340,10 @@ public class AutomateRSPanel extends PluginPanel {
                     {
                         if (client != null && client.getGameState() == GameState.LOGGED_IN) {
                             if (localPlayer == null) {
-                            } else if (!started) {
+                            } else if (!guiStarted) {
                             GUI.selectedBuild = loadBuildFromGUI();
                                 selectedBuild = "ALPHA_TESTER";
-                                started = true;
+                                guiStarted = true;
 //                                AutomateRS.scriptStarted = true;
                                 scriptPanel.remove(startButton);
                                 scriptPanel.add(pauseButton);
@@ -355,7 +353,7 @@ public class AutomateRSPanel extends PluginPanel {
                                 scriptTimer = (System.currentTimeMillis() - elapsedTime);
                             } else {
                                 selectedBuild = "ALPHA_TESTER";
-                                AutomateRS.scriptStarted = true;
+                                scriptStarted = true;
                                 scriptPanel.remove(startButton);
                                 scriptPanel.add(pauseButton);
                                 scriptPanel.add(stopButton);
@@ -392,7 +390,7 @@ public class AutomateRSPanel extends PluginPanel {
                     @Override
                     public void mouseClicked(MouseEvent e)
                     {
-                        AutomateRS.scriptStarted = false;
+                        scriptStarted = false;
                         scriptPanel.remove(pauseButton);
                         scriptPanel.add(startButton);
                         scriptPanel.add(stopButton);
@@ -421,16 +419,12 @@ public class AutomateRSPanel extends PluginPanel {
                     @Override
                     public void mouseClicked(MouseEvent e)
                     {
-                        GUI.started = false;
-                        AutomateRS.scriptStarted = false;
                         scriptPanel.remove(pauseButton);
                         scriptPanel.remove(stopButton);
                         scriptPanel.add(startButton);
                         scriptPanel.repaint();
                         scriptPanel.revalidate();
-                        scriptTimer = 0;
-                        elapsedTime = 0;
-                        debug("Stopped - AutomateRS");
+                        automateRS.stop();
                     }
 
                     @Override
@@ -639,7 +633,7 @@ public class AutomateRSPanel extends PluginPanel {
             throw new RuntimeException(e);
         }
 
-        if (GUI.started) {
+        if (guiStarted) {
             debug("SELECTED BUILD = " + GUI.selectedBuild);
             return GUI.selectedBuild;
         } else {
