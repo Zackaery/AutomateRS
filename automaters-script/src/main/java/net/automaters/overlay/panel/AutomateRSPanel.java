@@ -6,6 +6,7 @@ import net.automaters.overlay.panel.auto_login.ProfilePanel;
 import net.automaters.script.AutomateRS;
 import net.automaters.script.AutomateRSConfig;
 import net.automaters.api.client.ui.components.PluginInfoPanel;
+import net.automaters.script.Variables;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.client.config.ConfigManager;
@@ -76,11 +77,15 @@ public class AutomateRSPanel extends PluginPanel {
     private final PluginInfoPanel updateTitle = new PluginInfoPanel();
     private final PluginInfoPanel updatedTitle = new PluginInfoPanel();
     private final PluginInfoPanel restartTitle = new PluginInfoPanel();
+    private final PluginInfoPanel reportBugTitle = new PluginInfoPanel();
+
 
 
     private final String PROFILE_NAME = "Profile Name";
 
     private final SpinnerModel model = new SpinnerNumberModel(301, 301, 578, 1);
+    private final JButton bugButton = new JButton("Report a Bug");
+    private final JPanel bugPanel = new JPanel();
     private final JPanel updatePanel = new JPanel();
     private final JPanel updateActionsContainer = new JPanel();
     private final JPanel loginPanel = new JPanel();
@@ -105,9 +110,12 @@ public class AutomateRSPanel extends PluginPanel {
     public static int useWorld;
     public static boolean boolWorld;
     private static final int iterations = 100000;
-    private static GUI GUI;
+    public static GUI GUI;
 
     AutomateRS automateRS = new AutomateRS();
+
+    public AutomateRSPanel() throws IOException {
+    }
 
     public void refreshPanel() {
         removeAll();
@@ -125,6 +133,10 @@ public class AutomateRSPanel extends PluginPanel {
         titlePanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         titlePanel.setBorder(new EmptyBorder(10, 5, 10, 0));
         titlePanel.setLayout(new DynamicGridLayout(0, 1, 0, 0));
+
+        bugPanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+        bugPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        bugPanel.setLayout(new DynamicGridLayout(0, 1, 0, 5));
 
         updatePanel.setBackground(ColorScheme.DARKER_GRAY_COLOR);
         updatePanel.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -152,6 +164,50 @@ public class AutomateRSPanel extends PluginPanel {
             // --- ADD COMPONENTS ---
             {
                 titlePanel.add(titleLabel, BorderLayout.CENTER);
+            }
+        }
+
+        // --- BUG PANEL ---
+        {
+            // --- SET COMPONENTS ---
+            {
+                reportBugTitle.setContent("Report a Bug",
+                        "Click the button below to automatically send in a bug report to the discord.");
+
+                bugButton.addMouseListener(new MouseAdapter() {
+
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        if (client != null && guiStarted) {
+                            Variables.getAll();
+                        } else {
+                            Object[] options = {"OK"};
+                            JOptionPane.showOptionDialog(null,
+                                    "No data has been collected. \n \n " +
+                                            "Please start the script before attempting to report a bug.",
+                                    "Error reporting a bug.", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options,
+                                    options[0]);
+                        }
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        bugButton.setBackground(new Color(60, 60, 60));
+                        bugButton.repaint();
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        bugButton.setBackground(null);
+                        bugButton.repaint();
+                    }
+                });
+
+                // --- ADD COMPONENTS ---
+                {
+                    bugPanel.add(reportBugTitle, BorderLayout.CENTER);
+                    bugPanel.add(bugButton, BorderLayout.CENTER);
+                }
             }
         }
 
@@ -217,8 +273,6 @@ public class AutomateRSPanel extends PluginPanel {
                     add(titlePanel);
                     add(updatePanel);
                     add(updateActionsContainer);
-                } else {
-                    updatePanel.add(updatedTitle, BorderLayout.NORTH);
                 }
             }
         }
@@ -341,8 +395,8 @@ public class AutomateRSPanel extends PluginPanel {
                         if (client != null && client.getGameState() == GameState.LOGGED_IN) {
                             if (localPlayer == null) {
                             } else if (!guiStarted) {
-                            GUI.selectedBuild = loadBuildFromGUI();
-                                selectedBuild = "ALPHA_TESTER";
+                                debug("Opening up GUI");
+                                selectedBuild = loadBuildFromGUI();
                                 guiStarted = true;
 //                                AutomateRS.scriptStarted = true;
                                 scriptPanel.remove(startButton);
@@ -425,6 +479,7 @@ public class AutomateRSPanel extends PluginPanel {
                         scriptPanel.repaint();
                         scriptPanel.revalidate();
                         automateRS.stop();
+                        automateRS.addToolBar();
                     }
 
                     @Override
@@ -452,7 +507,7 @@ public class AutomateRSPanel extends PluginPanel {
         {
             if (!addUpdateButton || automateRSConfig.alwaysShowPanel()) {
                 add(titlePanel, BorderLayout.NORTH);
-                add(updatePanel, BorderLayout.CENTER);
+                add(bugPanel, BorderLayout.CENTER);
                 if (addUpdateButton) {
                     add(updateActionsContainer);
                 }
@@ -479,17 +534,17 @@ public class AutomateRSPanel extends PluginPanel {
     void redrawProfiles() throws IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {
         accountPanel.removeAll();
         addAccounts(getProfileData());
-        revalidate();
         repaint();
+        revalidate();
     }
 
     private void addAccount(String data)
     {
         debug("profile = "+data);
-        ProfilePanel profile = new ProfilePanel(client, data, automateRSConfig, this);
+        ProfilePanel profile = new ProfilePanel(client, data, this);
         accountPanel.add(profile);
-        revalidate();
         repaint();
+        revalidate();
     }
 
     private void addAccounts(String data)
@@ -510,8 +565,8 @@ public class AutomateRSPanel extends PluginPanel {
     public void removeProfile(String data) throws IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {
         setProfileData(
                 getProfileData().replaceAll(data + "\\n", ""));
-        revalidate();
         repaint();
+        revalidate();
 
     }
 
@@ -522,7 +577,7 @@ public class AutomateRSPanel extends PluginPanel {
 
     private byte[] getSalt()
     {
-        if (automateRSConfig.salt().length() == 0)
+        if (automateRSConfig.salt().isEmpty())
         {
             return new byte[0];
         }
@@ -620,7 +675,7 @@ public class AutomateRSPanel extends PluginPanel {
             EventDispatchThreadRunner.runOnDispatchThread(() -> {
                 try {
                     GUI = new GUI();
-                    GUI.start();
+                    start();
                     debug("Launching AutomateRS - GUI");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -634,8 +689,8 @@ public class AutomateRSPanel extends PluginPanel {
         }
 
         if (guiStarted) {
-            debug("SELECTED BUILD = " + GUI.selectedBuild);
-            return GUI.selectedBuild;
+            debug("SELECTED BUILD = " + selectedBuild);
+            return selectedBuild;
         } else {
             return null;
         }

@@ -22,7 +22,7 @@ public class IconManager {
     public static final ImageIcon STARTED_ICON;
     public static final ImageIcon STOP_ICON;
     public static final ImageIcon STOP_HOVER_ICON;
-    public static final ImageIcon LOADING_ICON;
+    public static final ImageIcon LOADING_ICON = new ImageIcon("util\\loading_spinner.gif");
 
     static {
         AUTOMATERS_TITLE = set("script\\title.png");
@@ -40,7 +40,7 @@ public class IconManager {
         STARTED_ICON = set("util\\started.png");
         STOP_ICON = set("util\\stop.png");
         STOP_HOVER_ICON = set("util\\stop_hovered.png");
-        LOADING_ICON = set("util\\loading_spinner.gif");
+//        LOADING_ICON
     }
 
     public static ImageIcon set(String imagePath) {

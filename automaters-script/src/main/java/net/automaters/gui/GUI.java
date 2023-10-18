@@ -28,7 +28,7 @@ import static net.automaters.util.file_managers.IconManager.set;
 
 public class GUI implements ActionListener {
 
-    public JFrame frame = new JFrame();
+    public static JFrame frame = new JFrame();
     public static String versionNumber = "v0.28";
     public static JTabbedPane tabbedPanel;
     public static JLabel labelTitle;
