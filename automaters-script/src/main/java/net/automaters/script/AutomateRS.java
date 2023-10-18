@@ -11,6 +11,7 @@ import net.automaters.gui.utils.EventDispatchThreadRunner;
 import net.automaters.overlay.AutomateRSOverlay;
 import net.automaters.overlay.OverlayUtil;
 import net.automaters.overlay.panel.AutomateRSPanel;
+import net.automaters.overlay.panel.auto_login.ProfilePanel;
 import net.automaters.util.file_managers.ImageManager;
 import net.runelite.api.*;
 import net.runelite.api.events.*;
@@ -54,6 +55,7 @@ import static net.automaters.api.entities.LocalPlayer.localPlayer;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.gui.GUI.*;
 import static net.automaters.overlay.panel.AutomateRSPanel.*;
+import static net.automaters.overlay.panel.auto_login.ProfilePanel.displayProfileStatus;
 import static net.automaters.overlay.panel.auto_login.ProfilePanel.init;
 import static net.automaters.script.Variables.*;
 import static net.runelite.api.GameState.LOGGED_IN;
@@ -124,10 +126,7 @@ public class AutomateRS extends Script {
 
 	@Subscribe
 	private void onGameStateChanged(GameStateChanged e) {
-			if (e.getGameState() == GameState.LOADING)
-			{
-				interactedObject = null;
-			}
+		displayProfileStatus(client);
 	}
 
 	@Subscribe
@@ -206,6 +205,10 @@ public class AutomateRS extends Script {
 
 	public Task[] getTasks() { return new Task[0]; }
 
+	public void addToolBar() {
+		clientToolbar.addNavigation(navButton);
+	}
+
 	@Override
 	public void stop() {
 		super.stop();
@@ -215,7 +218,6 @@ public class AutomateRS extends Script {
 		overlayManager.remove(automateRSOverlay);
 		overlayManager.remove(overlayUtil);
 		debug("AutomateRS has stopped.");
-		clientToolbar.addNavigation(navButton);
 	}
 
 	@Subscribe
@@ -246,6 +248,7 @@ public class AutomateRS extends Script {
 						debug("Paused - AutomateRS");
 				} else {
 					stop();
+					addToolBar();
 				}
 			}
 	}

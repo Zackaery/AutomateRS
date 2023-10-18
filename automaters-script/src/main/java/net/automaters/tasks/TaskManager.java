@@ -5,6 +5,7 @@ package net.automaters.tasks;
 import net.automaters.activities.skills.mining.Mining;
 import net.automaters.activities.skills.woodcutting.Woodcutting;
 import net.automaters.tasks.tasks.GenerateTasks;
+import net.automaters.tasks.test.TestPluginCode;
 
 public class TaskManager {
 
@@ -19,7 +20,7 @@ public class TaskManager {
     public void executeTask(String task) {
         boolean testing = false;
         if (testing) {
-            new Test();
+            new TestPluginCode();
         } else {
         switch (currentTask) {
             case "WOODCUTTING":

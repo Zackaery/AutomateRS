@@ -16,3 +16,7 @@ tasks {
         }
     }
 }
+
+dependencies {
+    implementation(group = "org.apache.httpcomponents", name = "httpclient", version = "4.5.13")
+}

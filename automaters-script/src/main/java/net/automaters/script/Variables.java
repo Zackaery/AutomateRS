@@ -1,19 +1,15 @@
 package net.automaters.script;
 
-import net.automaters.activities.skills.firemaking.DynamicFiremaking;
 import net.automaters.api.entities.PlayerCrashInfo;
 import net.automaters.tasks.tasks.MiscellaneousTasks;
 import net.automaters.tasks.tasks.MoneyMakingTasks;
 import net.automaters.tasks.tasks.QuestingTasks;
 import net.automaters.tasks.tasks.SkillingTasks;
-import net.runelite.api.Player;
 import net.runelite.api.TileObject;
-import net.unethicalite.api.entities.Players;
 
 import java.util.*;
 
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.tasks.Task.*;
 
 public class Variables {
 
@@ -61,9 +57,7 @@ public class Variables {
 
     //Players
 
-    public Variables() {
-        debug("in Variables");
-    }
+    public Variables() { }
 
     public static void resetAll() {
         getAll();
@@ -77,7 +71,7 @@ public class Variables {
         //Strings
         task = null;
         outfit = null;
-        secondaryTask = null;
+        secondaryTask = "null";
         primaryTool = null;
         secondaryTool = null;
 

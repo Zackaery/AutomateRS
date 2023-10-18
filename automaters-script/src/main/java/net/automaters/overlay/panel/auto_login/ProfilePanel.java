@@ -1,7 +1,5 @@
 package net.automaters.overlay.panel.auto_login;
 
-import net.automaters.script.AutomateRS;
-import net.automaters.script.AutomateRSConfig;
 import net.automaters.overlay.panel.AutomateRSPanel;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
@@ -17,6 +15,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -24,38 +23,39 @@ import java.security.spec.InvalidKeySpecException;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.overlay.panel.AutomateRSPanel.*;
 import static net.automaters.script.Variables.guiStarted;
+import static net.automaters.util.file_managers.FileManager.PATH_AUTOMATE_RS_RESOURCES;
 import static net.automaters.util.file_managers.IconManager.*;
 import static net.unethicalite.api.game.Game.logout;
 import static net.automaters.script.Variables.scriptStarted;
 
 public class ProfilePanel extends JPanel {
 
-    private AutomateRS plugin;
-    AutomateRSConfig config;
     public static String profileName = null;
     private static String loginText = null;
     private static String password = null;
     private static Boolean useWorld = null;
     private static Integer world = null;
-    public static JLabel start = new JLabel();
+    private static JLabel startLabel;
+    private static JLabel deleteLabel;
+    static ImageIcon LOADING_ICON = new ImageIcon(PATH_AUTOMATE_RS_RESOURCES+ "util" +File.separator+ "loading_spinner.gif");
     Client thisClient;
 
-    public ProfilePanel(final Client client, final String data, final AutomateRSConfig automateRSConfig, final AutomateRSPanel parent)
+    public ProfilePanel(final Client client, final String data, final AutomateRSPanel parent)
     {
-
+        startLabel = new JLabel(START_ICON);
+        deleteLabel = new JLabel(DELETE_ICON);
         thisClient = client;
         String[] parts = data.split(":", 5);
-        this.profileName = parts[0];
-        this.loginText = parts[1];
+        profileName = parts[0];
+        loginText = parts[1];
         if (parts.length == 5)
         {
-            this.password = parts[2];
-            this.useWorld = Boolean.valueOf(parts[3]);
-            this.world = Integer.valueOf(parts[4]);
+            password = parts[2];
+            useWorld = Boolean.valueOf(parts[3]);
+            world = Integer.valueOf(parts[4]);
         }
         AutomateRSPanel.useWorld = world;
         AutomateRSPanel.boolWorld = useWorld;
-
 
 
         final ProfilePanel panel = this;
@@ -74,11 +74,10 @@ public class ProfilePanel extends JPanel {
         panelActions.setBorder(new EmptyBorder(0, 0, 0, 8));
         panelActions.setBackground(ColorScheme.DARKER_GRAY_COLOR);
 
-        JLabel delete = new JLabel();
         accountsAdded = true;
-        delete.setIcon(set("util\\delete.png"));
-        delete.setToolTipText("Delete - "+profileName);
-        delete.addMouseListener(new MouseAdapter()
+        deleteLabel.setIcon(set("util\\delete.png"));
+        deleteLabel.setToolTipText("Delete - "+profileName);
+        deleteLabel.addMouseListener(new MouseAdapter()
         {
             @Override
             public void mousePressed(MouseEvent e)
@@ -93,76 +92,74 @@ public class ProfilePanel extends JPanel {
                 {
                     debug(e.toString());
                 }
+                deleteLabel.repaint();
             }
 
             @Override
             public void mouseEntered(MouseEvent e)
             {
-                delete.setIcon(DELETE_HOVER_ICON);
+                deleteLabel.setIcon(DELETE_HOVER_ICON);
+                deleteLabel.repaint();
             }
 
             @Override
             public void mouseExited(MouseEvent e)
             {
-                delete.setIcon(DELETE_ICON);
+                deleteLabel.setIcon(DELETE_ICON);
+                deleteLabel.repaint();
             }
         });
 
-        start.setIcon(START_ICON);
-        start.addMouseListener(new MouseAdapter()
+        startLabel.setIcon(START_ICON);
+        startLabel.addMouseListener(new MouseAdapter()
         {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (start.getIcon() == START_ICON || start.getIcon() == START_HOVER_ICON) {
+                if (startLabel.getIcon() == START_ICON || startLabel.getIcon() == START_HOVER_ICON) {
                     if (useWorld && client.getWorld() != world) {
-                        start.setIcon(LOADING_ICON);
+                        startLabel.setIcon(LOADING_ICON);
                         prepareLogin();
                     } else {
-                        start.setIcon(LOADING_ICON);
+                        startLabel.setIcon(LOADING_ICON);
                         login(client);
                     }
                 }
-                if (start.getIcon() == STOP_HOVER_ICON) {
-                    start.setIcon(LOADING_ICON);
+                if (startLabel.getIcon() == STOP_HOVER_ICON) {
+                    startLabel.setIcon(LOADING_ICON);
                     scriptStarted = false;
                     guiStarted = false;
                     logout();
                 }
+                startLabel.repaint();
             }
 
             @Override
             public void mouseEntered(MouseEvent e)
             {
-                if (start.getIcon() == START_ICON) {
-                    start.setIcon(START_HOVER_ICON);
-                    start.setToolTipText("Login - "+profileName);
+                if (startLabel.getIcon() == START_ICON) {
+                    startLabel.setIcon(START_HOVER_ICON);
+                    startLabel.setToolTipText("Login - "+profileName);
                 }
-                if (start.getIcon() == STOP_ICON) {
-                    start.setIcon(STOP_HOVER_ICON);
-                    start.setToolTipText("Logout - "+profileName);
+                if (startLabel.getIcon() == STOP_ICON) {
+                    startLabel.setIcon(STOP_HOVER_ICON);
+                    startLabel.setToolTipText("Logout - "+profileName);
                 }
-                if (start.getIcon() == LOADING_ICON) {
-                    start.setToolTipText("Logging in - "+profileName);
+                if (startLabel.getIcon() == LOADING_ICON) {
+                    startLabel.setIcon(LOADING_ICON);
+                    startLabel.setToolTipText("Logging in - "+profileName);
                 }
+                startLabel.repaint();
             }
 
             @Override
             public void mouseExited(MouseEvent e)
             {
-                if (start.getIcon() == START_HOVER_ICON) {
-                    start.setIcon(START_ICON);
-                }
-                if (start.getIcon() == STOP_HOVER_ICON) {
-                    start.setIcon(STOP_ICON);
-                }
-                if (start.getIcon() == LOADING_ICON) {
-                    start.setIcon(LOADING_ICON);
-                }
+                displayProfileStatus(client);
             }
         });
 
-        panelActions.add(start, BorderLayout.CENTER);
-        panelActions.add(delete, BorderLayout.EAST);
+        panelActions.add(startLabel, BorderLayout.CENTER);
+        panelActions.add(deleteLabel, BorderLayout.EAST);
 
         JLabel label = new JLabel();
         label.setText(parts[0]);
@@ -205,17 +202,16 @@ public class ProfilePanel extends JPanel {
 
     }
 
-    public void displayProfileStatus(Client client) {
+    public static void displayProfileStatus(Client client) {
         if (client != null) {
             if (client.getGameState() == GameState.LOGIN_SCREEN || client.getGameState() == GameState.LOGIN_SCREEN_AUTHENTICATOR) {
-                start.setIcon(START_ICON);
+                startLabel.setIcon(START_ICON);
             } else if (client.getGameState() == GameState.LOGGING_IN || client.getGameState() == GameState.LOADING) {
-                repaint();
-                revalidate();
-                start.setIcon(LOADING_ICON);
+                startLabel.setIcon(LOADING_ICON);
             } else {
-                start.setIcon(STOP_ICON);
+                startLabel.setIcon(STOP_ICON);
             }
+            startLabel.repaint();
         }
     }
 
