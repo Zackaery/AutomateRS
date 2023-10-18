@@ -28,21 +28,21 @@ public class Locations {
                     }
                 }
             }
-//            else if (allOres[i] instanceof Iron) {
-//                Iron location = (Iron) allOres[i];
-//                if ((location.isMembersArea() && isInMembersWorld) || (!location.isMembersArea() && !isInMembersWorld)) {
-//                    if (location.getMinCombatLevel() <= playerCombatLevel) {
-//                        allAreas[i] = location.getIron();
-//                    }
-//                }
-//            } else if (allOres[i] instanceof Coal) {
-//                Coal location = (Coal) allOres[i];
-//                if ((location.isMembersArea() && isInMembersWorld) || (!location.isMembersArea() && !isInMembersWorld)) {
-//                    if (location.getMinCombatLevel() <= playerCombatLevel) {
-//                        allAreas[i] = location.getCoal();
-//                    }
-//                }
-//            }
+            else if (allFish[i] instanceof FlyFish) {
+                FlyFish location = (FlyFish) allFish[i];
+                if ((location.isMembersArea() && isInMembersWorld) || (!location.isMembersArea() && !isInMembersWorld)) {
+                    if (location.getMinCombatLevel() <= playerCombatLevel) {
+                        allAreas[i] = location.getFlyfish();
+                    }
+                }
+            } else if (allFish[i] instanceof Lobsters) {
+                Lobsters location = (Lobsters) allFish[i];
+                if ((location.isMembersArea() && isInMembersWorld) || (!location.isMembersArea() && !isInMembersWorld)) {
+                    if (location.getMinCombatLevel() <= playerCombatLevel) {
+                        allAreas[i] = location.getLobster();
+                    }
+                }
+            }
         }
 
         return getClosestArea(allAreas);
