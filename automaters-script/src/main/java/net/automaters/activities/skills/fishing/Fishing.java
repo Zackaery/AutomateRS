@@ -4,10 +4,12 @@ import net.automaters.api.automate_utils.AutomateBanking;
 import net.automaters.api.automate_utils.AutomateInventory;
 import net.automaters.api.automate_utils.AutomatePlayer;
 import net.automaters.api.entities.LocalPlayer;
+import net.automaters.api.entities.SkillCheck;
 import net.automaters.api.walking.Area;
 import net.automaters.tasks.Task;
 import net.runelite.api.GameObject;
 import net.runelite.api.Item;
+import net.runelite.api.Skill;
 import net.unethicalite.api.commons.Predicates;
 import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
@@ -16,7 +18,7 @@ import net.unethicalite.api.movement.Reachable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static net.automaters.activities.skills.fishing.Fish.getFurtherFish;
+import static net.automaters.activities.skills.fishing.Fish.*;
 import static net.automaters.api.automate_utils.AutomatePlayerCrashHandler.playerCrashing;
 import static net.automaters.api.automate_utils.AutomateUtils.addItemsToList;
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
@@ -38,7 +40,7 @@ public class Fishing extends Task {
     static ArrayList<String> taskItems = new ArrayList<>();
 
     static {
-        resources = new ArrayList<>(Arrays.asList("Fishing spot"));
+        resources = new ArrayList<>(Arrays.asList("Raw shrimp", "Raw anchovies", "Raw Lobster", "Raw guppy", "Raw cavefish", "Raw tetra", "Raw sardine", "Raw herring", "Raw pike", "Raw trout", "Raw salmon", "Raw tuna", "Raw swordfish", "Raw lobster"));
     }
 
     public Fishing() {
@@ -85,12 +87,6 @@ public class Fishing extends Task {
             getResources();
         }
 
-        if (resourceObject != null && localPlayer.distanceTo(resourceObject) <= 12) {
-            if (playerCrashing()) {
-                handlePlayerCrashing();
-            }
-        }
-
         if (!Inventory.isFull()) {
             interactWithResource();
         }
@@ -109,23 +105,72 @@ public class Fishing extends Task {
      */
 
     private void getPrimaryFishingTool() {
-        if (!Inventory.contains(Predicates.nameContains("pickaxe"))
-                && !Equipment.contains(Predicates.nameContains("pickaxe"))) {
-            debug("getPrimaryTool");
-            primaryTool = null;
-            primaryToolID = -1;
-            getPrimaryTool(FishingTools.class);
-        } else {
-            Item tool = Inventory.getFirst(Predicates.nameContains("pickaxe"));
-            Item wornTool = Equipment.getFirst(Predicates.nameContains("pickaxe"));
-            if (tool != null) {
-                debug("Inventory tool: "+tool.getName());
-                primaryTool = tool.getName();
-            } else if (wornTool != null) {
-                debug("Worn tool: "+wornTool.getName());
-                primaryTool = wornTool.getName();
-            } else {
+        // Lobster
+        if (SkillCheck.getFishingLevel() >= 40 ) {
+            if (!Inventory.contains(Predicates.nameContains("Lobster"))) {
+                debug("getPrimaryTool");
                 primaryTool = null;
+                primaryToolID = -1;
+                getPrimaryTool(FishingTools.class);
+            } else {
+                Item tool = Inventory.getFirst(Predicates.nameContains("Lobster"));
+                if (tool != null) {
+                    debug("Inventory tool: " + tool.getName());
+                    primaryTool = tool.getName();
+                } else {
+                    primaryTool = null;
+                }
+            }
+        }
+        // Fly Fish
+        if (SkillCheck.getFishingLevel() >= 20 && SkillCheck.getFishingLevel() < 40 ) {
+            if (!Inventory.contains(Predicates.nameContains("Fly"))) {
+                debug("getPrimaryTool");
+                primaryTool = null;
+                primaryToolID = -1;
+                getPrimaryTool(FishingTools.class);
+            } else {
+                Item tool = Inventory.getFirst(Predicates.nameContains("Fly"));
+                if (tool != null) {
+                    debug("Inventory tool: " + tool.getName());
+                    primaryTool = tool.getName();
+                } else {
+                    primaryTool = null;
+                }
+            }
+        }
+        // Fishing rod
+        if (SkillCheck.getFishingLevel() >= 10 && SkillCheck.getFishingLevel() < 20 ) {
+            if (!Inventory.contains("Fishing rod")) {
+                debug("getPrimaryTool");
+                primaryTool = null;
+                primaryToolID = -1;
+                getPrimaryTool(FishingTools.class);
+            } else {
+                Item tool = Inventory.getFirst("Fishing rod");
+                if (tool != null) {
+                    debug("Inventory tool: " + tool.getName());
+                    primaryTool = tool.getName();
+                } else {
+                    primaryTool = null;
+                }
+            }
+        }
+        // Small net
+        if (SkillCheck.getFishingLevel() >= 1 && SkillCheck.getFishingLevel() < 10 ) {
+            if (!Inventory.contains("Small net")) {
+                debug("getPrimaryTool");
+                primaryTool = null;
+                primaryToolID = -1;
+                getPrimaryTool(FishingTools.class);
+            } else {
+                Item tool = Inventory.getFirst(Predicates.nameContains("Small net"));
+                if (tool != null) {
+                    debug("Inventory tool: " + tool.getName());
+                    primaryTool = tool.getName();
+                } else {
+                    primaryTool = null;
+                }
             }
         }
     }
@@ -162,13 +207,6 @@ public class Fishing extends Task {
         }
     }
 
-    private void handlePlayerCrashing() {
-        debug("[HANDLE PLAYER CRASHING] - Handling crash");
-        resourceObject = getFurtherFish();
-        resourceObject.interact("Small Net");
-        sleepUntil(() -> localPlayer.distanceTo(resourceObject) <= 1, 5500);
-    }
-
     private void getResources() {
         secondaryTaskActive = false;
         resourceObject = Fish.getFish();
@@ -187,26 +225,76 @@ public class Fishing extends Task {
     }
 
     private void interactWithResource() {
-        if (resourceObject != null
-                && localPlayer.distanceTo(resourceObject) <= 12
-                && Reachable.isInteractable(resourceObject)) {
+        // small net
+        if (resourceObject.getName() == "Fishing spot") {
+            if (resourceObject != null
+                    && localPlayer.distanceTo(resourceObject) <= 12
+                    && Reachable.isInteractable(resourceObject)) {
 
-            debug("Fishing: " + resourceObject.getName());
-            resourceObject.interact("Small Net");
-            sleepUntil(() -> !LocalPlayer.canInteract(), 1800);
-            sleepUntil(() -> LocalPlayer.canInteract() || !Reachable.isInteractable(resourceObject) || playerCrashing(), 5500);
+                debug("Fishing: " + resourceObject.getName());
+                resourceObject.interact("Small Net");
+                sleepUntil(() -> !LocalPlayer.canInteract(), 1800);
+                sleepUntil(() -> LocalPlayer.canInteract() || !Reachable.isInteractable(resourceObject) || playerCrashing(), 5500);
 
-        } else {
-            if (LocalPlayer.canInteract()) {
-                if (resourceLocation != null) {
-                    automateWalk(resourceLocation);
-                } else {
-                    getResources();
-                }
             } else {
-                sleepUntil(() -> LocalPlayer.canInteract(), 1200);
+                if (LocalPlayer.canInteract()) {
+                    if (resourceLocation != null) {
+                        automateWalk(resourceLocation);
+                    } else {
+                        getResources();
+                    }
+                } else {
+                    sleepUntil(() -> LocalPlayer.canInteract(), 1200);
+                }
             }
         }
+        // Fly Fishing
+        if (resourceObject.getName() == "Rod Fishing spot" && Inventory.contains("Fly fishing rod")) {
+            if (resourceObject != null
+                    && localPlayer.distanceTo(resourceObject) <= 12
+                    && Reachable.isInteractable(resourceObject)) {
+
+                debug("Fishing: " + resourceObject.getName());
+                resourceObject.interact("Lure");
+                sleepUntil(() -> !LocalPlayer.canInteract(), 1800);
+                sleepUntil(() -> LocalPlayer.canInteract() || !Reachable.isInteractable(resourceObject) || playerCrashing(), 5500);
+
+            } else {
+                if (LocalPlayer.canInteract()) {
+                    if (resourceLocation != null) {
+                        automateWalk(resourceLocation);
+                    } else {
+                        getResources();
+                    }
+                } else {
+                    sleepUntil(() -> LocalPlayer.canInteract(), 1200);
+                }
+            }
+        }
+        // Lobster
+        if (resourceObject.getName() == "Fishing spot" && Inventory.contains("Lobster pot")){
+            if (resourceObject != null
+                    && localPlayer.distanceTo(resourceObject) <= 12
+                    && Reachable.isInteractable(resourceObject)) {
+
+                debug("Fishing: " + resourceObject.getName());
+                resourceObject.interact("Cage");
+                sleepUntil(() -> !LocalPlayer.canInteract(), 1800);
+                sleepUntil(() -> LocalPlayer.canInteract() || !Reachable.isInteractable(resourceObject) || playerCrashing(), 5500);
+
+            } else {
+                if (LocalPlayer.canInteract()) {
+                    if (resourceLocation != null) {
+                        automateWalk(resourceLocation);
+                    } else {
+                        getResources();
+                    }
+                } else {
+                    sleepUntil(() -> LocalPlayer.canInteract(), 1200);
+                }
+            }
+        }
+
     }
 
     /**

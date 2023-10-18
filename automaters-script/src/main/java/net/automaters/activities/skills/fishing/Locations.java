@@ -51,17 +51,11 @@ public class Locations {
     @Getter
     public enum Smallnet {
         // Small net areas
-        Catherby_FishArea_I  (1, true, new Area(2834, 3434, 2846, 3428,0)),
-        Catherby_FishArea_I_Walk  (1, true, new Area(2835, 3433, 2836, 3432,0)),
-        Lumbridge_FishArea_I  (1, true, new Area(3242, 3161, 3247, 3149,0)),
-        Lumbridge_FishArea_I_Walk  (1, true, new Area(3243, 3154, 3244, 3154,0)),
-        AlKharid_FishArea_I  (1, true, new Area(3264, 3151, 3279, 3137,0)),
-        AlKharid_FishArea_I_Walk  (1, true, new Area(3269, 3148, 3269, 3149,0)),
-        PortPisc_FishArea_I  (1, true, new Area(1758, 3798, 1767, 3792,0)),
-        PortPisc_FishArea_I_Walk  (1, true, new Area(1763, 3795, 1763, 3794,0)),
-        Hosidius_FishArea_I  (1, true, new Area(1814, 3609, 1821, 3596,0)),
-        Hosidius_FishArea_I_Walk  (1, true, new Area(1816, 3603, 1818, 3603,0)),
-
+        CATHERBY_FISHAREA_I (1, true, new Area(2834, 3434, 2846, 3428,0)),
+        LUMBRIDGE_FISHAREA_I (1, false, new Area(3242, 3161, 3247, 3149,0)),
+        ALKHARID_FISHAREA_I (1, false, new Area(3264, 3151, 3279, 3137,0)),
+        PORTPISC_FISHAREA_I (1, true, new Area(1758, 3798, 1767, 3792,0)),
+        HOSIDIUS_FISHAREA_I (1, true, new Area(1814, 3609, 1821, 3596,0)),
         ;
 
         private final int minCombatLevel;
@@ -80,16 +74,11 @@ public class Locations {
     public enum Lobsters {
 
         // Hosidius Ore Areas
-        MusaPoint_FishArea  (1, true, new Area(2922, 3182, 2927, 3178,0)),
-        MusaPoint_FishArea_Walk  (1, true, new Area(2924, 3180, 2925, 3179,0)),
-        LandsEnd_FishArea  (1, true, new Area(1483, 3434, 1489, 3429,0)),
-        LandsEnd_FishArea_Walk  (1, true, new Area(1486, 3432, 1487, 3432,0)),
-        PortPisc_FishArea  (1, true, new Area(1743, 3803, 1751, 3798,0)),
-        PortPisc_FishArea_Walk  (1, true, new Area(1746, 3801, 1746, 3800,0)),
-        Catherby_FishArea_I  (1, true, new Area(2843, 3432, 2848, 3428,0)),
-        Catherby_FishArea_II  (1, true, new Area(2851, 3426, 2856, 3423,0)),
-        Catherby_FishArea_I_Walk  (1, true, new Area(2845, 3431, 2845, 3430,0)),
-        Catherby_FishArea_II_Walk  (1, true, new Area(2853, 3425, 2853, 3424,0)),
+        MUSAPOINT_FISHAREA (1, true, new Area(2922, 3182, 2927, 3178,0)),
+        LANDSEND_FISHAREA (1, true, new Area(1483, 3434, 1489, 3429,0)),
+        PORTPISC_FISHAREA (1, true, new Area(1743, 3803, 1751, 3798,0)),
+        CATHERBY_FISHAREA_I (1, true, new Area(2843, 3432, 2848, 3428,0)),
+        CATHERBY_FISHAREA_II (1, true, new Area(2851, 3426, 2856, 3423,0)),
 
         ;
 
@@ -108,15 +97,10 @@ public class Locations {
     @Getter
     public enum FlyFish {
         // Hosidius Ore Areas
-        Lumbridge_FishArea  (1, false, new Area(3236,3257,3244,3236,0)),
-        Lumbridge_FishArea_Walk  (1, false, new Area(3240,3252,3241,3252,0)),
-        BarbVillage_FishArea  (1, false, new Area(3100,3438,3111,3420,0)),
-        BarbVillage_FishArea_Walk  (1, false, new Area(3104,3433,3105,3433,0)),
-        SeersVillage_FishArea  (1, false, new Area(2712,3533,2729,3522,0)),
-        SeersVillage_FishArea_Walk  (1, false, new Area(2725,3527,2727,3526,0)),
-        Kourend_FishArea  (1, false, new Area(1719,3687,1722,3682,0)),
-        Kourend_FishArea_Walk  (1, false, new Area(1720,3685,1721,3684,0)),
-
+        LUMBRIDGE_FISHAREA (1, false, new Area(3236,3257,3244,3236,0)),
+        BARBVILLAGE_FISHAREA (1, false, new Area(3100,3438,3111,3420,0)),
+        SEERSVILLAGE_FISHAREA (1, false, new Area(2712,3533,2729,3522,0)),
+        KOUREND_FISHAREA (1, false, new Area(1719,3687,1722,3682,0)),
         ;
 
         private final int minCombatLevel;

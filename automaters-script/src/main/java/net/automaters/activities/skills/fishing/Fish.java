@@ -21,9 +21,9 @@ public class Fish {
 
     @Getter
     public enum FishType {
-        SMALLNET(List.of("Fishing spot"),  1, false, Locations.Smallnet.class),
-        FLYFISH(List.of("Rod Fishing spot"), 21, false, Locations.FlyFish.class),
-        LOBSTER(List.of("Cage"), 41, false, Locations.Lobsters.class),
+        SMALLNET(Arrays.asList("Fishing spot"),  1, false, Locations.Smallnet.class),
+        FLYFISH(Arrays.asList("Rod Fishing spot"), 21, false, Locations.FlyFish.class),
+        LOBSTER(Arrays.asList("Cage"), 41, false, Locations.Lobsters.class),
         ;
 
         private final List<String> fishName;
