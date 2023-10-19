@@ -113,7 +113,7 @@ public class Mining extends Task {
             debug("getPrimaryTool");
             primaryTool = null;
             primaryToolID = -1;
-            getPrimaryTool(MiningTools.class);
+            getPrimaryTool(true, MiningTools.class);
         } else {
             Item tool = Inventory.getFirst(Predicates.nameContains("pickaxe"));
             Item wornTool = Equipment.getFirst(Predicates.nameContains("pickaxe"));

@@ -5,10 +5,12 @@ import net.automaters.api.automate_utils.AutomateInventory;
 import net.automaters.api.automate_utils.AutomatePlayer;
 import net.automaters.api.entities.LocalPlayer;
 import net.automaters.api.entities.SkillCheck;
+import net.automaters.api.utils.Debug;
 import net.automaters.api.walking.Area;
 import net.automaters.tasks.Task;
 import net.runelite.api.GameObject;
 import net.runelite.api.Item;
+import net.runelite.api.NPC;
 import net.runelite.api.Skill;
 import net.unethicalite.api.commons.Predicates;
 import net.unethicalite.api.items.Equipment;
@@ -33,7 +35,7 @@ import static net.unethicalite.api.commons.Time.sleepUntil;
 
 public class Fishing extends Task {
 
-    private GameObject resourceObject;
+    private NPC resourceObject;
     private Area resourceLocation;
 
     static ArrayList<String> resources;
@@ -111,7 +113,7 @@ public class Fishing extends Task {
                 debug("getPrimaryTool");
                 primaryTool = null;
                 primaryToolID = -1;
-                getPrimaryTool(FishingTools.class);
+                getPrimaryTool(false, FishingTools.class);
             } else {
                 Item tool = Inventory.getFirst(Predicates.nameContains("Lobster"));
                 if (tool != null) {
@@ -128,7 +130,7 @@ public class Fishing extends Task {
                 debug("getPrimaryTool");
                 primaryTool = null;
                 primaryToolID = -1;
-                getPrimaryTool(FishingTools.class);
+                getPrimaryTool(false, FishingTools.class);
             } else {
                 Item tool = Inventory.getFirst(Predicates.nameContains("Fly"));
                 if (tool != null) {
@@ -145,7 +147,7 @@ public class Fishing extends Task {
                 debug("getPrimaryTool");
                 primaryTool = null;
                 primaryToolID = -1;
-                getPrimaryTool(FishingTools.class);
+                getPrimaryTool(false, FishingTools.class);
             } else {
                 Item tool = Inventory.getFirst("Fishing rod");
                 if (tool != null) {
@@ -162,7 +164,7 @@ public class Fishing extends Task {
                 debug("getPrimaryTool");
                 primaryTool = null;
                 primaryToolID = -1;
-                getPrimaryTool(FishingTools.class);
+                getPrimaryTool(false, FishingTools.class);
             } else {
                 Item tool = Inventory.getFirst(Predicates.nameContains("Small net"));
                 if (tool != null) {
@@ -225,77 +227,41 @@ public class Fishing extends Task {
     }
 
     private void interactWithResource() {
-        // small net
-        if (resourceObject.getName() == "Fishing spot") {
-            if (resourceObject != null
-                    && localPlayer.distanceTo(resourceObject) <= 12
-                    && Reachable.isInteractable(resourceObject)) {
 
-                debug("Fishing: " + resourceObject.getName());
-                resourceObject.interact("Small Net");
-                sleepUntil(() -> !LocalPlayer.canInteract(), 1800);
-                sleepUntil(() -> LocalPlayer.canInteract() || !Reachable.isInteractable(resourceObject) || playerCrashing(), 5500);
 
-            } else {
-                if (LocalPlayer.canInteract()) {
-                    if (resourceLocation != null) {
-                        automateWalk(resourceLocation);
-                    } else {
-                        getResources();
-                    }
+        if (resourceObject != null
+                && localPlayer.distanceTo(resourceObject) <= 12
+                && Reachable.isInteractable(resourceObject)) {
+
+            debug("HELLO");
+
+            debug("resource object: "+resourceObject);
+            debug("distance to: "+localPlayer.distanceTo(resourceObject));
+            debug("reachable: "+Reachable.isInteractable(resourceObject));
+
+            String[] actions = resourceObject.getActions();
+            for (String action : actions) {
+                resourceObject.interact(action);
+            }
+            debug("Fishing: " + resourceObject.getName());
+            sleepUntil(() -> !LocalPlayer.canInteract(), 1800);
+            sleepUntil(() -> LocalPlayer.canInteract() || !Reachable.isInteractable(resourceObject) || playerCrashing(), 5500);
+
+        } else {
+
+            debug("GOODBYE");
+            if (LocalPlayer.canInteract()) {
+                if (resourceLocation != null) {
+                    automateWalk(resourceLocation);
                 } else {
-                    sleepUntil(() -> LocalPlayer.canInteract(), 1200);
+                    getResources();
                 }
+            } else {
+                sleepUntil(LocalPlayer::canInteract, 1200);
             }
         }
-        // Fly Fishing
-        if (resourceObject.getName() == "Rod Fishing spot" && Inventory.contains("Fly fishing rod")) {
-            if (resourceObject != null
-                    && localPlayer.distanceTo(resourceObject) <= 12
-                    && Reachable.isInteractable(resourceObject)) {
-
-                debug("Fishing: " + resourceObject.getName());
-                resourceObject.interact("Lure");
-                sleepUntil(() -> !LocalPlayer.canInteract(), 1800);
-                sleepUntil(() -> LocalPlayer.canInteract() || !Reachable.isInteractable(resourceObject) || playerCrashing(), 5500);
-
-            } else {
-                if (LocalPlayer.canInteract()) {
-                    if (resourceLocation != null) {
-                        automateWalk(resourceLocation);
-                    } else {
-                        getResources();
-                    }
-                } else {
-                    sleepUntil(() -> LocalPlayer.canInteract(), 1200);
-                }
-            }
-        }
-        // Lobster
-        if (resourceObject.getName() == "Fishing spot" && Inventory.contains("Lobster pot")){
-            if (resourceObject != null
-                    && localPlayer.distanceTo(resourceObject) <= 12
-                    && Reachable.isInteractable(resourceObject)) {
-
-                debug("Fishing: " + resourceObject.getName());
-                resourceObject.interact("Cage");
-                sleepUntil(() -> !LocalPlayer.canInteract(), 1800);
-                sleepUntil(() -> LocalPlayer.canInteract() || !Reachable.isInteractable(resourceObject) || playerCrashing(), 5500);
-
-            } else {
-                if (LocalPlayer.canInteract()) {
-                    if (resourceLocation != null) {
-                        automateWalk(resourceLocation);
-                    } else {
-                        getResources();
-                    }
-                } else {
-                    sleepUntil(() -> LocalPlayer.canInteract(), 1200);
-                }
-            }
-        }
-
     }
+
 
     /**
      * # onEnd() methods below

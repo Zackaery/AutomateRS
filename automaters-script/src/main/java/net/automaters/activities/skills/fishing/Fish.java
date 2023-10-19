@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.automaters.api.entities.LocalPlayer;
 import net.automaters.api.walking.Area;
 import net.runelite.api.GameObject;
+import net.runelite.api.NPC;
 import net.runelite.api.Skill;
 import net.runelite.api.TileObject;
 import net.unethicalite.api.entities.Players;
@@ -44,7 +45,8 @@ public class Fish {
 
         for (int i = FishType.values().length - 1; i >= 0; i--) {
             FishType fishType = FishType.values()[i];
-            if (fishingLevel >= FishType.SMALLNET.getReqFishingLevel()) {
+            if (fishingLevel >= fishType.reqFishingLevel) {
+                debug("fish type: "+fishType);
                 return fishType;
             }
         }
@@ -53,25 +55,25 @@ public class Fish {
     }
 
 
-    public static GameObject getFurtherFish() {
+    public static NPC getFurtherFish() {
         FishType chosenFishType = chooseFishType();
 
         if (chosenFishType != null) {
             List<String> fishNames = chosenFishType.getFishName();
             debug("Selected Fish Names: " + fishNames);
 
-            GameObject closestDistantFish = null;
+            NPC closestDistantFish = null;
             double closestDistance = Double.MAX_VALUE;
             double minDistance = 3; // Minimum distance to consider
 
             for (String fishName : fishNames) {
 
                 for (TileObject fishObject : TileObjects.getSurrounding(Players.getLocal().getWorldLocation(), 12, fishName)) {
-                    if (fishObject instanceof GameObject) {
+                    if (fishObject instanceof NPC) {
                         double distance = fishObject.distanceTo(localPlayer);
 
                         if (distance >= minDistance && distance < closestDistance) {
-                            closestDistantFish = (GameObject) fishObject;
+                            closestDistantFish = (NPC) fishObject;
                             closestDistance = distance;
                         }
                     }
@@ -85,24 +87,44 @@ public class Fish {
         }
     }
 
-    public static GameObject getFish() {
+    public static NPC getFish() {
         FishType chosenFishType = chooseFishType();
         if (chosenFishType != null) {
             List<String> fishNames = chosenFishType.getFishName();
 
-            GameObject closestFish = null;
+            debug("fishNames: "+fishNames);
+            NPC closestFish = null;
             double closestDistance = Double.MAX_VALUE;
 
             for (String fishName : fishNames) {
+                debug("1 - "+fishName);
                 TileObject fishObject = TileObjects.getNearest(LocalPlayer.getPosition(), fishName);
-                if (fishObject instanceof GameObject) {
+                if (fishObject instanceof NPC) {
+                    debug("2");
                     double distance = fishObject.distanceTo(localPlayer);
 
                     if (distance < closestDistance) {
-                        closestFish = (GameObject) fishObject;
+                        debug("3");
+                        closestFish = (NPC) fishObject;
                         closestDistance = distance;
+                        debug("closestFish: "+fishObject.getWorldLocation());
                     }
+                    debug("4");
                 }
+
+                if (fishObject instanceof GameObject) {
+                    debug("21");
+                    double distance = fishObject.distanceTo(localPlayer);
+
+                    if (distance < closestDistance) {
+                        debug("31");
+                        closestFish = (NPC) fishObject;
+                        closestDistance = distance;
+                        debug("closestFish: "+fishObject.getWorldLocation());
+                    }
+                    debug("41");
+                }
+                debug("5");
             }
 
 

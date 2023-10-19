@@ -20,30 +20,40 @@ import static net.unethicalite.api.commons.Time.sleep;
 
 public class PrimaryTools {
 
-    public static void getPrimaryTool(Class<?> skillEnumClass) {
+    public static void getPrimaryTool(Boolean wearable, Class<?> skillEnumClass) {
         if (Enum.class.isAssignableFrom(skillEnumClass)) {
             Enum<?>[] enumConstants = (Enum<?>[]) skillEnumClass.getEnumConstants();
+
             if (enumConstants != null) {
                 for (Enum<?> tool : enumConstants) {
-
                     try {
+                        int toolID = 0;
+                        int skillLevel = 0;
+                        int attackLevel = 0;
+                        boolean buyable;
+                        Skill skill;
+                        String toolName;
+
+                        if (wearable) {
+                            Field attackLevelField = skillEnumClass.getDeclaredField("attackLevel");
+                            attackLevelField.setAccessible(true);
+                            attackLevel = (int) attackLevelField.get(tool);
+                        }
+
                         Field idField = skillEnumClass.getDeclaredField("id");
                         Field skillLevelField = skillEnumClass.getDeclaredField("skillLevel");
-                        Field attackLevelField = skillEnumClass.getDeclaredField("attackLevel");
                         Field buyableField = skillEnumClass.getDeclaredField("buyable");
                         Field skillField = skillEnumClass.getDeclaredField("skill");
 
                         idField.setAccessible(true);
                         skillLevelField.setAccessible(true);
-                        attackLevelField.setAccessible(true);
                         buyableField.setAccessible(true);
 
-                        int toolID = (int) idField.get(tool);
-                        int skillLevel = (int) skillLevelField.get(tool);
-                        int attackLevel = (int) attackLevelField.get(tool);
-                        boolean buyable = (boolean) buyableField.get(tool);
-                        Skill skill = (Skill) skillField.get(tool);
-                        String toolName = tool.name();
+                        toolID = (int) idField.get(tool);
+                        skillLevel = (int) skillLevelField.get(tool);
+                        buyable = (boolean) buyableField.get(tool);
+                        skill = (Skill) skillField.get(tool);
+                        toolName = tool.name();
 
                         if (primaryTool == null) {
                             processTool(toolID, skillLevel, attackLevel, skill, buyable, toolName);
@@ -110,7 +120,7 @@ public class PrimaryTools {
     }
 
     private static boolean canWield(int attackLevel) {
-        return (Skills.getLevel(Skill.ATTACK) >= attackLevel);
+        return (Skills.getLevel(Skill.ATTACK) >= attackLevel && attackLevel != 0);
     }
 
     private static boolean hasTool(int id) {
@@ -168,6 +178,7 @@ public class PrimaryTools {
 
     }
 
+    @Getter
     public enum MiningTools implements Equippable {
         CRYSTAL_PICKAXE(ItemID.CRYSTAL_PICKAXE,71, 70, false),
         DRAGON_PICKAXE(ItemID.DRAGON_PICKAXE,61, 60, true),
@@ -193,54 +204,28 @@ public class PrimaryTools {
             this.buyable = buyable;
             this.skill = Skill.MINING;
         }
-
-        @Override
-        public int getId() {
-            return id;
-        }
-
-        @Override
-        public int getSkillLevel() {
-            return skillLevel;
-        }
-
-        @Override
-        public int getAttackLevel() {
-            return attackLevel;
-        }
     }
 
+    @Getter
     public enum FishingTools {
-        LOBSTER_POT(ItemID.LOBSTER_POT,41, 40, true),
-        FLY_FISHING_ROD(ItemID.FLY_FISHING_ROD,21, 20, true),
-        FISHING_ROD(ItemID.FISHING_ROD,11, 10, true),
-        SMALL_FISHING_NET(ItemID.SMALL_FISHING_NET,1, 1, true),
+        LOBSTER_POT(ItemID.LOBSTER_POT,40, 0, true),
+        FLY_FISHING_ROD(ItemID.FLY_FISHING_ROD,20, 0, true),
+        FISHING_ROD(ItemID.FISHING_ROD,10, 0, true),
+        SMALL_FISHING_NET(ItemID.SMALL_FISHING_NET,1, 0, true),
         ;
 
         public final int id;
         public final int skillLevel;
-        public final int fishingLevel;
+        public final int attackLevel;
         public final boolean buyable;
         public final Skill skill;
 
-        FishingTools(int id, int skillLevel, int fishingLevel, boolean buyable) {
+        FishingTools(int id, int skillLevel, int attackLevel, boolean buyable) {
             this.id = id;
             this.skillLevel = skillLevel;
-            this.fishingLevel = fishingLevel;
+            this.attackLevel = attackLevel;
             this.buyable = buyable;
             this.skill = Skill.FISHING;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public int getSkillLevel() {
-            return skillLevel;
-        }
-
-        public int getFishingLevel() {
-            return fishingLevel;
         }
     }
 

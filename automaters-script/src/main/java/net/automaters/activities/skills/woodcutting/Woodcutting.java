@@ -123,7 +123,7 @@ public class Woodcutting extends Task {
                 && !Equipment.contains(Predicates.nameContains(" axe"))) {
             primaryTool = null;
             primaryToolID = -1;
-            getPrimaryTool(WoodcuttingTools.class);
+            getPrimaryTool(true, WoodcuttingTools.class);
         } else {
             Item tool = Inventory.getFirst(Predicates.nameContains(" axe"));
             Item wornTool = Equipment.getFirst(Predicates.nameContains(" axe"));
