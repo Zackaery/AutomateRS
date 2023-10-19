@@ -6,7 +6,7 @@ import net.automaters.activities.skills.fishing.Fishing;
 import net.automaters.activities.skills.mining.Mining;
 import net.automaters.activities.skills.woodcutting.Woodcutting;
 import net.automaters.tasks.tasks.GenerateTasks;
-import net.automaters.tasks.test.TestPluginCode;
+import net.automaters.tasks.tests.TestPluginCode;
 
 public class TaskManager {
 
