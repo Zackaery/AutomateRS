@@ -31,6 +31,8 @@ repositories {
 }
 
 dependencies {
+    implementation(group = "net.java.dev.jna", name = "jna-platform", version = "5.9.0")
+    implementation(group = "org.apache.httpcomponents", name = "httpmime", version = "4.4")
     implementation(group = "org.apache.httpcomponents", name = "httpclient", version = "4.5.13")
     implementation(group = "com.formdev", name = "flatlaf", version = "3.2.1")
     implementation(group = "org.json", name = "json", version = "20220320")

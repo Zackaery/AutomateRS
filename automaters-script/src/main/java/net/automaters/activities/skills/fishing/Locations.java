@@ -20,15 +20,21 @@ public class Locations {
         int playerCombatLevel = Players.getLocal().getCombatLevel();
 
         for (int i = 0; i < allFish.length; i++) {
-            if (allFish[i] instanceof Smallnet) {
-                Smallnet location = (Smallnet) allFish[i];
+            if (allFish[i] instanceof SmallNet) {
+                SmallNet location = (SmallNet) allFish[i];
                 if ((location.isMembersArea() && isInMembersWorld) || (!location.isMembersArea() && !isInMembersWorld)) {
                     if (location.getMinCombatLevel() <= playerCombatLevel) {
-                        allAreas[i] = location.getSmallnet();
+                        allAreas[i] = location.getSmallNet();
                     }
                 }
-            }
-            else if (allFish[i] instanceof FlyFish) {
+            } else if (allFish[i] instanceof RodFish) {
+                RodFish location = (RodFish) allFish[i];
+                if ((location.isMembersArea() && isInMembersWorld) || (!location.isMembersArea() && !isInMembersWorld)) {
+                    if (location.getMinCombatLevel() <= playerCombatLevel) {
+                        allAreas[i] = location.getRodFish();
+                    }
+                }
+            } else if (allFish[i] instanceof FlyFish) {
                 FlyFish location = (FlyFish) allFish[i];
                 if ((location.isMembersArea() && isInMembersWorld) || (!location.isMembersArea() && !isInMembersWorld)) {
                     if (location.getMinCombatLevel() <= playerCombatLevel) {
@@ -49,36 +55,77 @@ public class Locations {
     }
 
     @Getter
-    public enum Smallnet {
-        // Small net areas
-        CATHERBY_FISHAREA_I  (1, true, new Area(2834, 3434, 2846, 3428,0)),
-        LUMBRIDGE_FISHAREA_I (1, false, new Area(3242, 3161, 3247, 3149,0)),
-        ALKHARID_FISHAREA_I  (1, false, new Area(3264, 3151, 3279, 3137,0)),
-        PORTPISC_FISHAREA_I  (1, true, new Area(1758, 3798, 1767, 3792,0)),
-        HOSIDIUS_FISHAREA_I  (1, true, new Area(1814, 3609, 1821, 3596,0)),
+    public enum SmallNet {
+        CATHERBY_FISHING_SPOT  (1, true, new Area(2834, 3434, 2846, 3428,0)),
+        LUMBRIDGE_FISHING_SPOT (1, false, new Area(3242, 3161, 3247, 3149,0)),
+        ALKHARID_FISHING_SPOT  (1, false, new Area(3264, 3151, 3279, 3137,0)),
+        PORTPISC_FISHING_SPOT  (1, true, new Area(1758, 3798, 1767, 3792,0)),
+        HOSIDIUS_FISHING_SPOT  (1, true, new Area(1814, 3609, 1821, 3596,0)),
         ;
 
         private final int minCombatLevel;
         private final boolean membersArea;
-        private final Area smallnet;
+        private final Area smallNet;
 
-        Smallnet(int minCombatLevel, final boolean membersArea, final Area smallnet) {
+        SmallNet(int minCombatLevel, final boolean membersArea, final Area smallNet) {
             this.minCombatLevel = minCombatLevel;
             this.membersArea = membersArea;
-            this.smallnet = smallnet;
+            this.smallNet = smallNet;
         }
 
     }
 
     @Getter
-    public enum Lobsters {
+    public enum RodFish {
+        CATHERBY_FISHING_SPOT     (1, true, new Area(2834, 3434, 2846, 3428,0)),
+        LUMBRIDGE_FISHING_SPOT    (1, false, new Area(3242, 3161, 3247, 3149,0)),
+        ALKHARID_FISHING_SPOT     (1, false, new Area(3264, 3151, 3279, 3137,0)),
+        PORTPISC_FISHING_SPOT     (1, true, new Area(1758, 3798, 1767, 3792,0)),
+        HOSIDIUS_FISHING_SPOT     (1, true, new Area(1814, 3609, 1821, 3596,0)),
+        LUMBRIDGE_ROD_FISHING     (1, false, new Area(3236,3257,3244,3236,0)),
+        BARBVILLAGE_ROD_FISHING   (1, false, new Area(3100,3438,3111,3420,0)),
+        SEERSVILLAGE_ROD_FISHING  (1, true, new Area(2712,3533,2729,3522,0)),
+        KOUREND_ROD_FISHING       (1, true, new Area(1719,3687,1722,3682,0)),
 
-        // Hosidius Ore Areas
-        MUSAPOINT_FISHAREA   (1, false, new Area(2922, 3182, 2927, 3178,0)),
-        LANDSEND_FISHAREA    (1, true, new Area(1483, 3434, 1489, 3429,0)),
-        PORTPISC_FISHAREA    (1, true, new Area(1743, 3803, 1751, 3798,0)),
-        CATHERBY_FISHAREA_I  (1, true, new Area(2843, 3432, 2848, 3428,0)),
-        CATHERBY_FISHAREA_II (1, true, new Area(2851, 3426, 2856, 3423,0)),
+        ;
+
+        private final int minCombatLevel;
+        private final boolean membersArea;
+        private final Area rodFish;
+
+        RodFish(int minCombatLevel, final boolean membersArea, final Area rodFish) {
+            this.minCombatLevel = minCombatLevel;
+            this.membersArea = membersArea;
+            this.rodFish = rodFish;
+        }
+    }
+
+    @Getter
+    public enum FlyFish {
+        LUMBRIDGE_ROD_FISHING     (1, false, new Area(3236,3257,3244,3236,0)),
+        BARBVILLAGE_ROD_FISHING   (1, false, new Area(3100,3438,3111,3420,0)),
+        SEERSVILLAGE_ROD_FISHING  (1, true, new Area(2712,3533,2729,3522,0)),
+        KOUREND_ROD_FISHING       (1, true, new Area(1719,3687,1722,3682,0)),
+        ;
+
+        private final int minCombatLevel;
+        private final boolean membersArea;
+        private final Area flyfish;
+
+        FlyFish(int minCombatLevel, final boolean membersArea, final Area flyFish) {
+            this.minCombatLevel = minCombatLevel;
+            this.membersArea = membersArea;
+            this.flyfish = flyFish;
+        }
+    }
+
+    @Getter
+    public enum Lobsters {
+        MUSAPOINT_CAGE_FISHING   (1, false, new Area(2922, 3182, 2927, 3178,0)),
+        LANDSEND_CAGE_FISHING    (1, true, new Area(1483, 3434, 1489, 3429,0)),
+        PORTPISC_CAGE_FISHING    (1, true, new Area(1743, 3803, 1751, 3798,0)),
+        CATHERBY_CAGE_FISHING_I  (1, true, new Area(2843, 3432, 2848, 3428,0)),
+        CATHERBY_CAGE_FISHING_II (1, true, new Area(2851, 3426, 2856, 3423,0)),
 
         ;
 
@@ -94,23 +141,4 @@ public class Locations {
 
     }
 
-    @Getter
-    public enum FlyFish {
-        // Hosidius Ore Areas
-        LUMBRIDGE_FISHAREA    (1, false, new Area(3236,3257,3244,3236,0)),
-        BARBVILLAGE_FISHAREA  (1, false, new Area(3100,3438,3111,3420,0)),
-        SEERSVILLAGE_FISHAREA (1, true, new Area(2712,3533,2729,3522,0)),
-        KOUREND_FISHAREA      (1, true, new Area(1719,3687,1722,3682,0)),
-        ;
-
-        private final int minCombatLevel;
-        private final boolean membersArea;
-        private final Area flyfish;
-
-        FlyFish(int minCombatLevel, final boolean membersArea, final Area flyfish) {
-            this.minCombatLevel = minCombatLevel;
-            this.membersArea = membersArea;
-            this.flyfish = flyfish;
-        }
-    }
 }

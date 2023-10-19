@@ -71,12 +71,16 @@ public class GrandExchangePrices {
     }
 
     public static boolean canAfford(int ItemID) {
+        return canAfford(ItemID, 1);
+    }
+
+    public static boolean canAfford(int ItemID, int amount) {
         if (totalCoins == -1) {
             debug("Checking total coins amount");
             getAmountTotal("Coins", true);
         }
         debug("Can Afford: "+ItemID+" - "+(totalCoins >= Integer.parseInt(String.valueOf(getPrice(ItemID).high))));
-        return (totalCoins >= (getPrice(ItemID).high));
+        return (totalCoins >= ((getPrice(ItemID).high)*amount));
     }
 
     private static class AllPricesData {

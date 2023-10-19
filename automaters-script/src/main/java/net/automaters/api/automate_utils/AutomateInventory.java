@@ -20,11 +20,8 @@ public class AutomateInventory {
     }
 
     public static void dropAll(ArrayList<String> dropList) {
-        debug("drop all");
         for (String itemName : dropList) {
-            debug("item name: "+itemName);
             if (Inventory.contains(itemName)) {
-                debug("invent contains: "+itemName);
                 Inventory.getAll(itemName).forEach(Item::drop);
                 Time.sleepTick();
             }

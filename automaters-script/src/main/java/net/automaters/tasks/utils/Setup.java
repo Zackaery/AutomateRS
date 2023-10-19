@@ -27,6 +27,10 @@ public class Setup {
         return tasks.contains(secondaryTask) || !tasks.contains(secondaryTask) && secondaryTool != null;
     }
 
+    public static boolean setupSecondaryItem() {
+        return tasks.contains(secondaryTask) || !tasks.contains(secondaryTask) && secondaryTool != null;
+    }
+
     public static boolean setupSecondaryTask() {
         return !secondaryTask.equals("null");
     }
@@ -44,7 +48,9 @@ public class Setup {
         if (!taskItems.contains(primaryTool)) {
             addItemsToList(taskItems, primaryTool);
         }
-
+        if (secondaryItem != null) {
+            addItemsToList(taskItems, secondaryItem);
+        }
         if (!tasks.contains(secondaryTask)) {
             addItemsToList(taskItems, secondaryTool);
         }

@@ -42,6 +42,7 @@ import java.util.Base64;
 
 import static net.automaters.api.client.ui.components.InfoPanel.buildLinkPanel;
 import static net.automaters.api.entities.LocalPlayer.localPlayer;
+import static net.automaters.api.utils.Webhooks.sendWebhookMessage;
 import static net.automaters.gui.GUI.*;
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.script.Variables.*;
@@ -179,7 +180,7 @@ public class AutomateRSPanel extends PluginPanel {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         if (client != null && guiStarted) {
-                            Variables.getAll();
+                            sendWebhookMessage(getAll());
                         } else {
                             Object[] options = {"OK"};
                             JOptionPane.showOptionDialog(null,

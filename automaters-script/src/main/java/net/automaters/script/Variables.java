@@ -5,14 +5,23 @@ import net.automaters.tasks.tasks.MiscellaneousTasks;
 import net.automaters.tasks.tasks.MoneyMakingTasks;
 import net.automaters.tasks.tasks.QuestingTasks;
 import net.automaters.tasks.tasks.SkillingTasks;
+import net.runelite.api.Item;
 import net.runelite.api.TileObject;
+import net.unethicalite.api.items.Inventory;
 
 import java.util.*;
 
 import static net.automaters.api.utils.Debug.debug;
+import static net.automaters.overlay.AutomateRSOverlay.scriptRunTime;
+import static net.automaters.tasks.TaskManager.currentTask;
 
 public class Variables {
 
+    //Task Info
+    public static String resourceObject = null;
+    public static String resourceLocation = null;
+    public static String resourceAction = null;
+    public static List<String> resourceItems = null;
 
     //Integers
     public static int skillTask;
@@ -26,6 +35,7 @@ public class Variables {
     public static String secondaryTask = "null";
     public static String primaryTool = null;
     public static String secondaryTool = null;
+    public static String secondaryItem = null;
 
     //Booleans
     public static boolean delayWalk;
@@ -62,6 +72,12 @@ public class Variables {
     public static void resetAll() {
         getAll();
 
+        //Task Info
+        resourceObject = null;
+        resourceAction = null;
+        resourceLocation = null;
+        resourceItems = new ArrayList<>();
+
         //Integers
         skillTask = 0;
         totalCoins = -1;
@@ -74,6 +90,7 @@ public class Variables {
         secondaryTask = "null";
         primaryTool = null;
         secondaryTool = null;
+        secondaryItem = null;
 
         //Booleans
         delayWalk = false;
@@ -104,51 +121,65 @@ public class Variables {
         objectToRender = null;
     }
 
-    public static void getAll() {
+    public static String getAll() {
+        List<Item> inventoryItems = Inventory.getAll();
+        List<String> export = new ArrayList<>();
 
-        debug("\n[AUTOMATERS - VARIABLES LIST]"+
-
-                "\n\n[INTEGERS]" +
-                "\nskillTask : " +skillTask+
-                "\ntotalCoins : " +totalCoins+
-                "\nprimaryToolID : " +primaryToolID+
-                "\nsecondaryToolID : "+secondaryToolID+
-
-                "\n\n[STRINGS]" +
-                "\ntask : " +task+
-                "\noutfit : " +outfit+
-                "\nsecondaryTask : " +secondaryTask+
-                "\nprimaryTool : " +primaryTool+
-                "\nsecondaryTool : "+secondaryTool+
-
-                "\n\n[BOOLEANS]" +
-                "\ndelayWalk : " +delayWalk+
-                "\nguiStarted : " +guiStarted+
-                "\nscriptStarted : " +scriptStarted+
-                "\nsecondaryTaskActive : "+secondaryTaskActive+
-
-                "\n\n[TIMERS]" +
-                "\nstartTime : " +startTime+
-                "\nscriptTimer : " +scriptTimer+
-                "\nelapsedTime : " +elapsedTime+
-                "\ntaskDuration : " +taskDuration+
-                "\nlastInteractionTime : " +lastInteractionTime+
-                "\ninteractionCooldown : "+interactionCooldown+
-
-                "\n\n[LISTS]" +
-                "\ntaskItems : "+taskItems+
-                "\ntaskList : " +taskList+
-                "\nskillingTasks : " +skillingTasks+
-                "\nquestingTasks : " +questingTasks+
-                "\nmoneyMakingTasks : " +moneyMakingTasks+
-                "\nmiscellaneousTasks : " +miscellaneousTasks+
-
-                "\n\n[MAPS]" +
-                "\nplayerCrashInfo : ");
-        for (Map.Entry<String, PlayerCrashInfo> entry : playerCrashInfo.entrySet()) {
-            String key = entry.getKey();
-            PlayerCrashInfo value = entry.getValue();
-            debug("Key: " + key + ", Value: " + value);
+        for (Item item : inventoryItems) {
+            if (!export.contains(item)) {
+                export.add(item.getName());
+            }
         }
+
+        String bugReport = (
+                "\n\n**Task Information:**" +
+                        "\n> **Total Runtime:** " + scriptRunTime() +
+                        "\n> **Current Task:** " + currentTask +
+                        "\n> **Resource Name:** " + resourceObject +
+                        "\n> **Resource Action:** " + resourceAction +
+                        "\n> **Resource Location:** " + resourceLocation +
+                        "\n> **Resource Items - (droppable):** " + resourceItems +
+                        "\n> **Inventory Items - (current):** " + export +
+
+                        "\n```prolog" +
+                        "\n[INTEGERS]" +
+                        "\nskillTask : " + skillTask +
+                        "\ntotalCoins : " + totalCoins +
+                        "\nprimaryToolID : " + primaryToolID +
+                        "\nsecondaryToolID : " + secondaryToolID +
+
+                        "\n\n[STRINGS]" +
+                        "\ntask : " + task +
+                        "\noutfit : " + outfit +
+                        "\nsecondaryTask : " + secondaryTask +
+                        "\nprimaryTool : " + primaryTool +
+                        "\nsecondaryTool : " + secondaryTool +
+                        "\nsecondaryItem : " + secondaryItem +
+
+                        "\n\n[BOOLEANS]" +
+                        "\ndelayWalk : " + delayWalk +
+                        "\nguiStarted : " + guiStarted +
+                        "\nscriptStarted : " + scriptStarted +
+                        "\nsecondaryTaskActive : " + secondaryTaskActive +
+
+                        "\n\n[TIMERS]" +
+                        "\nstartTime : " + startTime +
+                        "\nscriptTimer : " + scriptTimer +
+                        "\nelapsedTime : " + elapsedTime +
+                        "\ntaskDuration : " + taskDuration +
+                        "\nlastInteractionTime : " + lastInteractionTime +
+                        "\ninteractionCooldown : " + interactionCooldown +
+
+                        "\n\n[LISTS]" +
+                        "\ntaskItems : " + taskItems +
+                        "\ntaskList : " + taskList +
+                        "\nskillingTasks : " + skillingTasks +
+                        "\nquestingTasks : " + questingTasks +
+                        "\nmoneyMakingTasks : " + moneyMakingTasks +
+                        "\nmiscellaneousTasks : " + miscellaneousTasks +
+                "\n```");
+
+        debug("Thank-you for submitting a bug report!");
+        return bugReport;
     }
 }

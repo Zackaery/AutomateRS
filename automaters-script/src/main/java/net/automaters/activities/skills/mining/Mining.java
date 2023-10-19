@@ -5,6 +5,7 @@ import net.automaters.api.automate_utils.AutomatePlayer;
 import net.automaters.api.entities.LocalPlayer;
 import net.automaters.api.automate_utils.AutomateInventory;
 import net.automaters.api.walking.Area;
+import net.automaters.script.Variables;
 import net.automaters.tasks.Task;
 import net.runelite.api.*;
 import net.unethicalite.api.commons.Predicates;
@@ -30,8 +31,9 @@ import static net.unethicalite.api.commons.Time.sleepUntil;
 
 public class Mining extends Task {
 
-    private GameObject resourceObject;
-    private Area resourceLocation;
+    private GameObject object;
+    private Area location;
+    private String action = "Mine";
 
     static ArrayList<String> resources;
     static ArrayList<String> taskItems = new ArrayList<>();
@@ -80,11 +82,11 @@ public class Mining extends Task {
             handleInventory();
         }
 
-        if (resourceObject == null && LocalPlayer.canInteract()) {
+        if (object == null && LocalPlayer.canInteract()) {
             getResources();
         }
 
-        if (resourceObject != null && localPlayer.distanceTo(resourceObject) <= 12) {
+        if (object != null && localPlayer.distanceTo(object) <= 12) {
             if (playerCrashing()) {
                 handlePlayerCrashing();
             }
@@ -163,42 +165,46 @@ public class Mining extends Task {
 
     private void handlePlayerCrashing() {
         debug("[HANDLE PLAYER CRASHING] - Handling crash");
-        resourceObject = getFurtherOre();
-        resourceObject.interact("Mine");
-        sleepUntil(() -> localPlayer.distanceTo(resourceObject) <= 1, 5500);
+        object = getFurtherOre();
+        object.interact("Mine");
+        sleepUntil(() -> localPlayer.distanceTo(object) <= 1, 5500);
     }
 
     private void getResources() {
         secondaryTaskActive = false;
-        resourceObject = Ores.getOre();
-        resourceLocation = Ores.getOreLocation();
-        if (resourceObject != null
-                && resourceLocation != null) {
-            String l = String.format("%d, %d, %d, %d, %d",
-                    resourceLocation.minX,
-                    resourceLocation.minY,
-                    resourceLocation.maxX,
-                    resourceLocation.maxY,
-                    resourceLocation.thisZ);
-            debug("Resource Name: " + resourceObject.getName());
-            debug("Resource Location: " + l);
+        object = Ores.getOre();
+        location = Ores.getOreLocation();
+        if (object != null
+                && location != null) {
+            String area = String.format("%d, %d, %d, %d, %d",
+                    location.minX,
+                    location.minY,
+                    location.maxX,
+                    location.maxY,
+                    location.thisZ);
+            debug("Resource Name: " + object.getName());
+            debug("Resource Location: " + area);
+            Variables.resourceObject = object.getName();
+            Variables.resourceLocation = area;
+            Variables.resourceAction = action;
+            Variables.resourceItems = resources;
         }
     }
 
     private void interactWithResource() {
-        if (resourceObject != null
-                && localPlayer.distanceTo(resourceObject) <= 12
-                && Reachable.isInteractable(resourceObject)) {
+        if (object != null
+                && localPlayer.distanceTo(object) <= 12
+                && Reachable.isInteractable(object)) {
 
-            debug("Mining: " + resourceObject.getName());
-            resourceObject.interact("Mine");
+            debug("Mining: " + object.getName());
+            object.interact(action);
             sleepUntil(() -> !LocalPlayer.canInteract(), 1800);
-            sleepUntil(() -> LocalPlayer.canInteract() || !Reachable.isInteractable(resourceObject) || playerCrashing(), 5500);
+            sleepUntil(() -> LocalPlayer.canInteract() || !Reachable.isInteractable(object) || playerCrashing(), 5500);
 
         } else {
             if (LocalPlayer.canInteract()) {
-                if (resourceLocation != null) {
-                    automateWalk(resourceLocation);
+                if (location != null) {
+                    automateWalk(location);
                 } else {
                     getResources();
                 }

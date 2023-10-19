@@ -6,6 +6,7 @@ import net.automaters.api.automate_utils.AutomateInventory;
 import net.automaters.api.automate_utils.AutomatePlayer;
 import net.automaters.api.entities.LocalPlayer;
 import net.automaters.api.walking.Area;
+import net.automaters.script.Variables;
 import net.automaters.tasks.Task;
 import net.runelite.api.*;
 import net.unethicalite.api.commons.Predicates;
@@ -43,8 +44,9 @@ import static net.unethicalite.api.game.Skills.getLevel;
 
 public class Woodcutting extends Task {
 
-    private GameObject resourceObject;
-    private Area resourceLocation;
+    private GameObject object;
+    private Area location;
+    private String action = "Chop down";
 
     static ArrayList<String> resources;
     static ArrayList<String> taskItems = new ArrayList<>();
@@ -99,7 +101,7 @@ public class Woodcutting extends Task {
             return;
         }
 
-        if (resourceObject == null && LocalPlayer.canInteract()) {
+        if (object == null && LocalPlayer.canInteract()) {
             getResources();
         }
 
@@ -197,18 +199,22 @@ public class Woodcutting extends Task {
         firemaking = false;
 //        fletching = false;
         secondaryTaskActive = false;
-        resourceObject = Trees.getTree();
-        resourceLocation = Trees.getTreeLocation();
-        if (resourceObject != null
-                && resourceLocation != null) {
-            String l = String.format("%d, %d, %d, %d, %d",
-                    resourceLocation.minX,
-                    resourceLocation.minY,
-                    resourceLocation.maxX,
-                    resourceLocation.maxY,
-                    resourceLocation.thisZ);
-            debug("Resource Name: " + resourceObject.getName());
-            debug("Resource Location: " + l);
+        object = Trees.getTree();
+        location = Trees.getTreeLocation();
+        if (object != null
+                && location != null) {
+            String area = String.format("%d, %d, %d, %d, %d",
+                    location.minX,
+                    location.minY,
+                    location.maxX,
+                    location.maxY,
+                    location.thisZ);
+            debug("Resource Name: " + object.getName());
+            debug("Resource Location: " + area);
+            Variables.resourceObject = object.getName();
+            Variables.resourceLocation = area;
+            Variables.resourceAction = action;
+            Variables.resourceItems = resources;
         }
     }
 
@@ -224,19 +230,19 @@ public class Woodcutting extends Task {
         NPC attacking = NPCs.getNearest(x -> x.getName() != null);
         if (attacking != null && attacking.getInteracting() != null && attacking.getInteracting() == localPlayer && localPlayer.getHealthScale() != -1) {
             debug("NPC Attacking player: "+attacking);
-            automateWalk(resourceLocation);
+            automateWalk(location);
         }
 
-        if (resourceObject != null && localPlayer.distanceTo(resourceObject) <= 12
-                && Reachable.isInteractable(resourceObject)) {
-            debug("Chopping down: " + resourceObject.getName());
-            resourceObject.interact("Chop down");
+        if (object != null && localPlayer.distanceTo(object) <= 12
+                && Reachable.isInteractable(object)) {
+            debug("Chopping down: " + object.getName());
+            object.interact(action);
             sleepUntil(() -> !LocalPlayer.canInteract(), 1800);
-            sleepUntil(() -> LocalPlayer.canInteract() || !Reachable.isInteractable(resourceObject), 5500);
+            sleepUntil(() -> LocalPlayer.canInteract() || !Reachable.isInteractable(object), 5500);
         } else {
             if (LocalPlayer.canInteract()) {
-                if (resourceLocation != null) {
-                    automateWalk(resourceLocation);
+                if (location != null) {
+                    automateWalk(location);
                 } else {
                     getResources();
                 }

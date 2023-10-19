@@ -15,7 +15,7 @@ public class AutomateUtils {
     public static void addItemsToList(ArrayList<String> list, String nameContains) {
         Inventory.getAll(Predicates.nameContains(nameContains)).forEach(item -> {
             if (Inventory.contains(item.getName()) && !list.contains(item.getName())) {
-                debug("adding item: "+item.getName());
+                debug("Adding item to list: "+item.getName());
                 list.add(item.getName());
             }
         });
@@ -24,7 +24,7 @@ public class AutomateUtils {
     public static void addItemsToList(ArrayList<String> list, Integer id) {
         Inventory.getAll(Predicates.ids(id)).forEach(item -> {
             if (Inventory.contains(item.getName()) && !list.contains(item.getName())) {
-                debug("adding item: "+item.getName());
+                debug("Adding item to list: "+item.getName());
                 list.add(item.getName());
             }
         });
@@ -49,7 +49,7 @@ public class AutomateUtils {
     public static void addIdsToList(ArrayList<Integer> list, Integer id) {
         Inventory.getAll(Predicates.ids(id)).forEach(item -> {
             if (Inventory.contains(item.getId()) && !list.contains(item.getId())) {
-                debug("adding item: "+item.getId());
+                debug("Adding item to list: "+item.getId());
                 list.add(item.getId());
             }
         });

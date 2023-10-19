@@ -53,7 +53,7 @@ public class AutomateRSOverlay extends OverlayPanel {
 
 					TableComponent tableStatusComponent = new TableComponent();
 					tableStatusComponent.setColumnAlignments(TableAlignment.LEFT, TableAlignment.RIGHT);
-					tableStatusComponent.addRow("Runtime:", timeFormat());
+					tableStatusComponent.addRow("Runtime:", scriptRunTime());
 					tableStatusComponent.addRow("Status:", displayMessage);
 					if (!tableStatusComponent.isEmpty()) {
 						panelComponent.setBackgroundColor(MATERIAL_DARK);
@@ -74,7 +74,7 @@ public class AutomateRSOverlay extends OverlayPanel {
 		return super.render(g);
 	}
 
-	public String timeFormat() {
+	public static String scriptRunTime() {
 		long totalElapsedTime = scriptStarted ? System.currentTimeMillis() - scriptTimer : elapsedTime;
 		Duration duration = Duration.ofMillis(totalElapsedTime);
 		long hours = duration.toHours();

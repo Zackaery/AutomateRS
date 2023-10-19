@@ -86,7 +86,6 @@ public class PrimaryTools {
                 break;
             }
             if (primaryTool == null) {
-                debug("in primaryTool == null");
                 while (scriptStarted && !Bank.isOpen()) {
                     openBank();
                     sleep(600, 1200);
@@ -151,15 +150,42 @@ public class PrimaryTools {
     @Getter
     public enum WoodcuttingTools implements Equippable {
 
-        CRYSTAL_AXE(ItemID.CRYSTAL_AXE, 71, 70, false),
-        DRAGON_AXE(ItemID.DRAGON_AXE, 61, 60, true),
-        RUNE_AXE(ItemID.RUNE_AXE, 41, 40, true),
-        ADAMANT_AXE(ItemID.ADAMANT_AXE, 31, 30, true),
-        MITHRIL_AXE(ItemID.MITHRIL_AXE, 21, 20, true),
-        BLACK_AXE(ItemID.BLACK_AXE, 11, 10, true),
-        STEEL_AXE(ItemID.STEEL_AXE, 6, 5, true),
-        IRON_AXE(ItemID.IRON_AXE, 1, 1, true),
-        BRONZE_AXE(ItemID.BRONZE_AXE, 1, 1, true)
+        CRYSTAL_AXE(ItemID.CRYSTAL_AXE,
+                71,
+                70,
+                false),
+        DRAGON_AXE(ItemID.DRAGON_AXE,
+                61,
+                60,
+                true),
+        RUNE_AXE(ItemID.RUNE_AXE,
+                41,
+                40,
+                true),
+        ADAMANT_AXE(ItemID.ADAMANT_AXE,
+                31,
+                30,
+                true),
+        MITHRIL_AXE(ItemID.MITHRIL_AXE,
+                21,
+                20,
+                true),
+        BLACK_AXE(ItemID.BLACK_AXE,
+                11,
+                10,
+                true),
+        STEEL_AXE(ItemID.STEEL_AXE,
+                6,
+                5,
+                true),
+        IRON_AXE(ItemID.IRON_AXE,
+                1,
+                1,
+                true),
+        BRONZE_AXE(ItemID.BRONZE_AXE,
+                1,
+                1,
+                true)
         ;
 
         public final int id;
@@ -180,15 +206,42 @@ public class PrimaryTools {
 
     @Getter
     public enum MiningTools implements Equippable {
-        CRYSTAL_PICKAXE(ItemID.CRYSTAL_PICKAXE,71, 70, false),
-        DRAGON_PICKAXE(ItemID.DRAGON_PICKAXE,61, 60, true),
-        RUNE_PICKAXE(ItemID.RUNE_PICKAXE,41, 40, true),
-        ADAMANT_PICKAXE(ItemID.ADAMANT_PICKAXE,31, 30, true),
-        MITHRIL_PICKAXE(ItemID.MITHRIL_PICKAXE,21, 20, true),
-        BLACK_PICKAXE(ItemID.BLACK_PICKAXE,11, 10, true),
-        STEEL_PICKAXE(ItemID.STEEL_PICKAXE,6, 5, true),
-        IRON_PICKAXE(ItemID.IRON_PICKAXE,1, 1, true),
-        BRONZE_PICKAXE(ItemID.BRONZE_PICKAXE, 1, 1, true)
+        CRYSTAL_PICKAXE(ItemID.CRYSTAL_PICKAXE,
+                71,
+                70,
+                false),
+        DRAGON_PICKAXE(ItemID.DRAGON_PICKAXE,
+                61,
+                60,
+                true),
+        RUNE_PICKAXE(ItemID.RUNE_PICKAXE,
+                41,
+                40,
+                true),
+        ADAMANT_PICKAXE(ItemID.ADAMANT_PICKAXE,
+                31,
+                30,
+                true),
+        MITHRIL_PICKAXE(ItemID.MITHRIL_PICKAXE,
+                21,
+                20,
+                true),
+        BLACK_PICKAXE(ItemID.BLACK_PICKAXE,
+                11,
+                10,
+                true),
+        STEEL_PICKAXE(ItemID.STEEL_PICKAXE,
+                6,
+                5,
+                true),
+        IRON_PICKAXE(ItemID.IRON_PICKAXE,
+                1,
+                1,
+                true),
+        BRONZE_PICKAXE(ItemID.BRONZE_PICKAXE,
+                1,
+                1,
+                true)
         ;
 
         public final int id;
@@ -208,10 +261,22 @@ public class PrimaryTools {
 
     @Getter
     public enum FishingTools {
-        LOBSTER_POT(ItemID.LOBSTER_POT,40, 0, true),
-        FLY_FISHING_ROD(ItemID.FLY_FISHING_ROD,20, 0, true),
-        FISHING_ROD(ItemID.FISHING_ROD,10, 0, true),
-        SMALL_FISHING_NET(ItemID.SMALL_FISHING_NET,1, 0, true),
+        LOBSTER_POT(ItemID.LOBSTER_POT,
+                99,
+                0,
+                true),
+        FLY_FISHING_ROD(ItemID.FLY_FISHING_ROD,
+                90,
+                0,
+                true),
+        FISHING_ROD(ItemID.FISHING_ROD,
+                80,
+                0,
+                true),
+        SMALL_FISHING_NET(ItemID.SMALL_FISHING_NET,
+                1,
+                0,
+                true),
         ;
 
         public final int id;
