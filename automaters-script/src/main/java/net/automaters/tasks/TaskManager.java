@@ -2,6 +2,7 @@ package net.automaters.tasks;
 
 //import net.automaters.activities.skills.mining.*;
 
+import net.automaters.activities.skills.fishing.Fishing;
 import net.automaters.activities.skills.mining.Mining;
 import net.automaters.activities.skills.woodcutting.Woodcutting;
 import net.automaters.tasks.tasks.GenerateTasks;
@@ -36,6 +37,9 @@ public class TaskManager {
             case "FIREMAKING":
 //                new Firemaking();
                 new GenerateTasks();
+                break;
+            case "FISHING":
+                new Fishing();
                 break;
 
             default:

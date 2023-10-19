@@ -51,11 +51,11 @@ public class Locations {
     @Getter
     public enum Smallnet {
         // Small net areas
-        CATHERBY_FISHAREA_I (1, true, new Area(2834, 3434, 2846, 3428,0)),
+        CATHERBY_FISHAREA_I  (1, true, new Area(2834, 3434, 2846, 3428,0)),
         LUMBRIDGE_FISHAREA_I (1, false, new Area(3242, 3161, 3247, 3149,0)),
-        ALKHARID_FISHAREA_I (1, false, new Area(3264, 3151, 3279, 3137,0)),
-        PORTPISC_FISHAREA_I (1, true, new Area(1758, 3798, 1767, 3792,0)),
-        HOSIDIUS_FISHAREA_I (1, true, new Area(1814, 3609, 1821, 3596,0)),
+        ALKHARID_FISHAREA_I  (1, false, new Area(3264, 3151, 3279, 3137,0)),
+        PORTPISC_FISHAREA_I  (1, true, new Area(1758, 3798, 1767, 3792,0)),
+        HOSIDIUS_FISHAREA_I  (1, true, new Area(1814, 3609, 1821, 3596,0)),
         ;
 
         private final int minCombatLevel;
@@ -74,10 +74,10 @@ public class Locations {
     public enum Lobsters {
 
         // Hosidius Ore Areas
-        MUSAPOINT_FISHAREA (1, true, new Area(2922, 3182, 2927, 3178,0)),
-        LANDSEND_FISHAREA (1, true, new Area(1483, 3434, 1489, 3429,0)),
-        PORTPISC_FISHAREA (1, true, new Area(1743, 3803, 1751, 3798,0)),
-        CATHERBY_FISHAREA_I (1, true, new Area(2843, 3432, 2848, 3428,0)),
+        MUSAPOINT_FISHAREA   (1, false, new Area(2922, 3182, 2927, 3178,0)),
+        LANDSEND_FISHAREA    (1, true, new Area(1483, 3434, 1489, 3429,0)),
+        PORTPISC_FISHAREA    (1, true, new Area(1743, 3803, 1751, 3798,0)),
+        CATHERBY_FISHAREA_I  (1, true, new Area(2843, 3432, 2848, 3428,0)),
         CATHERBY_FISHAREA_II (1, true, new Area(2851, 3426, 2856, 3423,0)),
 
         ;
@@ -97,10 +97,10 @@ public class Locations {
     @Getter
     public enum FlyFish {
         // Hosidius Ore Areas
-        LUMBRIDGE_FISHAREA (1, false, new Area(3236,3257,3244,3236,0)),
-        BARBVILLAGE_FISHAREA (1, false, new Area(3100,3438,3111,3420,0)),
-        SEERSVILLAGE_FISHAREA (1, false, new Area(2712,3533,2729,3522,0)),
-        KOUREND_FISHAREA (1, false, new Area(1719,3687,1722,3682,0)),
+        LUMBRIDGE_FISHAREA    (1, false, new Area(3236,3257,3244,3236,0)),
+        BARBVILLAGE_FISHAREA  (1, false, new Area(3100,3438,3111,3420,0)),
+        SEERSVILLAGE_FISHAREA (1, true, new Area(2712,3533,2729,3522,0)),
+        KOUREND_FISHAREA      (1, true, new Area(1719,3687,1722,3682,0)),
         ;
 
         private final int minCombatLevel;

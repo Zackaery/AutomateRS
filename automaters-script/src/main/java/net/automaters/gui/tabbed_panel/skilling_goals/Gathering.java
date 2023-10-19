@@ -80,7 +80,7 @@ public class Gathering {
             // ---- labelGoalFishing ----
             labelGoalFishing.setText("Fishing Level:");
             // ---- spinnerTaskStop ----
-            goalFishing.setModel(new SpinnerNumberModel(1, 1, 99, 1));
+            goalFishing.setModel(new SpinnerNumberModel(99, 1, 99, 1));
             // ---- labelGoalWoodcutting ----
             labelGoalWoodcutting.setText("Woodcutting Level:");
             // ---- spinnerTaskStop ----
@@ -100,7 +100,7 @@ public class Gathering {
             panelSkillingGoalsGathering.add(labelGoalMining);
             panelSkillingGoalsGathering.add(goalMining);
             panelSkillingGoalsGathering.add(labelGoalFishing);
-//            panelSkillingGoalsGathering.add(goalFishing);
+            panelSkillingGoalsGathering.add(goalFishing);
             panelSkillingGoalsGathering.add(labelGoalWoodcutting);
             panelSkillingGoalsGathering.add(goalWoodcutting);
             panelSkillingGoalsGathering.add(labelGoalFarming);

@@ -40,7 +40,7 @@ public class Fishing extends Task {
     static ArrayList<String> taskItems = new ArrayList<>();
 
     static {
-        resources = new ArrayList<>(Arrays.asList("Raw shrimp", "Raw anchovies", "Raw Lobster", "Raw guppy", "Raw cavefish", "Raw tetra", "Raw sardine", "Raw herring", "Raw pike", "Raw trout", "Raw salmon", "Raw tuna", "Raw swordfish", "Raw lobster"));
+        resources = new ArrayList<>(Arrays.asList("Raw shrimp", "Raw anchovies", "Raw guppy", "Raw cavefish", "Raw tetra", "Raw sardine", "Raw herring", "Raw pike", "Raw trout", "Raw salmon", "Raw lobster", "Raw tuna", "Raw swordfish"));
     }
 
     public Fishing() {
