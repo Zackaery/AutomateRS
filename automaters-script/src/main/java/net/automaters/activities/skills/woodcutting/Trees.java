@@ -57,7 +57,7 @@ public class Trees {
 
         for (int i = treeTypes.length - 1; i >= 0; i--) {
             TreeType currentTree = treeTypes[i];
-            int nextWoodcuttingLevel = (i > 0) ? treeTypes[i - 1].reqWoodcuttingLevel : Integer.MIN_VALUE;
+            int nextWoodcuttingLevel = (i > 0 && i < 5) ? treeTypes[i + 1].reqWoodcuttingLevel : Integer.MIN_VALUE;
 
             if (currentTree.isMembers() && !Worlds.inMembersWorld()) {
                 continue;

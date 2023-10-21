@@ -6,8 +6,6 @@ import java.util.Random;
 
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.script.Variables.*;
-import static net.automaters.tasks.TaskManager.currentTask;
-import static net.automaters.tasks.TaskManager.taskSelected;
 
 public class GenerateTasks {
 

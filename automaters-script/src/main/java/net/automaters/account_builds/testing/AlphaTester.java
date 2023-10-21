@@ -4,8 +4,8 @@ import net.automaters.tasks.tasks.GenerateTasks;
 import net.automaters.tasks.TaskManager;
 
 import static net.automaters.api.utils.Debug.debug;
-import static net.automaters.tasks.TaskManager.currentTask;
-import static net.automaters.tasks.TaskManager.taskSelected;
+import static net.automaters.script.Variables.currentTask;
+import static net.automaters.script.Variables.taskSelected;
 
 public class AlphaTester {
 

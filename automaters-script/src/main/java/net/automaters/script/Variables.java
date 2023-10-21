@@ -13,7 +13,6 @@ import java.util.*;
 
 import static net.automaters.api.utils.Debug.debug;
 import static net.automaters.overlay.AutomateRSOverlay.scriptRunTime;
-import static net.automaters.tasks.TaskManager.currentTask;
 
 public class Variables {
 
@@ -36,12 +35,15 @@ public class Variables {
     public static String primaryTool = null;
     public static String secondaryTool = null;
     public static String secondaryItem = null;
+    public static String currentTask;
 
     //Booleans
     public static boolean delayWalk;
     public static boolean guiStarted;
     public static boolean scriptStarted;
     public static boolean secondaryTaskActive;
+    public static boolean taskStarted;
+    public static boolean taskSelected;
 
     //Timers
     public static long startTime;
@@ -91,12 +93,15 @@ public class Variables {
         primaryTool = null;
         secondaryTool = null;
         secondaryItem = null;
+        currentTask = null;
 
         //Booleans
         delayWalk = false;
         guiStarted = false;
         scriptStarted = false;
         secondaryTaskActive = false;
+        taskStarted = false;
+        taskSelected = false;
 
         //Timers
         startTime = 0;
@@ -135,6 +140,7 @@ public class Variables {
                 "\n\n**Task Information:**" +
                         "\n> **Total Runtime:** " + scriptRunTime() +
                         "\n> **Current Task:** " + currentTask +
+                        "\n> **Task Started:** " + taskStarted +
                         "\n> **Resource Name:** " + resourceObject +
                         "\n> **Resource Action:** " + resourceAction +
                         "\n> **Resource Location:** " + resourceLocation +

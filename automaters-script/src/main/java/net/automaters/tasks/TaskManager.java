@@ -8,11 +8,10 @@ import net.automaters.activities.skills.woodcutting.Woodcutting;
 import net.automaters.tasks.tasks.GenerateTasks;
 import net.automaters.tasks.tests.TestPluginCode;
 
+import static net.automaters.script.Variables.currentTask;
+
 public class TaskManager {
 
-    public static boolean taskStarted;
-    public static boolean taskSelected;
-    public static String currentTask;
 
     public TaskManager(String task) {
         executeTask(task);
